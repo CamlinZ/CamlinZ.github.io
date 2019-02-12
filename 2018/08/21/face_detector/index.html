@@ -83,18 +83,18 @@
 <meta name="keywords" content="人脸检测,人脸对齐,深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="人脸检测和人脸对齐C++工程">
-<meta property="og:url" content="http://yoursite.com/2018/08/21/face-detector/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/21/face_detector/index.html">
 <meta property="og:site_name" content="Camlin Zhang Blog">
 <meta property="og:description" content="人脸检测和人脸对齐C++工程1、前言该工程分为人脸检测，人脸对齐和特征点平滑处理三个部分。 人脸检测 采用FaceBoxes作为解决方案，参考论文《FaceBoxes: A CPU Real-time Face Detector with High Accuracy》。并且在该论文提出的网络结构基础上，进行了网络压缩，使其达到更快的速度，详情见model文件夹中的README.md 人脸对齐 采用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/face-detector/readme_image/flow_diagram.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/face-detector/readme_image/adjust_flow_diagram.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/08/21/face-detector/readme_image/kalman_filter_flow_diagram.jpg">
-<meta property="og:updated_time" content="2019-02-12T12:30:04.450Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/face_detector/flow_diagram.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/face_detector/adjust_flow_diagram.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/08/21/face_detector/kalman_filter_flow_diagram.jpg">
+<meta property="og:updated_time" content="2019-02-12T12:49:30.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="人脸检测和人脸对齐C++工程">
 <meta name="twitter:description" content="人脸检测和人脸对齐C++工程1、前言该工程分为人脸检测，人脸对齐和特征点平滑处理三个部分。 人脸检测 采用FaceBoxes作为解决方案，参考论文《FaceBoxes: A CPU Real-time Face Detector with High Accuracy》。并且在该论文提出的网络结构基础上，进行了网络压缩，使其达到更快的速度，详情见model文件夹中的README.md 人脸对齐 采用">
-<meta name="twitter:image" content="http://yoursite.com/2018/08/21/face-detector/readme_image/flow_diagram.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/21/face_detector/flow_diagram.jpg">
 
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/21/face-detector/">
+  <link rel="canonical" href="http://yoursite.com/2018/08/21/face_detector/">
 
 
 
@@ -257,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/21/face-detector/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/21/face_detector/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Camlin Zhang">
@@ -365,13 +365,13 @@
 <p><strong>特征点平滑处理</strong></p>
 <p>由于使用ERT进行视频帧的特征点检测时，特征点会出现明显的抖动，所以采用卡尔曼滤波进行平滑处理，参考论文《Automatic facial landmark tracking in video sequences using kalman filter assisted active shape models》</p>
 <h2 id="2、流程说明"><a href="#2、流程说明" class="headerlink" title="2、流程说明"></a>2、流程说明</h2><p><strong>总体流程</strong></p>
-<p><img src="readme_image/flow_diagram.jpg" alt="flow_diagram"></p>
+<p><img src="/2018/08/21/face_detector/flow_diagram.jpg" alt="flow_diagram"></p>
 <p><strong>调整人脸检测框流程</strong></p>
 <p>在上述流程中，由于检测算法得到的人脸框普遍无法将所有的68个人脸特征点包含进来，因此引入调整人脸检测框位置这一步，具体步骤如下图所示：</p>
-<p><img src="readme_image/adjust_flow_diagram.jpg" alt="adjust_flow_diagram"></p>
+<p><img src="/2018/08/21/face_detector/adjust_flow_diagram.jpg" alt="adjust_flow_diagram"></p>
 <p><strong>卡尔曼滤波处理流程</strong></p>
 <p>卡尔曼滤波分别针对68个特征点中嘴部、眼睛、面部轮廓和其他区域4个部分进行滤波，这四个部分的原理相同，只是参数的设置不同。以其中一个为例，如下图所示：</p>
-<p><img src="readme_image/kalman_filter_flow_diagram.jpg" alt="kalman_filter_flow_diagram"></p>
+<p><img src="/2018/08/21/face_detector/kalman_filter_flow_diagram.jpg" alt="kalman_filter_flow_diagram"></p>
 <h2 id="3、依赖环境"><a href="#3、依赖环境" class="headerlink" title="3、依赖环境"></a>3、依赖环境</h2><ul>
 <li>FaceBoxes caffe环境</li>
 <li>dlib 19.15</li>
