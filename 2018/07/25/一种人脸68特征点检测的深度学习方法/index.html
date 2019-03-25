@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-sun.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-sun.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="人脸68特征点,深度学习,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Camlin Zhang's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="该人脸68特征点检测的深度学习方法采用VGG作为原型进行改造(以下简称mini VGG)，从数据集的准备，网络模型的构造以及最终的训练过程三个方面进行介绍，工程源码详见：Github链接 一、数据集的准备1、数据集的采集第一类是公共数据集：人脸68特征点检测的数据集通常采用ibug数据集，官网地址为：https://ibug.doc.ic.ac.uk/resources/facial-point-">
+<meta name="keywords" content="人脸68特征点,深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一种人脸68特征点检测的深度学习方法">
+<meta property="og:url" content="http://camlinzhang.com/2018/07/25/一种人脸68特征点检测的深度学习方法/index.html">
+<meta property="og:site_name" content="Camlin Zhang&#39;s Blog">
+<meta property="og:description" content="该人脸68特征点检测的深度学习方法采用VGG作为原型进行改造(以下简称mini VGG)，从数据集的准备，网络模型的构造以及最终的训练过程三个方面进行介绍，工程源码详见：Github链接 一、数据集的准备1、数据集的采集第一类是公共数据集：人脸68特征点检测的数据集通常采用ibug数据集，官网地址为：https://ibug.doc.ic.ac.uk/resources/facial-point-">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20180623141024430?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180623154456210?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180623154509518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/2018062316063612?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2019-03-25T05:07:15.474Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一种人脸68特征点检测的深度学习方法">
+<meta name="twitter:description" content="该人脸68特征点检测的深度学习方法采用VGG作为原型进行改造(以下简称mini VGG)，从数据集的准备，网络模型的构造以及最终的训练过程三个方面进行介绍，工程源码详见：Github链接 一、数据集的准备1、数据集的采集第一类是公共数据集：人脸68特征点检测的数据集通常采用ibug数据集，官网地址为：https://ibug.doc.ic.ac.uk/resources/facial-point-">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180623141024430?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Camlin Zhang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://camlinzhang.com/2018/07/25/一种人脸68特征点检测的深度学习方法/">
+
+
+
+
+
+  <title>一种人脸68特征点检测的深度学习方法 | Camlin Zhang's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+<a href="https://github.com/CamlinZ" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Camlin Zhang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://camlinzhang.com/2018/07/25/一种人脸68特征点检测的深度学习方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Camlin Zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Camlin Zhang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一种人脸68特征点检测的深度学习方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T21:39:17+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-25T13:07:15+08:00">
+                2019-03-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/深度学习算法/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/深度学习算法/人脸特征点/" itemprop="url" rel="index">
+                    <span itemprop="name">人脸特征点</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>该人脸68特征点检测的深度学习方法采用VGG作为原型进行改造(以下简称mini VGG)，从数据集的准备，网络模型的构造以及最终的训练过程三个方面进行介绍，工程源码详见：<a href="https://github.com/CamlinZ/face_alignment" target="_blank" rel="noopener">Github链接</a></p>
+<h1 id="一、数据集的准备"><a href="#一、数据集的准备" class="headerlink" title="一、数据集的准备"></a>一、数据集的准备</h1><h2 id="1、数据集的采集"><a href="#1、数据集的采集" class="headerlink" title="1、数据集的采集"></a>1、数据集的采集</h2><p>第一类是公共数据集：<br>人脸68特征点检测的数据集通常采用ibug数据集，官网地址为：<br><a href="https://ibug.doc.ic.ac.uk/resources/facial-point-annotations/" target="_blank" rel="noopener">https://ibug.doc.ic.ac.uk/resources/facial-point-annotations/</a><br>其中同时包含图像和标注的有(有的数据集免费下载的只有标注没有图像)：<br>300W，AFW，HELEN，LFPW，IBUG五个数据集。<br>如果需要做对于视频类图像的68特征点检测可以用下面300-VM数据集：<br><a href="https://ibug.doc.ic.ac.uk/resources/300-VW/" target="_blank" rel="noopener">https://ibug.doc.ic.ac.uk/resources/300-VW/</a><br>上面数据集的介绍可以参考：<a href="https://yinguobing.com/facial-landmark-localization-by-deep-learning-data-and-algorithm/" target="_blank" rel="noopener">https://yinguobing.com/facial-landmark-localization-by-deep-learning-data-and-algorithm/</a></p>
+<p>第二类是自己标注的数据集：<br>这部分主要是用标注工具对自己收集到的图片进行标注，我采用自己的标注工具进行标注后，生成的是一个包含68点坐标位置的txt文档，之后要需要通过以下脚本将其转换成公共数据集中类似的pts文件的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">from __future__ import division</span><br><span class="line">import os</span><br><span class="line">import cv2</span><br><span class="line">from compiler.ast import flatten</span><br><span class="line"></span><br><span class="line">txt_dir = &quot;/Users/camlin_z/Data/68landmark/txt/&quot;</span><br><span class="line">txt_new_dir = &quot;/Users/camlin_z/Data/68landmark/landmark/&quot;</span><br><span class="line"></span><br><span class="line">def trans_label():</span><br><span class="line">    files = os.listdir(txt_dir)</span><br><span class="line">    for file in files:</span><br><span class="line">        flag = file.find(&quot;.&quot;)</span><br><span class="line">        if flag &gt; 0:</span><br><span class="line">            txt_name = file[:flag] + &quot;.pts&quot;</span><br><span class="line">            print txt_name</span><br><span class="line">            line = open(txt_dir + file, &apos;r&apos;)</span><br><span class="line">            for label in line:</span><br><span class="line">                label = label.strip().split()</span><br><span class="line">                label = map(float, label)</span><br><span class="line">                file_new = open(txt_new_dir + txt_name, &apos;w+&apos;)</span><br><span class="line">                file_new.write(&quot;version: 1&quot; + &quot;\n&quot;)</span><br><span class="line">                file_new.write(&quot;n_points: 68&quot; + &quot;\n&quot;)</span><br><span class="line">                file_new.write(&quot;&#123;&quot; + &quot;\n&quot;)</span><br><span class="line">                for i in range(0, 135, 2):</span><br><span class="line">                    file_new.write(str(label[i]) + &quot; &quot; + str(label[i+1]) + &quot;\n&quot;)</span><br><span class="line">                file_new.write(&quot;&#125;&quot;)</span><br><span class="line">        else:</span><br><span class="line">            print file, &quot; not exist!&quot;</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    trans_label()</span><br></pre></td></tr></table></figure>
+<p>通过以上的整理过程，就可以将数据集整理成以下形式：<br><img src="https://img-blog.csdn.net/20180623141024430?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>同时需要将以上数据集分成训练集和测试集两个部分。</p>
+<h2 id="2、数据集的预处理"><a href="#2、数据集的预处理" class="headerlink" title="2、数据集的预处理"></a>2、数据集的预处理</h2><p>准备好上面的五个数据集后，接下来就是对于数据集的一系列处理了，由于特征点的检测是基于检测框检测出来之后，将图像crop出只有人脸的部分，然后再进行特征点的检测过程(因为这样可以大量的减少图像中其他因素的干扰，将神经网络的功能聚焦到特征点检测的任务上面来)，所以需要根据以上数据集中标注的特征点位置来裁剪出一个只有人脸的区域，用于神经网络的训练。</p>
+<p>处理过程主要参考：<br><a href="https://yinguobing.com/facial-landmark-localization-by-deep-learning-data-collate/" target="_blank" rel="noopener">https://yinguobing.com/facial-landmark-localization-by-deep-learning-data-collate/</a><br>但是在图像进行预处理之后，特征点的位置同样也会发生变化，上面作者分享的代码在对图像进行处理之后没有将对应的特征点坐标进行处理，所以我将原始的代码进行改进，同时对特征点坐标和图像进行处理，并生成最终我们网络训练需要的label形式，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">This script shows how to read iBUG pts file and draw all the landmark points on image.</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">from __future__ import division</span><br><span class="line">import os</span><br><span class="line">import cv2</span><br><span class="line">from compiler.ast import flatten</span><br><span class="line">import face_detector_image as fd</span><br><span class="line">from lxml import etree, objectify</span><br><span class="line">from compiler.ast import flatten</span><br><span class="line">import shutil</span><br><span class="line"></span><br><span class="line"># 0: test the pts of crop image</span><br><span class="line"># 1: output the crop image</span><br><span class="line">test_flag = 0</span><br><span class="line"># List all the files</span><br><span class="line">filelist_train = [&quot;300W/trainset&quot;, &quot;afw&quot;, &quot;data2&quot;, &quot;data3&quot;, &quot;data4/trainset&quot;,</span><br><span class="line">             &quot;helen/trainset&quot;, &quot;landmark/trainset&quot;, &quot;lfpw/trainset&quot;]</span><br><span class="line">filelist_test = [&quot;300W/testset&quot;, &quot;data4/testset&quot;, &quot;helen/testset&quot;,</span><br><span class="line">             &quot;landmark/testset&quot;, &quot;lfpw/testset&quot;]</span><br><span class="line"></span><br><span class="line">filelist = filelist_train</span><br><span class="line"></span><br><span class="line">def mkr(dr):</span><br><span class="line">    if not os.path.exists(dr):</span><br><span class="line">        os.mkdir(dr)</span><br><span class="line"></span><br><span class="line">def read_points(file_name=None):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Read points from .pts file.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    points = []</span><br><span class="line">    with open(file_name) as file:</span><br><span class="line">        line_count = 0</span><br><span class="line">        for line in file:</span><br><span class="line">            if &quot;version&quot; in line or &quot;points&quot; in line or &quot;&#123;&quot; in line or &quot;&#125;&quot; in line:</span><br><span class="line">                continue</span><br><span class="line">            else:</span><br><span class="line">                loc_x, loc_y = line.strip().split()</span><br><span class="line">                points.append([float(loc_x), float(loc_y)])</span><br><span class="line">                line_count += 1</span><br><span class="line">    return points</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def draw_landmark_point(image, points):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Draw landmark point on image.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    for point in points:</span><br><span class="line">        cv2.circle(image, (int(point[0]), int(</span><br><span class="line">            point[1])), 2, (0, 255, 0), -1, cv2.LINE_AA)</span><br><span class="line">    return image</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def points_are_valid(points, image):</span><br><span class="line">    &quot;&quot;&quot;Check if all points are in image&quot;&quot;&quot;</span><br><span class="line">    min_box = get_minimal_box(points)</span><br><span class="line">    if box_in_image(min_box, image):</span><br><span class="line">        return True</span><br><span class="line">    return False</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_square_box(box):</span><br><span class="line">    &quot;&quot;&quot;Get the square boxes which are ready for CNN from the boxes&quot;&quot;&quot;</span><br><span class="line">    left_x = box[0]</span><br><span class="line">    top_y = box[1]</span><br><span class="line">    right_x = box[2]</span><br><span class="line">    bottom_y = box[3]</span><br><span class="line"></span><br><span class="line">    box_width = right_x - left_x</span><br><span class="line">    box_height = bottom_y - top_y</span><br><span class="line"></span><br><span class="line">    # Check if box is already a square. If not, make it a square.</span><br><span class="line">    diff = box_height - box_width</span><br><span class="line">    delta = int(abs(diff) / 2)</span><br><span class="line"></span><br><span class="line">    if diff == 0:                   # Already a square.</span><br><span class="line">        return box</span><br><span class="line">    elif diff &gt; 0:                  # Height &gt; width, a slim box.</span><br><span class="line">        left_x -= delta</span><br><span class="line">        right_x += delta</span><br><span class="line">        if diff % 2 == 1:</span><br><span class="line">            right_x += 1</span><br><span class="line">    else:                           # Width &gt; height, a short box.</span><br><span class="line">        top_y -= delta</span><br><span class="line">        bottom_y += delta</span><br><span class="line">        if diff % 2 == 1:</span><br><span class="line">            bottom_y += 1</span><br><span class="line"></span><br><span class="line">    # Make sure box is always square.</span><br><span class="line">    assert ((right_x - left_x) == (bottom_y - top_y)), &apos;Box is not square.&apos;</span><br><span class="line"></span><br><span class="line">    return [left_x, top_y, right_x, bottom_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_minimal_box(points):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Get the minimal bounding box of a group of points.</span><br><span class="line">    The coordinates are also converted to int numbers.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    min_x = int(min([point[0] for point in points]))</span><br><span class="line">    max_x = int(max([point[0] for point in points]))</span><br><span class="line">    min_y = int(min([point[1] for point in points]))</span><br><span class="line">    max_y = int(max([point[1] for point in points]))</span><br><span class="line">    return [min_x, min_y, max_x, max_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def move_box(box, offset):</span><br><span class="line">    &quot;&quot;&quot;Move the box to direction specified by offset&quot;&quot;&quot;</span><br><span class="line">    left_x = box[0] + offset[0]</span><br><span class="line">    top_y = box[1] + offset[1]</span><br><span class="line">    right_x = box[2] + offset[0]</span><br><span class="line">    bottom_y = box[3] + offset[1]</span><br><span class="line">    return [left_x, top_y, right_x, bottom_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def expand_box(square_box, scale_ratio=1.2):</span><br><span class="line">    &quot;&quot;&quot;Scale up the box&quot;&quot;&quot;</span><br><span class="line">    assert (scale_ratio &gt;= 1), &quot;Scale ratio should be greater than 1.&quot;</span><br><span class="line">    delta = int((square_box[2] - square_box[0]) * (scale_ratio - 1) / 2)</span><br><span class="line">    left_x = square_box[0] - delta</span><br><span class="line">    left_y = square_box[1] - delta</span><br><span class="line">    right_x = square_box[2] + delta</span><br><span class="line">    right_y = square_box[3] + delta</span><br><span class="line">    return [left_x, left_y, right_x, right_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def points_in_box(points, box):</span><br><span class="line">    &quot;&quot;&quot;Check if box contains all the points&quot;&quot;&quot;</span><br><span class="line">    minimal_box = get_minimal_box(points)</span><br><span class="line">    return box[0] &lt;= minimal_box[0] and \</span><br><span class="line">        box[1] &lt;= minimal_box[1] and \</span><br><span class="line">        box[2] &gt;= minimal_box[2] and \</span><br><span class="line">        box[3] &gt;= minimal_box[3]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def box_in_image(box, image):</span><br><span class="line">    &quot;&quot;&quot;Check if the box is in image&quot;&quot;&quot;</span><br><span class="line">    rows = image.shape[0]</span><br><span class="line">    cols = image.shape[1]</span><br><span class="line">    return box[0] &gt;= 0 and box[1] &gt;= 0 and box[2] &lt;= cols and box[3] &lt;= rows</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def box_is_valid(image, points, box):</span><br><span class="line">    &quot;&quot;&quot;Check if box is valid.&quot;&quot;&quot;</span><br><span class="line">    # Box contains all the points.</span><br><span class="line">    points_is_in_box = points_in_box(points, box)</span><br><span class="line"></span><br><span class="line">    # Box is in image.</span><br><span class="line">    box_is_in_image = box_in_image(box, image)</span><br><span class="line"></span><br><span class="line">    # Box is square.</span><br><span class="line">    w_equal_h = (box[2] - box[0]) == (box[3] - box[1])</span><br><span class="line"></span><br><span class="line">    # Return the result.</span><br><span class="line">    return box_is_in_image and points_is_in_box and w_equal_h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def fit_by_shifting(box, rows, cols):</span><br><span class="line">    &quot;&quot;&quot;Method 1: Try to move the box.&quot;&quot;&quot;</span><br><span class="line">    # Face box points.</span><br><span class="line">    left_x = box[0]</span><br><span class="line">    top_y = box[1]</span><br><span class="line">    right_x = box[2]</span><br><span class="line">    bottom_y = box[3]</span><br><span class="line"></span><br><span class="line">    # Check if moving is possible.</span><br><span class="line">    if right_x - left_x &lt;= cols and bottom_y - top_y &lt;= rows:</span><br><span class="line">        if left_x &lt; 0:                  # left edge crossed, move right.</span><br><span class="line">            right_x += abs(left_x)</span><br><span class="line">            left_x = 0</span><br><span class="line">        if right_x &gt; cols:              # right edge crossed, move left.</span><br><span class="line">            left_x -= (right_x - cols)</span><br><span class="line">            right_x = cols</span><br><span class="line">        if top_y &lt; 0:                   # top edge crossed, move down.</span><br><span class="line">            bottom_y += abs(top_y)</span><br><span class="line">            top_y = 0</span><br><span class="line">        if bottom_y &gt; rows:             # bottom edge crossed, move up.</span><br><span class="line">            top_y -= (bottom_y - rows)</span><br><span class="line">            bottom_y = rows</span><br><span class="line"></span><br><span class="line">    return [left_x, top_y, right_x, bottom_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def fit_by_shrinking(box, rows, cols):</span><br><span class="line">    &quot;&quot;&quot;Method 2: Try to shrink the box.&quot;&quot;&quot;</span><br><span class="line">    # Face box points.</span><br><span class="line">    left_x = box[0]</span><br><span class="line">    top_y = box[1]</span><br><span class="line">    right_x = box[2]</span><br><span class="line">    bottom_y = box[3]</span><br><span class="line"></span><br><span class="line">    # The first step would be get the interlaced area.</span><br><span class="line">    if left_x &lt; 0:                  # left edge crossed, set zero.</span><br><span class="line">        left_x = 0</span><br><span class="line">    if right_x &gt; cols:              # right edge crossed, set max.</span><br><span class="line">        right_x = cols</span><br><span class="line">    if top_y &lt; 0:                   # top edge crossed, set zero.</span><br><span class="line">        top_y = 0</span><br><span class="line">    if bottom_y &gt; rows:             # bottom edge crossed, set max.</span><br><span class="line">        bottom_y = rows</span><br><span class="line"></span><br><span class="line">    # Then found out which is larger: the width or height. This will</span><br><span class="line">    # be used to decide in which dimention the size would be shrinked.</span><br><span class="line">    width = right_x - left_x</span><br><span class="line">    height = bottom_y - top_y</span><br><span class="line">    delta = abs(width - height)</span><br><span class="line">    # Find out which dimention should be altered.</span><br><span class="line">    if width &gt; height:                  # x should be altered.</span><br><span class="line">        if left_x != 0 and right_x != cols:     # shrink from center.</span><br><span class="line">            left_x += int(delta / 2)</span><br><span class="line">            right_x -= int(delta / 2) + delta % 2</span><br><span class="line">        elif left_x == 0:                       # shrink from right.</span><br><span class="line">            right_x -= delta</span><br><span class="line">        else:                                   # shrink from left.</span><br><span class="line">            left_x += delta</span><br><span class="line">    else:                               # y should be altered.</span><br><span class="line">        if top_y != 0 and bottom_y != rows:     # shrink from center.</span><br><span class="line">            top_y += int(delta / 2) + delta % 2</span><br><span class="line">            bottom_y -= int(delta / 2)</span><br><span class="line">        elif top_y == 0:                        # shrink from bottom.</span><br><span class="line">            bottom_y -= delta</span><br><span class="line">        else:                                   # shrink from top.</span><br><span class="line">            top_y += delta</span><br><span class="line"></span><br><span class="line">    return [left_x, top_y, right_x, bottom_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def fit_box(box, image, points):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Try to fit the box, make sure it satisfy following conditions:</span><br><span class="line">    - A square.</span><br><span class="line">    - Inside the image.</span><br><span class="line">    - Contains all the points.</span><br><span class="line">    If all above failed, return None.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    rows = image.shape[0]</span><br><span class="line">    cols = image.shape[1]</span><br><span class="line"></span><br><span class="line">    # First try to move the box.</span><br><span class="line">    box_moved = fit_by_shifting(box, rows, cols)</span><br><span class="line"></span><br><span class="line">    # If moving faild ,try to shrink.</span><br><span class="line">    if box_is_valid(image, points, box_moved):</span><br><span class="line">        return box_moved</span><br><span class="line">    else:</span><br><span class="line">        box_shrinked = fit_by_shrinking(box, rows, cols)</span><br><span class="line"></span><br><span class="line">    # If shrink failed, return None</span><br><span class="line">    if box_is_valid(image, points, box_shrinked):</span><br><span class="line">        return box_shrinked</span><br><span class="line"></span><br><span class="line">    # Finally, Worst situation.</span><br><span class="line">    print(&quot;Fitting failed!&quot;)</span><br><span class="line">    return None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_valid_box(image, points):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Try to get a valid face box which meets the requirments.</span><br><span class="line">    The function follows these steps:</span><br><span class="line">        1. Try method 1, if failed:</span><br><span class="line">        2. Try method 0, if failed:</span><br><span class="line">        3. Return None</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # Try method 1 first.</span><br><span class="line">    def _get_postive_box(raw_boxes, points):</span><br><span class="line">        for box in raw_boxes:</span><br><span class="line">            # Move box down.</span><br><span class="line">            diff_height_width = (box[3] - box[1]) - (box[2] - box[0])</span><br><span class="line">            offset_y = int(abs(diff_height_width / 2))</span><br><span class="line">            box_moved = move_box(box, [0, offset_y])</span><br><span class="line"></span><br><span class="line">            # Make box square.</span><br><span class="line">            square_box = get_square_box(box_moved)</span><br><span class="line"></span><br><span class="line">            # Remove false positive boxes.</span><br><span class="line">            if points_in_box(points, square_box):</span><br><span class="line">                return square_box</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line">    # Try to get a positive box from face detection results.</span><br><span class="line">    _, raw_boxes = fd.get_facebox(image, threshold=0.5)</span><br><span class="line">    positive_box = _get_postive_box(raw_boxes, points)</span><br><span class="line">    if positive_box is not None:</span><br><span class="line">        if box_in_image(positive_box, image) is True:</span><br><span class="line">            return positive_box</span><br><span class="line">        return fit_box(positive_box, image, points)</span><br><span class="line"></span><br><span class="line">    # Method 1 failed, Method 0</span><br><span class="line">    min_box = get_minimal_box(points)</span><br><span class="line">    sqr_box = get_square_box(min_box)</span><br><span class="line">    epd_box = expand_box(sqr_box)</span><br><span class="line">    if box_in_image(epd_box, image) is True:</span><br><span class="line">        return epd_box</span><br><span class="line">    return fit_box(epd_box, image, points)</span><br><span class="line"></span><br><span class="line">def get_new_pts(facebox, raw_points, label_txt, image_file, flag, ratio_w, ratio_h):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    generate a new pts file according to face box</span><br><span class="line"></span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    x = facebox[0]</span><br><span class="line">    y = facebox[1]</span><br><span class="line">    # print x, y</span><br><span class="line">    new_point = []</span><br><span class="line">    label_pts = flatten(raw_points)</span><br><span class="line">    # print label_pts</span><br><span class="line"></span><br><span class="line">    label_txt.write(flag + image_file + &quot;.jpg &quot;)</span><br><span class="line">    for i in range(0, 135, 2):</span><br><span class="line">        if i != 134:</span><br><span class="line">            x_temp = int((label_pts[i] - x) * ratio_w )</span><br><span class="line">            y_temp = int((label_pts[i + 1] - y) * ratio_h)</span><br><span class="line">            new_point.append([x_temp, y_temp])</span><br><span class="line">            label_txt.write(str(x_temp) + &quot; &quot; + str(y_temp) + &quot; &quot;)</span><br><span class="line">        else:</span><br><span class="line">            x_temp = int((label_pts[i] - x) * ratio_w)</span><br><span class="line">            y_temp = int((label_pts[i + 1] - y) * ratio_h)</span><br><span class="line">            new_point.append([x_temp, y_temp])</span><br><span class="line">            label_txt.write(str(x_temp) + &quot; &quot; + str(y_temp))</span><br><span class="line">    label_txt.write(&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    # print new_point</span><br><span class="line">    return new_point</span><br><span class="line"></span><br><span class="line">def preview(point_file, test_flag, bbox_new_file):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Preview points on image.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # Read the points from file.</span><br><span class="line">    raw_points = read_points(point_file)</span><br><span class="line"></span><br><span class="line">    # Safe guard, make sure point importing goes well.</span><br><span class="line">    assert len(raw_points) == 68, &quot;The landmarks should contain 68 points.&quot;</span><br><span class="line"></span><br><span class="line">    # Read the image.</span><br><span class="line">    head, tail = os.path.split(point_file)</span><br><span class="line">    image_file = tail.split(&apos;.&apos;)[-2]</span><br><span class="line">    img_jpeg = os.path.join(head, image_file + &quot;.jpeg&quot;)</span><br><span class="line">    img_jpg = os.path.join(head, image_file + &quot;.jpg&quot;)</span><br><span class="line">    img_png = os.path.join(head, image_file + &quot;.png&quot;)</span><br><span class="line">    if os.path.exists(img_jpg):</span><br><span class="line">        img = cv2.imread(img_jpg)</span><br><span class="line">        img_file = img_jpg</span><br><span class="line">    elif os.path.exists(img_jpeg):</span><br><span class="line">        img = cv2.imread(img_jpeg)</span><br><span class="line">        img_file = img_jpeg</span><br><span class="line">    else:</span><br><span class="line">        img = cv2.imread(img_png)</span><br><span class="line">        img_file = img_png</span><br><span class="line">    print image_file</span><br><span class="line">    # Fast check: all points are in image.</span><br><span class="line">    if points_are_valid(raw_points, img) is False:</span><br><span class="line">        return None</span><br><span class="line"></span><br><span class="line">    # Get the valid facebox.</span><br><span class="line">    facebox = get_valid_box(img, raw_points)</span><br><span class="line">    if facebox is None:</span><br><span class="line">        print(&quot;Using minimal box.&quot;)</span><br><span class="line">        facebox = get_minimal_box(raw_points)</span><br><span class="line"></span><br><span class="line">    # Extract valid image area.</span><br><span class="line">    face_area = img[facebox[1]:facebox[3],</span><br><span class="line">                    facebox[0]: facebox[2]]</span><br><span class="line"></span><br><span class="line">    rw = 1</span><br><span class="line">    rh = 1</span><br><span class="line">    # Check if resize is needed.</span><br><span class="line">    width = facebox[2] - facebox[0]</span><br><span class="line">    height = facebox[3] - facebox[1]</span><br><span class="line">    print width,height</span><br><span class="line">    if width != height:</span><br><span class="line">        print(&apos;opps!&apos;, width, height)</span><br><span class="line">    if (width != 224) or (height != 224):</span><br><span class="line">        face_area = cv2.resize(face_area, (224, 224))</span><br><span class="line">        rw = 224 / width</span><br><span class="line">        rh = 224 / height</span><br><span class="line"></span><br><span class="line">    # generate a new pts file according to facebox</span><br><span class="line">    new_point = get_new_pts(facebox, raw_points, label_txt,</span><br><span class="line">                            image_file, flag, rw, rh)</span><br><span class="line"></span><br><span class="line">    if test_flag == 0:</span><br><span class="line">        # verify the crop image whether match to 68 point or not</span><br><span class="line">        face_area = draw_landmark_point(face_area, new_point)</span><br><span class="line">        cv2.imwrite(DATA_TEST_DST + image_file + &quot;.jpg&quot;, face_area)</span><br><span class="line">    else:</span><br><span class="line">        cv2.imwrite(DATA_DST + image_file + &quot;.jpg&quot;, face_area)</span><br><span class="line"></span><br><span class="line">    # Show the result.</span><br><span class="line">    cv2.imshow(&quot;Crop face&quot;, face_area)</span><br><span class="line">    if cv2.waitKey(10) == 27:</span><br><span class="line">        cv2.waitKey()</span><br><span class="line"></span><br><span class="line">    # # Show whole image in window.</span><br><span class="line">    # width, height = img.shape[:2]</span><br><span class="line">    # max_height = 640</span><br><span class="line">    # if height &gt; max_height:</span><br><span class="line">    #     img = cv2.resize(</span><br><span class="line">    #         img, (max_height, int(width * max_height / height)))</span><br><span class="line">    # cv2.imshow(&quot;preview&quot;, img)</span><br><span class="line">    # cv2.waitKey()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    The main entrance</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    for file_string in filelist:</span><br><span class="line"></span><br><span class="line">        root = &quot;/Users/camlin_z/Data/data/&quot;</span><br><span class="line">        # 图像存储的路劲</span><br><span class="line">        DATA_DIR = root + file_string + &quot;/&quot;</span><br><span class="line">        # crop之后图像存储的路劲</span><br><span class="line">        DATA_DST = root + file_string + &quot;_crop/&quot;</span><br><span class="line">        # 存储将转换后的坐标画在crop之后的图像的路径，用于验证坐标的转换是否出现错误</span><br><span class="line">        DATA_TEST_DST = root + file_string + &quot;_pts/&quot;</span><br><span class="line">        # 最终生成网络训练需要的label的txt文件的路径</span><br><span class="line">        point_new_file = root + file_string + &quot;.txt&quot;</span><br><span class="line">        flag = file_string + &quot;/&quot;</span><br><span class="line"></span><br><span class="line">        pts_file_list = []</span><br><span class="line">        for file_path, _, file_names in os.walk(DATA_DIR):</span><br><span class="line">            for file_name in file_names:</span><br><span class="line">                if file_name.split(&quot;.&quot;)[-1] in [&quot;pts&quot;]:</span><br><span class="line">                    pts_file_list.append(os.path.join(file_path, file_name))</span><br><span class="line"></span><br><span class="line">        label_txt = open(point_new_file, &apos;w&apos;)</span><br><span class="line">        mkr(DATA_DST)</span><br><span class="line">        mkr(DATA_TEST_DST)</span><br><span class="line"></span><br><span class="line">        # Show the image one by one.</span><br><span class="line">        for file_name in pts_file_list:</span><br><span class="line">            preview(file_name, test_flag, bbox_new_file)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="3、数据增强"><a href="#3、数据增强" class="headerlink" title="3、数据增强"></a>3、数据增强</h2><p>由于以上数据集总共加起来只有五千张左右，对于需要大数据训练的神经网络显然是不够的，所以这里考虑对上面的数据集进行数据增强的操作，由于项目的需要，所以主要是对原来的数据集进行旋转的数据增强。</p>
+<p>以上的旋转主要可以分为两种策略：<br>1、将原始图像直接保持原始大小进行旋转<br>2、将原始图像旋转后将生成的图像的四个边向外扩充，使得生成的图像不会切掉原始图像的四个边。</p>
+<p>主要分为±15°，±30°，±45°，±60°四种旋转类型，在进行数据增强的过程中，主要由三个问题需要解决：<br>（1）旋转后产生的黑色区域可能影响卷积学习特征<br>（2）利用以上产生的只有人脸的图像进行旋转可能将之前标注的特征点旋转到图像的外面，导致某些特征点损失<br>（3）旋转后特征点坐标的生成</p>
+<p>针对第一个问题：<br>可以参考：<a href="https://blog.csdn.net/guyuealian/article/details/77993410中的方法，对图像的黑色区域利用其边缘值的二次插值来进行填充，但是上面的处理过程可能会产生一些奇怪的边缘效果，如下图所示：" target="_blank" rel="noopener">https://blog.csdn.net/guyuealian/article/details/77993410中的方法，对图像的黑色区域利用其边缘值的二次插值来进行填充，但是上面的处理过程可能会产生一些奇怪的边缘效果，如下图所示：</a><br><img src="https://img-blog.csdn.net/20180623154456210?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img src="https://img-blog.csdn.net/20180623154509518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>有担心上面这些奇怪的特征是不是会影响最终卷积网络的学习结果，但是暂时还没有找到合适的解决方法，有大牛知道，感谢留言。</p>
+<p>针对第二个问题：<br>可以参考：<a href="https://www.oschina.net/translate/opencv-rotation中的代码，将图像旋转后根据其旋转后产生的新的长宽来存储图片，保证最终生成的旋转后的图片不会去掉原始图片的四个角，上面展示的图片就是利用这种方法进行旋转-60°之后的结果。" target="_blank" rel="noopener">https://www.oschina.net/translate/opencv-rotation中的代码，将图像旋转后根据其旋转后产生的新的长宽来存储图片，保证最终生成的旋转后的图片不会去掉原始图片的四个角，上面展示的图片就是利用这种方法进行旋转-60°之后的结果。</a></p>
+<p>针对第三个问题：<br>可以参考：<a href="https://blog.csdn.net/songzitea/article/details/51043743中的解释来进行转换。" target="_blank" rel="noopener">https://blog.csdn.net/songzitea/article/details/51043743中的解释来进行转换。</a><br>还有一篇写的比较好的博文可以阅读：<a href="https://charlesnord.github.io/2017/04/01/rotation/" target="_blank" rel="noopener">https://charlesnord.github.io/2017/04/01/rotation/</a></p>
+<p>将以上问题一一解决之后，由于采用策略二进行旋转时会产生上面图片所示的大块奇怪的特征，但是策略一则不会产生那么大块的奇怪的特征，所以我对于旋转的数据增强的整体逻辑如下：<br><img src="https://img-blog.csdn.net/2018062316063612?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>按照上面的处理过程，可以写出下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br></pre></td><td class="code"><pre><span class="line">#-*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">from __future__ import division</span><br><span class="line">import cv2</span><br><span class="line">import os</span><br><span class="line">import numpy as np</span><br><span class="line">import math</span><br><span class="line"></span><br><span class="line">filelist = [&quot;300W/trainset&quot;, &quot;afw/trainset&quot;, &quot;data2/trainset&quot;, &quot;data3/trainset&quot;,</span><br><span class="line">             &quot;data4/trainset&quot;, &quot;helen/trainset&quot;, &quot;landmark/trainset&quot;, &quot;lfpw/trainset&quot;,</span><br><span class="line">            &quot;300W/testset&quot;, &quot;afw/testset&quot;, &quot;data2/testset&quot;, &quot;data3/testset&quot;,</span><br><span class="line">            &quot;data4/testset&quot;, &quot;helen/testset&quot;, &quot;landmark/testset&quot;, &quot;lfpw/testset&quot;]</span><br><span class="line"></span><br><span class="line">img_dir = &quot;/Users/camlin_z/Data/data_output/&quot;</span><br><span class="line">angles = [15, 30, 45, 60]</span><br><span class="line"></span><br><span class="line">def mkr(dr):</span><br><span class="line">    if not os.path.exists(dr):</span><br><span class="line">        os.mkdir(dr)</span><br><span class="line"></span><br><span class="line">def read_points(file_name=None):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Read points from .pts file.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    points = []</span><br><span class="line">    with open(file_name) as file:</span><br><span class="line">        line_count = 0</span><br><span class="line">        for line in file:</span><br><span class="line">            if &quot;version&quot; in line or &quot;points&quot; in line or &quot;&#123;&quot; in line or &quot;&#125;&quot; in line:</span><br><span class="line">                continue</span><br><span class="line">            else:</span><br><span class="line">                loc_x, loc_y = line.strip().split()</span><br><span class="line">                points.append([float(loc_x), float(loc_y)])</span><br><span class="line">                line_count += 1</span><br><span class="line">    return points</span><br><span class="line"></span><br><span class="line">def draw_save_landmark(image, points, dst):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Draw landmark point on image.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    for point in points:</span><br><span class="line">        cv2.circle(image, (int(point[0]), int(</span><br><span class="line">            point[1])), 2, (0, 255, 0), -1, cv2.LINE_AA)</span><br><span class="line">    cv2.imwrite(dst, image)</span><br><span class="line"></span><br><span class="line">def trans_label(txt, label):</span><br><span class="line">    file_new = open(txt, &apos;w+&apos;)</span><br><span class="line">    file_new.write(&quot;version: 1&quot; + &quot;\n&quot;)</span><br><span class="line">    file_new.write(&quot;n_points: 68&quot; + &quot;\n&quot;)</span><br><span class="line">    file_new.write(&quot;&#123;&quot; + &quot;\n&quot;)</span><br><span class="line">    for point in label:</span><br><span class="line">        file_new.write(str(point[0]) + &quot; &quot; + str(point[1]) + &quot;\n&quot;)</span><br><span class="line">    file_new.write(&quot;&#125;&quot;)</span><br><span class="line"></span><br><span class="line">def rotate_with_adjust_size(img, theta):</span><br><span class="line">    img_raw = cv2.imread(img)</span><br><span class="line">    height, width = img_raw.shape[:2]</span><br><span class="line">    center = (width / 2, height / 2)</span><br><span class="line">    scale = 1</span><br><span class="line">    rangle = np.deg2rad(theta)  # angle in radians</span><br><span class="line">    # now calculate new image width and height</span><br><span class="line">    nw = (abs(np.sin(rangle) * height) + abs(np.cos(rangle) * width)) * scale</span><br><span class="line">    nh = (abs(np.cos(rangle) * height) + abs(np.sin(rangle) * width)) * scale</span><br><span class="line">    # ask OpenCV for the rotation matrix</span><br><span class="line">    rot_mat = cv2.getRotationMatrix2D((nw * 0.5, nh * 0.5), theta, scale)</span><br><span class="line">    # calculate the move from the old center to the new center combined</span><br><span class="line">    # with the rotation</span><br><span class="line">    rot_move = np.dot(rot_mat, np.array([(nw - width) * 0.5, (nh - height) * 0.5, 0]))</span><br><span class="line">    # the move only affects the translation, so update the translation</span><br><span class="line">    # part of the transform</span><br><span class="line">    rot_mat[0, 2] += rot_move[0]</span><br><span class="line">    rot_mat[1, 2] += rot_move[1]</span><br><span class="line">    img_rotate = cv2.warpAffine(img_raw, rot_mat, (int(np.math.ceil(nw)), int(np.math.ceil(nh))), cv2.INTER_LANCZOS4,</span><br><span class="line">                          cv2.BORDER_REFLECT, 1)</span><br><span class="line">    offset_w = (nw - width) / 2</span><br><span class="line">    offset_h = (nh - height) / 2</span><br><span class="line"></span><br><span class="line">    img_rotate = cv2.resize(img_rotate, (224, 224))</span><br><span class="line">    rw = 224 / nw</span><br><span class="line">    rh = 224 / nh</span><br><span class="line">    return img_rotate, center, offset_w, offset_h, rw, rh</span><br><span class="line"></span><br><span class="line">def rotate_with_original_size(img, theta):</span><br><span class="line">    img_raw = cv2.imread(img)</span><br><span class="line">    height, width = img_raw.shape[:2]</span><br><span class="line">    center = (width / 2, height / 2)</span><br><span class="line">    rot_mat = cv2.getRotationMatrix2D(center, theta, 1)</span><br><span class="line">    img_rotate = cv2.warpAffine(img_raw, rot_mat, (width, height), cv2.INTER_LANCZOS4,</span><br><span class="line">                          cv2.BORDER_REFLECT, 1)</span><br><span class="line">    return img_rotate, center</span><br><span class="line"></span><br><span class="line">def rotate_pts_original_size(img, points, center, angle):</span><br><span class="line">    flag = 0</span><br><span class="line">    new_points = []</span><br><span class="line">    height, width = img.shape[:2]</span><br><span class="line">    theta = np.deg2rad(angle)</span><br><span class="line">    for i in range(len(points)):</span><br><span class="line">        [x_raw, y_raw] = points[i]</span><br><span class="line">        y_raw = height - y_raw</span><br><span class="line">        (center_x, center_y) = center</span><br><span class="line">        center_y = height - center_y</span><br><span class="line">        x = round((x_raw - center_x) * math.cos(theta) - (y_raw - center_y) * math.sin(theta) + center_x)</span><br><span class="line">        y = round((x_raw - center_x) * math.sin(theta) + (y_raw - center_y) * math.cos(theta) + center_y)</span><br><span class="line">        x = int(x)</span><br><span class="line">        y = int(height - y)</span><br><span class="line">        if x &lt;= 0 or y &lt;= 0:</span><br><span class="line">            flag = 1</span><br><span class="line">            break</span><br><span class="line">        new_points.append([x, y])</span><br><span class="line">    return new_points, flag</span><br><span class="line"></span><br><span class="line">def rotate_pts_adjust_size(img, points, center, angle, offset_w, offset_h, rate_w, rate_h):</span><br><span class="line">    new_points = []</span><br><span class="line">    height, width = img.shape[:2]</span><br><span class="line">    theta = np.deg2rad(angle)</span><br><span class="line">    for i in range(len(points)):</span><br><span class="line">        [x_raw, y_raw] = points[i]</span><br><span class="line">        y_raw = height - y_raw</span><br><span class="line">        (center_x, center_y) = center</span><br><span class="line">        center_y = height - center_y</span><br><span class="line">        x = round((x_raw - center_x) * math.cos(theta) - (y_raw - center_y) * math.sin(theta) + center_x)</span><br><span class="line">        y = round((x_raw - center_x) * math.sin(theta) + (y_raw - center_y) * math.cos(theta) + center_y)</span><br><span class="line">        x = int((x + offset_w) * rate_w)</span><br><span class="line">        y = int((height - y + offset_h) * rate_h)</span><br><span class="line">        new_points.append([x, y])</span><br><span class="line">    return new_points</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    for angle in angles:</span><br><span class="line">        for file_string in filelist:</span><br><span class="line">            out_dir = os.path.join(img_dir, file_string + &quot;_&quot; + str(abs(angle)))</span><br><span class="line">            out_verify_dir = out_dir + &quot;/out/&quot;</span><br><span class="line">            mkr(out_dir)</span><br><span class="line">            mkr(out_verify_dir)</span><br><span class="line">            for file_path, _, file_names in os.walk(os.path.join(img_dir, file_string)):</span><br><span class="line">                for file_name in file_names:</span><br><span class="line">                    if file_name.split(&quot;.&quot;)[-1] in [&quot;jpg&quot;, &quot;png&quot;, &quot;jpeg&quot;]:</span><br><span class="line">                        print file_name</span><br><span class="line">                        # 读取图像路径</span><br><span class="line">                        img_file_path = os.path.join(img_dir, file_string, file_name)</span><br><span class="line">                        # 读取pts文件路径</span><br><span class="line">                        pts_file_name = file_name.split(&quot;.&quot;)[0] + &quot;.pts&quot;</span><br><span class="line">                        pts_file_path = os.path.join(img_dir, file_string, pts_file_name)</span><br><span class="line">                        # 写入pts文件路径</span><br><span class="line">                        pts_new_dir = os.path.join(out_dir, pts_file_name)</span><br><span class="line"></span><br><span class="line">                        ############ 原始大小旋转图像和点 ############</span><br><span class="line">                        # 随机生成指定的旋转角度</span><br><span class="line">                        if angle == 15:</span><br><span class="line">                            theta_pos = np.random.randint(0, 15)</span><br><span class="line">                            theta_neg = np.random.randint(-15, 0)</span><br><span class="line">                        elif angle == 30:</span><br><span class="line">                            theta_pos = np.random.randint(15, 30)</span><br><span class="line">                            theta_neg = np.random.randint(-30, -15)</span><br><span class="line">                        elif angle == 45:</span><br><span class="line">                            theta_pos = np.random.randint(30, 45)</span><br><span class="line">                            theta_neg = np.random.randint(-45, -30)</span><br><span class="line">                        else:</span><br><span class="line">                            theta_pos = np.random.randint(45, 60)</span><br><span class="line">                            theta_neg = np.random.randint(-60, -45)</span><br><span class="line"></span><br><span class="line">                        arr = np.random.randint(0, 2)</span><br><span class="line">                        if arr == 0:</span><br><span class="line">                            theta = theta_pos</span><br><span class="line">                        else:</span><br><span class="line">                            theta = theta_neg</span><br><span class="line">                        print theta</span><br><span class="line">                        # 旋转图像</span><br><span class="line">                        img, center = rotate_with_original_size(img_file_path, theta)</span><br><span class="line">                        # 调整图像对应坐标点</span><br><span class="line">                        points = read_points(pts_file_path)</span><br><span class="line">                        new_points, flag = rotate_pts_original_size(img, points, center, theta)</span><br><span class="line"></span><br><span class="line">                        # 根据以上flag判断产生的点是否超出图像位置</span><br><span class="line">                        # 如果超出，则使用调整大小的方式旋转</span><br><span class="line">                        if flag == 1:</span><br><span class="line">                            print img_file_path, &quot;warning!!!&quot;</span><br><span class="line">                            img, center, offset_w, offset_h, rw, rh = rotate_with_adjust_size(img_file_path, theta)</span><br><span class="line">                            new_points = rotate_pts_adjust_size(img, points, center, theta, offset_w, offset_h,rw, rh)</span><br><span class="line"></span><br><span class="line">                        # 将图像写入输出文件夹</span><br><span class="line">                        cv2.imwrite(os.path.join(out_dir, file_name), img)</span><br><span class="line">                        # 将pts重新写入输出文件夹</span><br><span class="line">                        trans_label(pts_new_dir, new_points)</span><br><span class="line">                        # 将坐标点画到图像上验证位置是否正确</span><br><span class="line">                        out_img_path = os.path.join(out_verify_dir, file_name)</span><br><span class="line">                        draw_save_landmark(img, new_points, out_img_path)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>以上过程处理完成后，就完成了所有的数据预处理过程了。</p>
+<h1 id="二、网络模型的构造"><a href="#二、网络模型的构造" class="headerlink" title="二、网络模型的构造"></a>二、网络模型的构造</h1><p>由于caffe的图片输入层只是支持一个标签的输入，所以本文中的caffe的iamge data layer经过了一定程度的修改，使其可以接受136个label值的输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br></pre></td><td class="code"><pre><span class="line">#ifdef USE_OPENCV</span><br><span class="line">#include &lt;opencv2/core/core.hpp&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;fstream&gt;  // NOLINT(readability/streams)</span><br><span class="line">#include &lt;iostream&gt;  // NOLINT(readability/streams)</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;utility&gt;</span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line"></span><br><span class="line">#include &quot;caffe/data_transformer.hpp&quot;</span><br><span class="line">#include &quot;caffe/layers/base_data_layer.hpp&quot;</span><br><span class="line">#include &quot;caffe/layers/image_data_layer.hpp&quot;</span><br><span class="line">#include &quot;caffe/util/benchmark.hpp&quot;</span><br><span class="line">#include &quot;caffe/util/io.hpp&quot;</span><br><span class="line">#include &quot;caffe/util/math_functions.hpp&quot;</span><br><span class="line">#include &quot;caffe/util/rng.hpp&quot;</span><br><span class="line"></span><br><span class="line">namespace caffe &#123;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">ImageDataLayer&lt;Dtype&gt;::~ImageDataLayer&lt;Dtype&gt;() &#123;</span><br><span class="line">  this-&gt;StopInternalThread();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">int ImageDataLayer&lt;Dtype&gt;::Rand(int n) &#123;</span><br><span class="line">  if (n &lt; 1) return 1;</span><br><span class="line">  caffe::rng_t* rng =</span><br><span class="line">      static_cast&lt;caffe::rng_t*&gt;(prefetch_rng_-&gt;generator());</span><br><span class="line">  return ((*rng)() % n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ImageDataLayer&lt;Dtype&gt;::DataLayerSetUp(const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; bottom,</span><br><span class="line">      const vector&lt;Blob&lt;Dtype&gt;*&gt;&amp; top) &#123;</span><br><span class="line">  const int new_height = this-&gt;layer_param_.image_data_param().new_height();</span><br><span class="line">  const int new_width  = this-&gt;layer_param_.image_data_param().new_width();</span><br><span class="line">  const bool is_color  = this-&gt;layer_param_.image_data_param().is_color();</span><br><span class="line">  const bool shuffleflag = this-&gt;layer_param_.image_data_param().shuffle();</span><br><span class="line">  string root_folder = this-&gt;layer_param_.image_data_param().root_folder();</span><br><span class="line"></span><br><span class="line">  CHECK((new_height == 0 &amp;&amp; new_width == 0) ||</span><br><span class="line">      (new_height &gt; 0 &amp;&amp; new_width &gt; 0)) &lt;&lt; &quot;Current implementation requires &quot;</span><br><span class="line">      &quot;new_height and new_width to be set at the same time.&quot;;</span><br><span class="line">  // Read the file with filenames and labels</span><br><span class="line">  const string&amp; source = this-&gt;layer_param_.image_data_param().source();</span><br><span class="line">  LOG(INFO) &lt;&lt; &quot;Opening file &quot; &lt;&lt; source;</span><br><span class="line">  std::ifstream infile(source.c_str());</span><br><span class="line">  string line;</span><br><span class="line">  int pos;</span><br><span class="line">  int label_dim = 0;</span><br><span class="line">  bool gfirst = true;</span><br><span class="line">  int rd = shuffleflag?4:0;</span><br><span class="line">  while (std::getline(infile, line)) &#123;</span><br><span class="line">	if(line.find_last_of(&apos; &apos;)==line.size()-2) line.erase(line.find_last_not_of(&apos; &apos;)-1);</span><br><span class="line">        pos = line.find_first_of(&apos; &apos;);</span><br><span class="line">	string str = line.substr(0, pos);</span><br><span class="line">	int p0 = pos + 1;</span><br><span class="line">	vector&lt;float&gt; vl;</span><br><span class="line">	while (pos != -1)&#123;</span><br><span class="line">		pos = line.find_first_of(&apos; &apos;, p0);</span><br><span class="line">		vl.push_back(atof(line.substr(p0, pos).c_str()));</span><br><span class="line">		p0 = pos + 1;</span><br><span class="line">	&#125;</span><br><span class="line">	if (shuffleflag) &#123;</span><br><span class="line">		float minx = vl[0];</span><br><span class="line">		float maxx = minx;</span><br><span class="line">		float miny = vl[1];</span><br><span class="line">		float maxy = miny;</span><br><span class="line">		for (int i = 2; i &lt; vl.size(); i += 2)&#123;</span><br><span class="line">			if (vl[i] &lt; minx) minx = vl[i];</span><br><span class="line">			else if (vl[i] &gt; maxx) maxx = vl[i];</span><br><span class="line">			if (vl[i + 1] &lt; miny) miny = vl[i + 1];</span><br><span class="line">			else if (vl[i + 1] &gt; maxy) maxy = vl[i + 1];</span><br><span class="line">		&#125;</span><br><span class="line">		vl.push_back(minx);</span><br><span class="line">		vl.push_back(maxx + 1);</span><br><span class="line">		vl.push_back(miny);</span><br><span class="line">		vl.push_back(maxy + 1);</span><br><span class="line">	&#125;</span><br><span class="line">	if (gfirst)&#123;</span><br><span class="line">		label_dim = vl.size();</span><br><span class="line">		gfirst = false;</span><br><span class="line">		LOG(INFO) &lt;&lt; &quot;label dim: &quot; &lt;&lt; label_dim - rd;</span><br><span class="line">		//LOG(INFO) &lt;&lt; line;		</span><br><span class="line">	&#125;</span><br><span class="line">	CHECK_EQ(vl.size(), label_dim)  &lt;&lt; &quot;label dim not match in: &quot; &lt;&lt; lines_.size()&lt;&lt;&quot;, &quot;&lt;&lt;lines_[lines_.size()-1].first;</span><br><span class="line">	lines_.push_back(std::make_pair(str, vl));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  CHECK(!lines_.empty()) &lt;&lt; &quot;File is empty&quot;;</span><br><span class="line"></span><br><span class="line">  if (shuffleflag) &#123;</span><br><span class="line">    // randomly shuffle data</span><br><span class="line">    LOG(INFO) &lt;&lt; &quot;Shuffling data &amp; randomly crop image&quot;;</span><br><span class="line">    const unsigned int prefetch_rng_seed = caffe_rng_rand();</span><br><span class="line">    prefetch_rng_.reset(new Caffe::RNG(prefetch_rng_seed));</span><br><span class="line">    ShuffleImages();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    if (this-&gt;phase_ == TRAIN &amp;&amp; Caffe::solver_rank() &gt; 0 &amp;&amp;</span><br><span class="line">        this-&gt;layer_param_.image_data_param().rand_skip() == 0) &#123;</span><br><span class="line">      LOG(WARNING) &lt;&lt; &quot;Shuffling or skipping recommended for multi-GPU&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  LOG(INFO) &lt;&lt; &quot;A total of &quot; &lt;&lt; lines_.size() &lt;&lt; &quot; images.&quot;;</span><br><span class="line"></span><br><span class="line">  lines_id_ = 0;</span><br><span class="line">  // Check if we would need to randomly skip a few data points</span><br><span class="line">  if (this-&gt;layer_param_.image_data_param().rand_skip()) &#123;</span><br><span class="line">    unsigned int skip = caffe_rng_rand() %</span><br><span class="line">        this-&gt;layer_param_.image_data_param().rand_skip();</span><br><span class="line">    LOG(INFO) &lt;&lt; &quot;Skipping first &quot; &lt;&lt; skip &lt;&lt; &quot; data points.&quot;;</span><br><span class="line">    CHECK_GT(lines_.size(), skip) &lt;&lt; &quot;Not enough points to skip&quot;;</span><br><span class="line">    lines_id_ = skip;</span><br><span class="line">  &#125;</span><br><span class="line">  // Read an image, and use it to initialize the top blob.</span><br><span class="line">  cv::Mat cv_img = ReadImageToCVMat(root_folder + lines_[lines_id_].first,</span><br><span class="line">                                    0, 0, is_color);</span><br><span class="line">  CHECK(cv_img.data) &lt;&lt; &quot;Could not load &quot; &lt;&lt; lines_[lines_id_].first;</span><br><span class="line">  // Use data_transformer to infer the expected blob shape from a cv_image.</span><br><span class="line">  vector&lt;int&gt; top_shape(4);</span><br><span class="line">  top_shape[0] = 1;</span><br><span class="line">  top_shape[1] = cv_img.channels();</span><br><span class="line">  top_shape[2] = shuffleflag ? new_height : cv_img.rows;</span><br><span class="line">  top_shape[3] = shuffleflag ? new_width : cv_img.cols;</span><br><span class="line">  this-&gt;transformed_data_.Reshape(top_shape);</span><br><span class="line">  // Reshape prefetch_data and top[0] according to the batch_size.</span><br><span class="line">  const int batch_size = this-&gt;layer_param_.image_data_param().batch_size();</span><br><span class="line">  CHECK_GT(batch_size, 0) &lt;&lt; &quot;Positive batch size required&quot;;</span><br><span class="line">  top_shape[0] = batch_size;</span><br><span class="line">  for (int i = 0; i &lt; this-&gt;prefetch_.size(); ++i) &#123;</span><br><span class="line">    this-&gt;prefetch_[i]-&gt;data_.Reshape(top_shape);</span><br><span class="line">  &#125;</span><br><span class="line">  top[0]-&gt;Reshape(top_shape);</span><br><span class="line"></span><br><span class="line">  LOG(INFO) &lt;&lt; &quot;output data size: &quot; &lt;&lt; top[0]-&gt;num() &lt;&lt; &quot;,&quot;</span><br><span class="line">      &lt;&lt; top[0]-&gt;channels() &lt;&lt; &quot;,&quot; &lt;&lt; top[0]-&gt;height() &lt;&lt; &quot;,&quot;</span><br><span class="line">      &lt;&lt; top[0]-&gt;width();</span><br><span class="line">  // label</span><br><span class="line">  vector&lt;int&gt; label_shape(2, batch_size);</span><br><span class="line">  label_shape[1] = label_dim-rd;</span><br><span class="line">  top[1]-&gt;Reshape(label_shape);</span><br><span class="line">  for (int i = 0; i &lt; this-&gt;prefetch_.size(); ++i) &#123;</span><br><span class="line">    this-&gt;prefetch_[i]-&gt;label_.Reshape(label_shape);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ImageDataLayer&lt;Dtype&gt;::ShuffleImages() &#123;</span><br><span class="line">  caffe::rng_t* prefetch_rng =</span><br><span class="line">      static_cast&lt;caffe::rng_t*&gt;(prefetch_rng_-&gt;generator());</span><br><span class="line">  shuffle(lines_.begin(), lines_.end(), prefetch_rng);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// This function is called on prefetch thread</span><br><span class="line">template &lt;typename Dtype&gt;</span><br><span class="line">void ImageDataLayer&lt;Dtype&gt;::load_batch(Batch&lt;Dtype&gt;* batch) &#123;</span><br><span class="line">  CPUTimer batch_timer;</span><br><span class="line">  batch_timer.Start();</span><br><span class="line">  double read_time = 0;</span><br><span class="line">  double trans_time = 0;</span><br><span class="line">  CPUTimer timer;</span><br><span class="line">  CHECK(batch-&gt;data_.count());</span><br><span class="line">  CHECK(this-&gt;transformed_data_.count());</span><br><span class="line">  ImageDataParameter image_data_param = this-&gt;layer_param_.image_data_param();</span><br><span class="line">  const int batch_size = image_data_param.batch_size();</span><br><span class="line">  const float rate_height = this-&gt;layer_param_.image_data_param().rate_height();</span><br><span class="line">  const float rate_width = this-&gt;layer_param_.image_data_param().rate_width();</span><br><span class="line">  const bool is_color = image_data_param.is_color();</span><br><span class="line">  const bool shuffleflag = this-&gt;layer_param_.image_data_param().shuffle();</span><br><span class="line">  string root_folder = image_data_param.root_folder();</span><br><span class="line"></span><br><span class="line">  // Reshape according to the first image of each batch</span><br><span class="line">  // on single input batches allows for inputs of varying dimension.</span><br><span class="line">  cv::Mat cv_img = ReadImageToCVMat(root_folder + lines_[lines_id_].first,</span><br><span class="line">      0, 0, is_color);</span><br><span class="line">  CHECK(cv_img.data) &lt;&lt; &quot;Could not load &quot; &lt;&lt; lines_[lines_id_].first;</span><br><span class="line">  const int new_height = shuffleflag ? image_data_param.new_height() : cv_img.rows;</span><br><span class="line">  const int new_width = shuffleflag ? image_data_param.new_width() : cv_img.cols;</span><br><span class="line">  // Use data_transformer to infer the expected blob shape from a cv_img.</span><br><span class="line">  vector&lt;int&gt; top_shape(4);</span><br><span class="line">  top_shape[0] = 1;</span><br><span class="line">  top_shape[1] = cv_img.channels();</span><br><span class="line">  top_shape[2] = new_height;</span><br><span class="line">  top_shape[3] = new_width;</span><br><span class="line">  this-&gt;transformed_data_.Reshape(top_shape);</span><br><span class="line">  // Reshape batch according to the batch_size.</span><br><span class="line">  top_shape[0] = batch_size;</span><br><span class="line">  batch-&gt;data_.Reshape(top_shape);</span><br><span class="line">  vector&lt;int&gt; top_shape1(4);</span><br><span class="line">  top_shape1[0] = batch_size;</span><br><span class="line">  top_shape1[1] = shuffleflag ? lines_[0].second.size() - 4 : lines_[0].second.size();</span><br><span class="line">  top_shape1[2] = 1;</span><br><span class="line">  top_shape1[3] = 1;</span><br><span class="line">  batch-&gt;label_.Reshape(top_shape1);</span><br><span class="line"></span><br><span class="line">  Dtype* prefetch_data = batch-&gt;data_.mutable_cpu_data();</span><br><span class="line">  Dtype* prefetch_label = batch-&gt;label_.mutable_cpu_data();</span><br><span class="line"></span><br><span class="line">  // datum scales</span><br><span class="line">  const int lines_size = lines_.size();</span><br><span class="line">  const float dh_2 = (new_height - 1)*0.5;</span><br><span class="line">  const float dw_2 = (new_width - 1)*0.5;</span><br><span class="line">  for (int item_id = 0; item_id &lt; batch_size; ++item_id) &#123;</span><br><span class="line">    // get a blob</span><br><span class="line">    timer.Start();</span><br><span class="line">    CHECK_GT(lines_size, lines_id_);</span><br><span class="line">    cv::Mat cv_img = ReadImageToCVMat(root_folder + lines_[lines_id_].first,</span><br><span class="line">        0, 0, is_color);</span><br><span class="line">    CHECK(cv_img.data) &lt;&lt; &quot;Could not load &quot; &lt;&lt; lines_[lines_id_].first;</span><br><span class="line">    read_time += timer.MicroSeconds();</span><br><span class="line">    timer.Start();</span><br><span class="line">    // Apply transformations (mirror, crop...) to the image</span><br><span class="line">	int x1 = 0;</span><br><span class="line">	int y1 = 0;</span><br><span class="line">	int x2 = cv_img.cols;</span><br><span class="line">	int y2 = cv_img.rows;</span><br><span class="line">	if (shuffleflag)&#123;</span><br><span class="line">		CHECK_GE(cv_img.rows, new_height) &lt;&lt; lines_[lines_id_].first;</span><br><span class="line">		CHECK_GE(cv_img.cols, new_width) &lt;&lt; lines_[lines_id_].first;</span><br><span class="line">		int minx = lines_[lines_id_].second[top_shape1[1]];</span><br><span class="line">		int maxx = lines_[lines_id_].second[top_shape1[1] + 1];</span><br><span class="line">		int miny = lines_[lines_id_].second[top_shape1[1] + 2];</span><br><span class="line">		int maxy = lines_[lines_id_].second[top_shape1[1] + 3];</span><br><span class="line">		x1 = Rand(2 * round(rate_width*cv_img.cols));</span><br><span class="line">		y1 = Rand(2 * round(rate_height*cv_img.rows));</span><br><span class="line">		x2 = x1 + new_width;</span><br><span class="line">		y2 = y1 + new_height;</span><br><span class="line">		if (x1 &gt; minx)&#123;</span><br><span class="line">			x2 -= x1 - minx;</span><br><span class="line">			x1 = minx;</span><br><span class="line">		&#125;</span><br><span class="line">		if (x2 &lt; maxx)&#123;</span><br><span class="line">			x1 += maxx - x2;</span><br><span class="line">			x2 = maxx;</span><br><span class="line">		&#125;</span><br><span class="line">		if (x1&lt;0)&#123;</span><br><span class="line">			x2 += -x1;</span><br><span class="line">			x1 = 0;</span><br><span class="line">		&#125;</span><br><span class="line">		if (x2 &gt; cv_img.cols)&#123;</span><br><span class="line">			x1 -= x2 - cv_img.cols;</span><br><span class="line">			x2 = cv_img.cols;</span><br><span class="line">		&#125;</span><br><span class="line">		if (y1 &gt; miny)&#123;</span><br><span class="line">			y2 -= y1 - miny;</span><br><span class="line">			y1 = miny;</span><br><span class="line">		&#125;</span><br><span class="line">		if (y2 &lt; maxy)&#123;</span><br><span class="line">			y1 += maxy - y2;</span><br><span class="line">			y2 = maxy;</span><br><span class="line">		&#125;</span><br><span class="line">		if (y1&lt;0)&#123;</span><br><span class="line">			y2 += -y1;</span><br><span class="line">			y1 = 0;</span><br><span class="line">		&#125;</span><br><span class="line">		if (y2&gt;cv_img.rows)&#123;</span><br><span class="line">			y1 -= y2 - cv_img.rows;</span><br><span class="line">			y2 = cv_img.rows;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if (y2 - y1 != new_height || x2 - x1 != new_width)&#123;</span><br><span class="line">		printf(&quot;%s y1:%d, y2:%d, x1:%d, x2:%d\n&quot;, lines_[lines_id_].first.c_str(),y1,y2,x1,x2);</span><br><span class="line">	&#125;</span><br><span class="line">    //</span><br><span class="line">    int offset = batch-&gt;data_.offset(item_id);</span><br><span class="line">    this-&gt;transformed_data_.set_cpu_data(prefetch_data + offset);</span><br><span class="line">    this-&gt;data_transformer_-&gt;Transform(cv_img(cv::Range(y1, y2), cv::Range(x1, x2)), &amp;(this-&gt;transformed_data_));</span><br><span class="line">    trans_time += timer.MicroSeconds();</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; top_shape1[1]; i++)&#123;</span><br><span class="line">      if (i % 2 == 0) prefetch_label[item_id*top_shape1[1] + i] = (lines_[lines_id_].second[i] - x1 - dw_2) / dw_2;</span><br><span class="line">      else prefetch_label[item_id*top_shape1[1] + i] = (lines_[lines_id_].second[i] - y1 - dh_2) / dh_2;</span><br><span class="line">    &#125;</span><br><span class="line">    // go to the next iter</span><br><span class="line">    lines_id_++;</span><br><span class="line">    if (lines_id_ &gt;= lines_size) &#123;</span><br><span class="line">      // We have reached the end. Restart from the first.</span><br><span class="line">      DLOG(INFO) &lt;&lt; &quot;Restarting data prefetching from start.&quot;;</span><br><span class="line">      lines_id_ = 0;</span><br><span class="line">      if (shuffleflag) &#123;</span><br><span class="line">        ShuffleImages();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  batch_timer.Stop();</span><br><span class="line">  DLOG(INFO) &lt;&lt; &quot;Prefetch batch: &quot; &lt;&lt; batch_timer.MilliSeconds() &lt;&lt; &quot; ms.&quot;;</span><br><span class="line">  DLOG(INFO) &lt;&lt; &quot;     Read time: &quot; &lt;&lt; read_time / 1000 &lt;&lt; &quot; ms.&quot;;</span><br><span class="line">  DLOG(INFO) &lt;&lt; &quot;Transform time: &quot; &lt;&lt; trans_time / 1000 &lt;&lt; &quot; ms.&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INSTANTIATE_CLASS(ImageDataLayer);</span><br><span class="line">REGISTER_LAYER_CLASS(ImageData);</span><br><span class="line"></span><br><span class="line">&#125;  // namespace caffe</span><br><span class="line">#endif  // USE_OPENCV</span><br></pre></td></tr></table></figure>
+<p>经过上面的修改之后，就可以编译该caffe。<br>网络结构以及solver.ptototxt见github中landmark_detec文件夹中的内容。</p>
+<h1 id="三、模型的训练"><a href="#三、模型的训练" class="headerlink" title="三、模型的训练"></a>三、模型的训练</h1><p>准备好了上面的所有数据以及文件之后，可以使用下面的shell脚本进行训练：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line"></span><br><span class="line">cd ../</span><br><span class="line">## MODIFY PATH for YOUR SETTING</span><br><span class="line">CAFFE_DIR=/Users/camlin_z/Data/Project/caffe-68landmark</span><br><span class="line">CONFIG_DIR=$&#123;CAFFE_DIR&#125;/landmark_detec</span><br><span class="line">CAFFE_BIN=$&#123;CAFFE_DIR&#125;/build/tools/caffe</span><br><span class="line">DEV_ID=0</span><br><span class="line"></span><br><span class="line">sudo $&#123;CAFFE_BIN&#125; train \</span><br><span class="line">-solver=$&#123;CONFIG_DIR&#125;/solver.prototxt \</span><br><span class="line">-weights=$&#123;CONFIG_DIR&#125;/init.caffemodel \</span><br><span class="line">-gpu=$&#123;DEV_ID&#125; \</span><br><span class="line">2&gt;&amp;1 | tee $&#123;CONFIG_DIR&#125;/train.log</span><br></pre></td></tr></table></figure>
+<p>训练过程中先开始使用”fixed”的策略进行训练，发现到20000次的迭代之后，loss不再下降了，所以改为”multistep”的策略进行训练，训练得到的模型效果还是很好的，时间在我的mac上面大概是80ms左右，可以使用下面的脚本进行测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"># coding=utf-8</span><br><span class="line"></span><br><span class="line">import numpy as np</span><br><span class="line">import cv2</span><br><span class="line">import caffe</span><br><span class="line">from PIL import Image, ImageDraw</span><br><span class="line">import time</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">blobname = &quot;68point&quot;</span><br><span class="line">feature_dim = 136</span><br><span class="line"></span><br><span class="line">root = &quot;/Users/camlin_z/Data/Project/caffe-master-multilabel-normalize-randcrop-newloss/landmark_detec/&quot;</span><br><span class="line">deploy = root + &quot;deploy.prototxt&quot;</span><br><span class="line"># caffe_model = root + &quot;snapshot_all1/snapshot_iter_250000.caffemodel&quot;</span><br><span class="line"># caffe_model = root + &quot;snapshot_part1/oldfinetune_iter_20000.caffemodel&quot;</span><br><span class="line">caffe_model = root + &quot;init.caffemodel&quot;</span><br><span class="line"># caffe_model = root + &quot;snapshot2/fine_iter_400000.caffemodel&quot;</span><br><span class="line"># caffe_model = root + &quot;snapshot_final/final_iter_350000.caffemodel&quot;</span><br><span class="line">img_dir = &quot;/Users/camlin_z/Data/data_fine/&quot;</span><br><span class="line">img_dir_out = &quot;/Users/camlin_z/Data/data_fine/out/&quot;</span><br><span class="line">label_file = &quot;/Users/camlin_z/Data/data_fine/label_test.txt&quot;</span><br><span class="line">img_path = &quot;/Users/camlin_z/Data/data_fine/data2/2415.jpeg&quot;</span><br><span class="line"></span><br><span class="line">net = caffe.Net(deploy, caffe_model, caffe.TEST)</span><br><span class="line">caffe.set_mode_cpu()</span><br><span class="line"></span><br><span class="line"># 测试一批数据，并显示所有数据的均方差</span><br><span class="line">def detec_whole(img_dir, img_dir_out, label_file):</span><br><span class="line">    time_sum = 0</span><br><span class="line">    mser_sum = 0</span><br><span class="line">    id_sum = 0</span><br><span class="line"></span><br><span class="line">    fid = open(label_file, &apos;r&apos;)</span><br><span class="line">    for id in fid:</span><br><span class="line">        id_sum += 1</span><br><span class="line">        flag = id.find(&apos; &apos;)</span><br><span class="line">        # 读取文件中的标签信息</span><br><span class="line">        image_name = id[:flag]</span><br><span class="line">        label_true = id[flag:]</span><br><span class="line">        label_true = label_true.strip().split()</span><br><span class="line">        label_true = map(float, label_true)</span><br><span class="line">        label_true = np.array(label_true, np.float32)</span><br><span class="line">        imgname = os.path.basename(image_name)</span><br><span class="line">        print imgname</span><br><span class="line">        # print label_true</span><br><span class="line"></span><br><span class="line">        img = cv2.imread(img_dir + image_name)</span><br><span class="line">        img_draw = img.copy()</span><br><span class="line">        sh = img.shape</span><br><span class="line">        h = sh[0]</span><br><span class="line">        w = sh[1]</span><br><span class="line">        rw = (w + 1) / 2</span><br><span class="line">        rh = (h + 1) / 2</span><br><span class="line"></span><br><span class="line">        # 以下网络输出了预测的68点坐标</span><br><span class="line">        # start = time.time()</span><br><span class="line">        img = np.array(img, np.float32)</span><br><span class="line">        transformer = caffe.io.Transformer(&#123;&apos;data&apos;: net.blobs[&apos;data&apos;].data.shape&#125;)  # 设定图片的shape格式(1,3,28,28)</span><br><span class="line">        transformer.set_transpose(&apos;data&apos;, (2, 0, 1))</span><br><span class="line">        transformer.set_mean(&apos;data&apos;, np.array([127.5, 127.5, 127.5]))</span><br><span class="line">        net.blobs[&apos;data&apos;].data[...] = transformer.preprocess(&apos;data&apos;, img)</span><br><span class="line">        start = time.time()</span><br><span class="line">        out = net.forward()</span><br><span class="line">        landmark = out[blobname]</span><br><span class="line">        elap = time.time() - start</span><br><span class="line">        landmark = np.array(landmark, np.float32)</span><br><span class="line">        landmark[0: 136: 2] = (landmark[0: 136: 2] * rh) + rh</span><br><span class="line">        landmark[1: 136: 2] = (landmark[1: 136: 2] * rw) + rw</span><br><span class="line">        # print landmark</span><br><span class="line">        time_sum += elap</span><br><span class="line">        print &quot;time:&quot;, elap</span><br><span class="line"></span><br><span class="line">        for i in range(0, 136, 2):</span><br><span class="line">            cv2.circle(img_draw, (int(landmark[0][i]), int(landmark[0][i + 1])), 2, (0, 255, 0), -1, cv2.LINE_AA)</span><br><span class="line">        cv2.imwrite(img_dir_out + imgname, img_draw)</span><br><span class="line"></span><br><span class="line">        v = label_true - landmark</span><br><span class="line">        v = v*v</span><br><span class="line">        v = v[0][0::2] + v[0][1:: 2]</span><br><span class="line">        sv = np.power(v, 0.5)</span><br><span class="line">        mser = sum(sv) / feature_dim</span><br><span class="line">        mser_sum += mser</span><br><span class="line">        print &quot;mser:&quot;, mser</span><br><span class="line"></span><br><span class="line">    print &quot;Average time:&quot;, time_sum/id_sum</span><br><span class="line">    print &quot;Average mser:&quot;, mser_sum/id_sum</span><br><span class="line"></span><br><span class="line"># 测试一张图片，并显示预测的特征点的位置</span><br><span class="line">def detec_single():</span><br><span class="line">    img = cv2.imread(img_path)</span><br><span class="line">    # draw = ImageDraw.Draw(img1)</span><br><span class="line">    sh = img.shape</span><br><span class="line">    print sh</span><br><span class="line">    h = sh[0]</span><br><span class="line">    w = sh[1]</span><br><span class="line">    rw = (w + 1)/2</span><br><span class="line">    rh = (h + 1)/2</span><br><span class="line">    img = np.array(img, np.float32)</span><br><span class="line">    img_copy = img.copy()</span><br><span class="line"></span><br><span class="line">    transformer = caffe.io.Transformer(&#123;&apos;data&apos;: net.blobs[&apos;data&apos;].data.shape&#125;)</span><br><span class="line">    transformer.set_transpose(&apos;data&apos;, (2, 0, 1))</span><br><span class="line">    transformer.set_mean(&apos;data&apos;, np.array([127.5, 127.5, 127.5]))</span><br><span class="line">    net.blobs[&apos;data&apos;].data[...] = transformer.preprocess(&apos;data&apos;,img)</span><br><span class="line">    start = time.time()</span><br><span class="line">    out = net.forward()</span><br><span class="line">    elap = time.time() - start</span><br><span class="line">    print &quot;time:&quot;, elap</span><br><span class="line">    landmark = out[blobname]</span><br><span class="line">    landmark = np.array(landmark, np.float32)</span><br><span class="line">    landmark[0: 136: 2] = (landmark[0: 136: 2] * rh ) + rh</span><br><span class="line">    landmark[1: 136: 2] = (landmark[1: 136: 2] * rw ) + rw</span><br><span class="line">    # print landmark</span><br><span class="line"></span><br><span class="line">    for i in range(0, 136, 2):</span><br><span class="line">        cv2.circle(img_copy, (int(landmark[0][i]), int(landmark[0][i+1])), 2, (0, 255, 0), -1, cv2.LINE_AA)</span><br><span class="line">    # draw.point(landmark[0], (225, 225, 255))</span><br><span class="line">    # del draw</span><br><span class="line">    cv2.imwrite(root + &apos;test.jpg&apos;, img_copy)</span><br><span class="line">    # img1.show()</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    detec_whole(img_dir, img_dir_out, label_file)</span><br><span class="line">    # detec_single()</span><br></pre></td></tr></table></figure>
+<p>在写上面的测试代码的时候发现mac上由于caffe的包和cv2的包会有冲突，所以img.show()显示图片会出现问题，希望有知道的大牛可以告诉我怎么解决这个问题。</p>
+<p>以上就是全部的过程，也是我实习里做的第二个完整的项目，上面如果有错误或者说的不对的地方，希望大家能够留言指出，万分感谢。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/images/we_chat_reward_image.png" alt="Camlin Zhang 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/uploads/images/alipay_reward_image.jpg" alt="Camlin Zhang 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/人脸68特征点/" rel="tag"><i class="fa fa-tag"></i> 人脸68特征点</a>
+          
+            <a href="/tags/深度学习/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/20/MTCNN配置及训练详细步骤/" rel="next" title="MTCNN配置及训练详细步骤">
+                <i class="fa fa-chevron-left"></i> MTCNN配置及训练详细步骤
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/25/PSPNet运行及训练/" rel="prev" title="PSPNet运行及训练">
+                PSPNet运行及训练 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/images/avatar.jpg" alt="Camlin Zhang">
+            
+              <p class="site-author-name" itemprop="name">Camlin Zhang</p>
+              <p class="site-description motion-element" itemprop="description">愿你被这个世界温柔以待</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CamlinZ" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://me.csdn.net/sinat_28731575" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="camlinzhang@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、数据集的准备"><span class="nav-number">1.</span> <span class="nav-text">一、数据集的准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、数据集的采集"><span class="nav-number">1.1.</span> <span class="nav-text">1、数据集的采集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、数据集的预处理"><span class="nav-number">1.2.</span> <span class="nav-text">2、数据集的预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、数据增强"><span class="nav-number">1.3.</span> <span class="nav-text">3、数据增强</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、网络模型的构造"><span class="nav-number">2.</span> <span class="nav-text">二、网络模型的构造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、模型的训练"><span class="nav-number">3.</span> <span class="nav-text">三、模型的训练</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+
+  <span class="with-love">
+    <i class="fa fa-heart" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Camlin Zhang</span>
+
+  
+</div>
+
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数：<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<span class="post-meta-divider">|</span>
+
+<!--
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.4k字</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
