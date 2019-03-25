@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://camlinzhang.com/"/>
-  <updated>2019-03-25T05:13:07.000Z</updated>
+  <updated>2019-03-25T13:30:36.641Z</updated>
   <id>http://camlinzhang.com/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>目标检测two-stage经典方法总结</title>
+    <link href="http://camlinzhang.com/2019/03/25/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8Btwo-stage%E7%BB%8F%E5%85%B8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"/>
+    <id>http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/</id>
+    <published>2019-03-25T12:33:08.000Z</published>
+    <updated>2019-03-25T13:30:36.641Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="计算机视觉的三大任务"><a href="#计算机视觉的三大任务" class="headerlink" title="计算机视觉的三大任务"></a>计算机视觉的三大任务</h2><ul><li><p>分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）</p></li><li><p>定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值</p></li><li><p>检测（在哪儿有什么）：给定一张图片，你把图片中的所有物体全部给我找出来（包括位置、类别）</p></li></ul><h2 id="OverFeat"><a href="#OverFeat" class="headerlink" title="OverFeat"></a>OverFeat</h2><blockquote><p>《OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks》</p></blockquote><p>在早期方法中，通常使用以下的传统框架进行目标检测任务(这里以人脸检测作为一个例子)：</p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg" alt="目标检测早期方法传统框架"></p><p>可以看到传统的框架通常使用下面的步骤进行检测任务：</p><ol><li>首先利用大量图片训练一个目标检测的分类器</li><li>在不同尺度的待检测图像中使用密集滑窗进行滑动，对每一个滑窗的位置使用第1步训练的分类器进行分类来判断是否为待检测目标</li><li>将密集滑窗策略得到的待检测目标的检测框进行NMS合并</li></ol><p>在上面的步骤中很明显可以发现传统检测方法是将分类和定位任务分开进行，并利用滑窗策略来对图像中的所有位置进行定位(后面简称为滑窗定位策略)，即将分类和滑窗定位策略合并起来最终完成检测任务。</p><p>Overfeat方法便是在以上框架的基础上利用深度学习的卷积神经网络进行改进，将分类，定位和检测任务用一个网络完成，主要改进点为：</p><ul><li><p>改进AlexNet分类网络作为主干网络，也即本文提出的<strong>OverFeat</strong>，它是将该主干网络作为一个特征提取算子，提取出特征为后面的分类和定位任务做准备</p></li><li><p>利用在OverFeat后面接上全连接层进行训练，来完成分类任务；然后将全连接层替换成FCN网络，保持训练分类任务的OverFeat结构参数不变，训练检测框回归任务(可以看出早期的深度学习方法还是延续了传统方法的思想，即利用类似于SIFT和HOG这些特征提取算子来提取特征，然后再在后面接各种不同任务的分类器进行分类，实际上在卷积神经网络中是可以将所有方法合并成一个end-to-end的任务的)</p></li><li><p>引入特征图滑窗策略来替代传统的在输入图片上进行的密集滑窗策略，极大的降低了计算量</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;计算机视觉的三大任务&quot;&gt;&lt;a href=&quot;#计算机视觉的三大任务&quot; class=&quot;headerlink&quot; title=&quot;计算机视觉的三大任务&quot;&gt;&lt;/a&gt;计算机视觉的三大任务&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;分类（是什么）：给定一张图片，为每张图片打一个标签，说出图
+      
+    
+    </summary>
+    
+      <category term="技术博客" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"/>
+    
+      <category term="深度学习算法" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="目标检测" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
+    
+    
+      <category term="目标检测" scheme="http://camlinzhang.com/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
+    
+      <category term="two-stage" scheme="http://camlinzhang.com/tags/two-stage/"/>
+    
+  </entry>
   
   <entry>
     <title>Caffe转NCNN并移植Android配置记录</title>
@@ -280,9 +312,9 @@
       <category term="环境配置" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
     
     
-      <category term="Ubuntu" scheme="http://camlinzhang.com/tags/Ubuntu/"/>
-    
       <category term="Caffe" scheme="http://camlinzhang.com/tags/Caffe/"/>
+    
+      <category term="Ubuntu" scheme="http://camlinzhang.com/tags/Ubuntu/"/>
     
       <category term="DeepLab" scheme="http://camlinzhang.com/tags/DeepLab/"/>
     
