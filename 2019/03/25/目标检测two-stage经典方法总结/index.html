@@ -114,7 +114,11 @@
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hlhptzrej30up03xq41.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1hli3gbmej30un07aaba.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg">
-<meta property="og:updated_time" content="2019-03-27T12:21:51.572Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1jgru0yqdj30fj05976j.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg">
+<meta property="og:updated_time" content="2019-03-29T13:44:02.996Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
 <meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
@@ -371,8 +375,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-27T20:21:51+08:00">
-                2019-03-27
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-29T21:44:02+08:00">
+                2019-03-29
               </time>
             
           </span>
@@ -562,7 +566,7 @@
 <li><p>对于网络输出的各个尺度对应的特征向量，例如第一个尺度产生的输出3x3xC，则是对于每一个类别对应的3x3个特征向量取平均值，得到该尺度下每一个类别的概率值，以此类推到各个尺度，便可以求出各个尺度中各个类别的概率。最后将各个尺度中相同类别的概率值做平均，便可以得到最终的各个类别的概率，根据评价指标的需要取最大的一个概率对应的类别作为top-1，或者最大的5个概率对应的类别作为top-5.</p>
 </li>
 </ul>
-<h3 id="定位任务"><a href="#定位任务" class="headerlink" title="定位任务"></a>定位任务</h3><h4 id="模型训练-1"><a href="#模型训练-1" class="headerlink" title="模型训练"></a>模型训练</h4><p>保持分类模型中训练好的OverFeat模型参数不变，在模型后面加上定位任务的网络进行训练，从而得到最终的定位网络</p>
+<h3 id="定位任务"><a href="#定位任务" class="headerlink" title="定位任务"></a>定位任务</h3><h4 id="模型训练-1"><a href="#模型训练-1" class="headerlink" title="模型训练"></a>模型训练</h4><p>保持分类模型中训练好的OverFeat模型参数不变，在模型后面加上定位任务的网络进行训练，从而得到最终的定位网络(文中并没有给出训练回归任务的loss函数)</p>
 <h4 id="模型定位步骤"><a href="#模型定位步骤" class="headerlink" title="模型定位步骤"></a>模型定位步骤</h4><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1hl0abyfyj30p00lqdki.jpg" alt=""></p>
 <p>从上图可以看到，以281x317的输入尺寸为例，OverFeat论文中对于上面OverFeat整体流程图中特征图2首先进行一个5x5的pooling层得到2x3的特征图，然后经过4096x1x1和1000x1x1的全连接层(这里使用FCN实现)之后最终输出每一个尺度产生的每一个特征图中的每一个像素点映射到原图中的检测框的坐标值，即图中的(top, left, right, right box edges)。对此，作者通过下面的几组图片分析了多尺度策略，offset pooling策略对模型产生检测框的密集度：</p>
 <ul>
@@ -578,6 +582,127 @@
 <h3 id="分类和定位任务"><a href="#分类和定位任务" class="headerlink" title="分类和定位任务"></a>分类和定位任务</h3><p>整体上OverFeat利用OverFeat特征提取器来提取特征，将该特征运用于后面的分类和定位任务，即可以看作对于后面产生的特征图中的每一个像素点映射到原始图中的区域，在该区域预测出分类任务中各个类别的概率以及回归任务中检测框的坐标值，下面同样以281x317的输入尺寸为例，给出网络同时进行两项任务的示意图：</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg" alt=""></p>
 <h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><p><a href="https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</a></p>
+<h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><p>2012年，AlexNet第一次利用卷积神经网络在ILSVRC比赛上获得了超越第二名几乎一半的成绩，引起了极大的反响，在目标检测领域，主要争论的问题是：</p>
+<blockquote>
+<p>To what extent do the CNN classiﬁcation results on ImageNet generalize to object detection results on the PASCAL VOC Challenge?</p>
+</blockquote>
+<blockquote>
+<p>ImageNet上的CNN分类结果在何种程度上能够应用到PASCAL VOC挑战的物体检测任务上？</p>
+</blockquote>
+<p>针对这个问题，本文主要关注两个方面：</p>
+<ol>
+<li>localizing objects with a deep network(主要关注如何使用AlexNet中的深度网络来完成定位问题)</li>
+<li>training a high-capacity model with only a small quantity of annotated detection data(主要关注如何将AlexNet中深度网络的权重迁移到定位问题上)</li>
+</ol>
+<p>下面就上面两个问题进行分析R-CNN的脉络</p>
+<h3 id="使用深度网络来定位物体"><a href="#使用深度网络来定位物体" class="headerlink" title="使用深度网络来定位物体"></a>使用深度网络来定位物体</h3><p>在图像中定位物体通常使用一下两种方法：</p>
+<ol>
+<li>将定位问题看作是回归问题(OverFeat采用的方法)，R-CNN论文中利用Szegedy等的工作说明这种方法不是很好</li>
+<li>构造一个滑动窗口检测器(R-CNN中采用的方法)</li>
+</ol>
+<p>下面具体说明R-CNN的具体构造：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1jgru0yqdj30fj05976j.jpg" alt=""></p>
+<p>如上图所示，R-CNN的测试部分主要分为三个模块:</p>
+<ol>
+<li>产生类别无关的候选框</li>
+<li>卷积神经网络产生定长的特征向量</li>
+<li>指定类别的SVM线性分类器</li>
+</ol>
+<h4 id="产生类别无关的候选框"><a href="#产生类别无关的候选框" class="headerlink" title="产生类别无关的候选框"></a>产生类别无关的候选框</h4><p>R-CNN采用论文《Selective search for object recognition》中的Selective Search方法来产生<strong>2000个</strong>后面需要的候选框，这个方法主要有三个优势：</p>
+<ul>
+<li>捕捉不同尺度（Capture All Scales）</li>
+<li>多样化（Diversification）</li>
+<li>快速计算（Fast to Compute）</li>
+</ul>
+<p>Selective Search算法主要包含两个内容</p>
+<ul>
+<li>Hierarchical Grouping Algorithm</li>
+<li>Diversification Strategies</li>
+</ul>
+<p><strong>Hierarchical Grouping Algorithm</strong></p>
+<ol>
+<li>使用论文《Efficient Graph-Based Image Segmentation》中的方法在图像中产生初始区域(参考：<a href="https://blog.csdn.net/ttransposition/article/details/38024557" target="_blank" rel="noopener">https://blog.csdn.net/ttransposition/article/details/38024557</a>)</li>
+<li>计算所有邻近区域之间的相似性</li>
+<li>两个最相似的区域被组合在一起</li>
+<li>计算合并区域和相邻区域的相似度</li>
+<li>重复2、3过程，直到整个图像变为一个地区。</li>
+</ol>
+<p><strong>Diversification Strategies</strong></p>
+<p>这个部分涉及到多样性的一些策略，使得抽样多样化，主要有下面三个不同方面：</p>
+<ol>
+<li>利用各种不同不变性的色彩空间</li>
+<li>采用不同的相似性度量</li>
+<li>通过改变起始区域，作者对比了一些初始化区域的方法，发现《Efficient Graph-Based Image Segmentation》中的方法效果最好</li>
+</ol>
+<p>主要参考：<a href="https://zhuanlan.zhihu.com/p/39927488" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/39927488</a></p>
+<h4 id="卷积神经网络产生定长的特征向量"><a href="#卷积神经网络产生定长的特征向量" class="headerlink" title="卷积神经网络产生定长的特征向量"></a>卷积神经网络产生定长的特征向量</h4><ol>
+<li>将第一步中产生的类别无关的候选框risize成227x227大小的图片</li>
+</ol>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg" alt=""></p>
+<p>上图中展示了作者在附录A中实验的几种resize方式：</p>
+<p>(B)考虑context(图像中context指RoI周边像素)的各向同性变形，检测框向周围像素扩充到227×227，若遇到图像边界则用候选框像素的均值进行填充</p>
+<p>(C)不考虑context的各向同性变形，直接用建议框像素均值填充至227×227</p>
+<p>(D)各向异性变形，简单粗暴对图像resize至227×227</p>
+<p>变形前先进行边界像素填充padding处理，即向外扩展建议框边界，以上三种方法中第一行为采用padding=0，第二行为采用padding=16</p>
+<blockquote>
+<p>作者采用的方法即为上图中(D)那一列的下面那一行的方式，在候选框周围加上16的padding(即向外扩展候选框边界)，再进行各向异性缩放，作者对比了各种方法后，发现这种方法最好，使得mAp提高了3到5个百分点</p>
+</blockquote>
+<ol start="2">
+<li>将1中resize以后的候选框图片使用AlexNet中五个卷积层和两个全连接层进行前向传播，最终得到一个4096x1维的特征向量</li>
+</ol>
+<h4 id="指定类别的SVM线性分类器"><a href="#指定类别的SVM线性分类器" class="headerlink" title="指定类别的SVM线性分类器"></a>指定类别的SVM线性分类器</h4><p>通过对每个类别训练出来的SVM对以上每个候选框产生的4096维特征向量进行打分，然后给出一张图像中所有的打分区域，然后使用NMS（每个类别是独立进行的），拒绝掉一些和高分区域的IOU大于阈值的候选框。</p>
+<h3 id="训练网络"><a href="#训练网络" class="headerlink" title="训练网络"></a>训练网络</h3><h4 id="CNN的训练"><a href="#CNN的训练" class="headerlink" title="CNN的训练"></a>CNN的训练</h4><p>由于目标检测的数据集标注数据较少，训练AlexNet这样的大型网络较为困难，于是产生了上面提到的第二个问题：</p>
+<blockquote>
+<p>training a high-capacity model with only a small quantity of annotated detection data</p>
+</blockquote>
+<ol>
+<li>利用ImageNet数据集进行预训练</li>
+<li>将ImageNet专用的1000-way分类层，换成了一个随机初始化的21-way分类层（其中20是VOC的类别数，1代表背景）而卷积部分都没有改变</li>
+<li>将PASCAL VOC数据集利用Selective Search方法产生候选框，利用所有候选框区域的图片作为训练数据，其中和真实标注的框的IoU&gt;=0.5就认为是正例，否则就是负例</li>
+<li>利用3中的数据进行finetune，SGD开始的learning_rate为0.001（是初始化预训练时的十分之一），这使得调优得以有效进行而不会破坏初始化的成果。每轮SGD迭代，统一使用32个正例窗口（跨所有类别）和96个背景窗口，即每个mini-batch的大小是128。另外倾向于采样正例窗口，因为和背景相比他们很稀少。</li>
+</ol>
+<h4 id="SVM分类器的训练"><a href="#SVM分类器的训练" class="headerlink" title="SVM分类器的训练"></a>SVM分类器的训练</h4><p>与上面CNN的finetune过程一样，同样采用步骤3中的方法来产生训练SVM的数据集，但是其中IoU低于0.3的被作为负例，GT作为正例，其余的全部丢弃。然后将这些候选框区域利用上面训练好的CNN提取特征，，对应标签数据，来训练SVM。但是由于这里训练数据太大，难以装进内存，所以R-CNN采用hard negative mining方法，hard negative mining方法使得训练能够很快的收敛，并且mAP在一个epoch之后就停止增长。</p>
+<blockquote>
+<p>hard negative mining：难负例挖掘算法，用途就是解决正负例数量不均衡，而负例分散代表性又不够的问题，用分类器对样本进行分类，把其中错误分类的样本(hard negative)放入负样本集合再继续训练分类器。</p>
+</blockquote>
+<h4 id="CNN和SVM训练中的问题"><a href="#CNN和SVM训练中的问题" class="headerlink" title="CNN和SVM训练中的问题"></a>CNN和SVM训练中的问题</h4><p>一、 为什么使用不同的正负例IoU阈值</p>
+<p>首先，两者的不同在于</p>
+<ul>
+<li>在CNN的训练中，是将候选框区域和真实标注的框的IoU&gt;=0.5就认为是正例，否则就是负例，其中候选框区域是针对所有类别的，因此每次匹配的时候只要和任意一个真是标注框的IoU&gt;=0.5就认为是正例</li>
+<li>在SVM的训练中，是将候选框区域和某一单一类别的真实标注框进行对比，当IoU阈值小于0.3的时候为负例，而正例为真实标注框</li>
+</ul>
+<p>而产生两种不同策略的原因在于：</p>
+<blockquote>
+<p>CNN的模型复杂度远远高于SVM，在训练CNN的时候采用上面的策略会使得正例的数目是真正正例(即GT)的数目的30倍，这样一方面可以避免CNN过拟合，另一方面可以为SVM的训练抽取到足够有表现力的特征(因为如果采用SVM那种数据处理方式，会使得CNN得到的数据样本很少)</p>
+</blockquote>
+<blockquote>
+<p>由于SVM的模型是采用上面训练好的CNN模型输出的4096-D的特征来进行训练，因此SVM不需要采用过多的样本来抽取特征；同时SVM模型的复杂度很低，为了获取到足够大的类间距，所以采用上面训练SVM的策略，这样可以让SVM更容易区分正例和负例的区别</p>
+</blockquote>
+<p>二、为什么不采用CNN直接进行分类，而是要在后面使用SVM分类</p>
+<blockquote>
+<p>在上面的训练策略中，为了CNN抽取到训练样本中足够丰富的特征，采用上面介绍的CNN训练数据的生成方法，引入了大量“jittered”样本(与真实标注框的IoU阈值在0.5到1之间的候选框样本)极大的扩充了正例，避免了CNN过拟合，但是带来的问题便是CNN很难学到有效的区分正例和负例之间的区别，并且由于“jittered”样本与真实标注框之间存在很大的偏差，因此CNN网络在预测精确的定位位置上表现不佳</p>
+</blockquote>
+<blockquote>
+<p>CNN的训练中采用的是随机选取正负例，保证两者之间的比例为1:3，而没有采用SVM中的hard negative mining方法，同样导致直接使用CNN进行分类的效果没有使用功能SVM的好</p>
+</blockquote>
+<h4 id="Ablation-studies"><a href="#Ablation-studies" class="headerlink" title="Ablation studies"></a>Ablation studies</h4><p>作者通过在上面提出的模型的基础上分别用Pool5、fc6以及fc7产生的特征来训练SVM，并使用SVM进行分类后的mAP指标如下：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg" alt=""></p>
+<ul>
+<li>前三行数据说明调优之前的模型中fc7的特征泛化能力不如fc6的特征，同时移除fc6和fc7，仅仅使用pool5的特征，只使用CNN参数的6%也能有非常好的结果。可见CNN的主要表达力来自于卷积层，而不是全连接层</li>
+<li>中间三行数据说明调优之后的模型提升非常明显，mAP提升了8个百分点，达到了54.2%。fc6和fc7的提升明显优于pool5，这说明pool5从ImageNet学习的特征通用性很强，在它之上层的大部分提升主要是在学习领域相关的非线性分类器(上面是文中的观点，但是个人觉得这个数据实际上在一定程度上反驳了上边关于全连接层对于模型的特征表达没有作用的观点)</li>
+</ul>
+<h4 id="检测错误分析"><a href="#检测错误分析" class="headerlink" title="检测错误分析"></a>检测错误分析</h4><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg" alt=""></p>
+<p>(这里没有看的太明白)</p>
+<h4 id="Bounding-box回归"><a href="#Bounding-box回归" class="headerlink" title="Bounding-box回归"></a>Bounding-box回归</h4><p>通过上面的检测错误分析，作者指出：</p>
+<blockquote>
+<p>As an immediate consequence of this analysis, we demonstrate that a simple bounding-box regression method signiﬁcantly reduces mislocalizations, which are the dominant error mode.</p>
+</blockquote>
+<p>从而在SVM对每一个候选框进行分类后，针对预测有类别的候选框进行Bounding-box回归。详细参考：<a href="https://blog.csdn.net/v1_vivian/article/details/80292569" target="_blank" rel="noopener">https://blog.csdn.net/v1_vivian/article/details/80292569</a>以及<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">https://blog.csdn.net/zijin0802034/article/details/77685438</a></p>
+<h3 id="自己的一些总结"><a href="#自己的一些总结" class="headerlink" title="自己的一些总结"></a>自己的一些总结</h3><ul>
+<li>R-CNN中产生候选框位置的算法是Selective Search方法，该方法还是在利用传统特征的思想来提取后面需要检测的位置</li>
+<li>在产生正负例样本的时候采用的是1:3的比例，感觉后的很多方法都沿用了这一比例</li>
+<li>为什么在数据量过大，没有办法全部装进内存的时候采用hard negative mining方法，还是没有完全理解</li>
+</ul>
 
       
     </div>
@@ -823,7 +948,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">3.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度网络来定位物体"><span class="nav-number">3.1.</span> <span class="nav-text">使用深度网络来定位物体</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产生类别无关的候选框"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生类别无关的候选框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络产生定长的特征向量"><span class="nav-number">3.1.2.</span> <span class="nav-text">卷积神经网络产生定长的特征向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定类别的SVM线性分类器"><span class="nav-number">3.1.3.</span> <span class="nav-text">指定类别的SVM线性分类器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练网络"><span class="nav-number">3.2.</span> <span class="nav-text">训练网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN的训练"><span class="nav-number">3.2.1.</span> <span class="nav-text">CNN的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM分类器的训练"><span class="nav-number">3.2.2.</span> <span class="nav-text">SVM分类器的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN和SVM训练中的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">CNN和SVM训练中的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ablation-studies"><span class="nav-number">3.2.4.</span> <span class="nav-text">Ablation studies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测错误分析"><span class="nav-number">3.2.5.</span> <span class="nav-text">检测错误分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounding-box回归"><span class="nav-number">3.2.6.</span> <span class="nav-text">Bounding-box回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己的一些总结"><span class="nav-number">3.3.</span> <span class="nav-text">自己的一些总结</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -880,7 +1005,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共40.8k字</span>
+  <span class="post-count">博客全站共43.6k字</span>
 </div>
 
         
