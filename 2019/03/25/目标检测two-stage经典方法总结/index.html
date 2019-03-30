@@ -118,7 +118,7 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg">
-<meta property="og:updated_time" content="2019-03-30T03:31:07.661Z">
+<meta property="og:updated_time" content="2019-03-30T04:00:40.125Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
 <meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
@@ -375,7 +375,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-30T11:31:07+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-30T12:00:40+08:00">
                 2019-03-30
               </time>
             
@@ -700,7 +700,7 @@
 <blockquote>
 <p>As an immediate consequence of this analysis, we demonstrate that a simple bounding-box regression method signiﬁcantly reduces mislocalizations, which are the dominant error mode.</p>
 </blockquote>
-<p>从而在SVM对每一个候选框进行分类后，针对预测有类别的候选框进行Bounding-box回归。详细参考：<a href="https://blog.csdn.net/v1_vivian/article/details/80292569" target="_blank" rel="noopener">https://blog.csdn.net/v1_vivian/article/details/80292569</a>以及<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">https://blog.csdn.net/zijin0802034/article/details/77685438</a></p>
+<p>从而在SVM对每一个候选框进行分类后，针对预测有类别的候选框进行Bounding-box回归。详细参考：<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">https://blog.csdn.net/zijin0802034/article/details/77685438</a><br>(个人觉得这篇博客很赞，详细的解释了此处回归的loss函数的设计原理)</p>
 <h3 id="自己的一些问题"><a href="#自己的一些问题" class="headerlink" title="自己的一些问题"></a>自己的一些问题</h3><ul>
 <li>R-CNN中产生候选框位置的算法是Selective Search方法，该方法还是在利用传统特征的思想来提取后面需要检测的位置，但是最后又使用了深卷积网络提取到的特征做Bounding-box回归来进行校正</li>
 <li>在产生正负例样本的时候采用的是1:3的比例，感觉后的很多方法都沿用了这一比例</li>
