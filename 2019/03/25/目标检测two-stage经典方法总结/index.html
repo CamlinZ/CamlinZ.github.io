@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="目标检测,two-stage,">
+  <meta name="keywords" content="目标检测,two-stage,OverFeat,SPP-Net,R-CNN,Fast-RCNN,Faster-RCNN,">
 
 
 
@@ -89,7 +89,7 @@
 
 
 <meta name="description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
-<meta name="keywords" content="目标检测,two-stage">
+<meta name="keywords" content="目标检测,two-stage,OverFeat,SPP-Net,R-CNN,Fast-RCNN,Faster-RCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="目标检测two-stage经典方法总结">
 <meta property="og:url" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/index.html">
@@ -122,7 +122,9 @@
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m3jopoybj31pk0lx1kx.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1m51iiou3j30o40c4n2h.jpg">
-<meta property="og:updated_time" content="2019-03-31T10:44:04.018Z">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg">
+<meta property="og:updated_time" content="2019-03-31T14:12:06.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
 <meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
@@ -379,7 +381,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-31T18:44:04+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-31T22:12:06+08:00">
                 2019-03-31
               </time>
             
@@ -586,7 +588,10 @@
 <h3 id="分类和定位任务"><a href="#分类和定位任务" class="headerlink" title="分类和定位任务"></a>分类和定位任务</h3><p>整体上OverFeat利用OverFeat特征提取器来提取特征，将该特征运用于后面的分类和定位任务，即可以看作对于后面产生的特征图中的每一个像素点映射到原始图中的区域，在该区域预测出分类任务中各个类别的概率以及回归任务中检测框的坐标值，下面同样以281x317的输入尺寸为例，给出网络同时进行两项任务的示意图：</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg" alt=""></p>
 <h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><p><a href="https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</a></p>
-<h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><p>2012年，AlexNet第一次利用卷积神经网络在ILSVRC比赛上获得了超越第二名几乎一半的成绩，引起了极大的反响，在目标检测领域，主要争论的问题是：</p>
+<h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><blockquote>
+<p>《Rich feature hierarchies for accurate object detection and semantic segmentation》</p>
+</blockquote>
+<p>2012年，AlexNet第一次利用卷积神经网络在ILSVRC比赛上获得了超越第二名几乎一半的成绩，引起了极大的反响，在目标检测领域，主要争论的问题是：</p>
 <blockquote>
 <p>To what extent do the CNN classiﬁcation results on ImageNet generalize to object detection results on the PASCAL VOC Challenge?</p>
 </blockquote>
@@ -709,7 +714,10 @@
 <li>R-CNN中产生候选框位置的算法是Selective Search方法，该方法还是在利用传统特征的思想来提取后面需要检测的位置，但是最后又使用了深卷积网络提取到的特征做Bounding-box回归来进行校正</li>
 <li>在产生正负例样本的时候采用的是1:3的比例，感觉后的很多方法都沿用了这一比例</li>
 </ul>
-<h2 id="SPP-Net"><a href="#SPP-Net" class="headerlink" title="SPP-Net"></a>SPP-Net</h2><h3 id="提出问题以及产生问题的原因"><a href="#提出问题以及产生问题的原因" class="headerlink" title="提出问题以及产生问题的原因"></a>提出问题以及产生问题的原因</h3><p>流行的CNN结构通常都需要输入图像的尺寸是固定的，这限制了输入图像的长宽比和缩放尺度。当遇到任意尺寸的图像时，都是先将图像利用裁剪和变形缩放的方式来适应成固定尺寸。但裁剪会导致信息的丢失，变形会导致位置信息的扭曲，就会影响识别的精度。另外，一个预先定义好的尺寸在物体是缩放可变的时候就不适用了。</p>
+<h2 id="SPP-Net"><a href="#SPP-Net" class="headerlink" title="SPP-Net"></a>SPP-Net</h2><blockquote>
+<p>《Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition》</p>
+</blockquote>
+<h3 id="提出问题以及产生问题的原因"><a href="#提出问题以及产生问题的原因" class="headerlink" title="提出问题以及产生问题的原因"></a>提出问题以及产生问题的原因</h3><p>流行的CNN结构通常都需要输入图像的尺寸是固定的，这限制了输入图像的长宽比和缩放尺度。当遇到任意尺寸的图像时，都是先将图像利用裁剪和变形缩放的方式来适应成固定尺寸。但裁剪会导致信息的丢失，变形会导致位置信息的扭曲，就会影响识别的精度。另外，一个预先定义好的尺寸在物体是缩放可变的时候就不适用了。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m1yi7fl9j30sd0gjgur.jpg" alt=""></p>
 <p>产生问题的原因主要来自网络的全连接层，也即是网络的最后阶段。</p>
 <h3 id="解决问题的方案"><a href="#解决问题的方案" class="headerlink" title="解决问题的方案"></a>解决问题的方案</h3><p>解决上面CNN输入固定问题的解决方案当然是本文的主角SPP了，即空间金字塔池化，论文首先说明了该结构的来历以及优点</p>
@@ -749,12 +757,48 @@
 <h3 id="SPP-Net的训练"><a href="#SPP-Net的训练" class="headerlink" title="SPP-Net的训练"></a>SPP-Net的训练</h3><p>由于PU的实现(如cuda-convnet和Caffe)更适合运行在固定输入图像上，因此SPP-Net采用下面两种训练方式：</p>
 <h4 id="单一尺寸训练"><a href="#单一尺寸训练" class="headerlink" title="单一尺寸训练"></a>单一尺寸训练</h4><p>首先考虑接收裁剪成224×224图像的网络。裁剪的目的是数据增强。对于一个给定尺寸的图像，我们先计算空间金字塔池化所需要的块（bins）的大小。试想一个尺寸是axa（也就是13×13）的conv5之后特征图。对于nxn块的金字塔级，我们实现一个滑窗池化过程，窗口大小为win = 上取整[a/n]，步幅str = 下取整[a/n]. 对于l层金字塔，我们实现l个这样的层。然后将l个层的输出进行连接输出给全连接层。</p>
 <h4 id="多尺寸训练"><a href="#多尺寸训练" class="headerlink" title="多尺寸训练"></a>多尺寸训练</h4><p>携带SPP的网络可以应用于任意尺寸，为了解决不同图像尺寸的训练问题，我们考虑一些预设好的尺寸。现在考虑这两个尺寸：180×180,224×224。我们使用缩放而不是裁剪，将前述的224的区域图像变成180大小。这样，不同尺度的区域仅仅是分辨率上的不同，而不是内容和布局上的不同。对于接受180输入的网络，我们实现另一个固定尺寸的网络。本例中，conv5输出的特征图尺寸是axa=10×10。我们仍然使用win = 上取整[a/n]，str = 下取整[a/n]，实现每个金字塔池化层。这个180网络的空间金字塔层的输出的大小就和224网络的一样了。<br>这样，这个180网络就和224网络拥有一样的参数了。换句话说，训练过程中，我们通过使用共享参数的两个固定尺寸的网络实现了不同输入尺寸的SPP-net。<br>为了降低从一个网络（比如224）向另一个网络（比如180）切换的开销，我们在每个网络上训练一个完整的epoch，然后在下一个完成的epoch再切换到另一个网络（权重保留）。依此往复。实验中我们发现多尺寸训练的收敛速度和单尺寸差不多。</p>
+<h3 id="SPP-Net用于物体检测"><a href="#SPP-Net用于物体检测" class="headerlink" title="SPP-Net用于物体检测"></a>SPP-Net用于物体检测</h3><p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg" alt=""></p>
+<p>将SPP-Net应用于检测的步骤如下：</p>
+<ol>
+<li>使用主干网络提取特征，取conv5产生的特征图</li>
+<li>根据Selective Search方法在原始图像中选取到的候选框的位置映射到conv5产生的特征图中，利用该区域的特征图使用SPP产生定长的特征</li>
+<li>SVM分类器根据上面的特征进行分类</li>
+<li>利用Bounding Box回归收紧检测框 </li>
+</ol>
 <h3 id="SPP-Net的测试结果总结"><a href="#SPP-Net的测试结果总结" class="headerlink" title="SPP-Net的测试结果总结"></a>SPP-Net的测试结果总结</h3><ol>
 <li>多尺度训练的效果比单尺度训练的好</li>
 <li>采用整幅图进行训练的效果比只采用图像正中间裁切后的图像块的效果好</li>
 <li>给定两个模型，我们首先使用每个模型对测试图像的候选框进行打分。然后对并联的两个候选框集合上应用最大化抑制。一个方法比较置信的窗口就会压制另一个方法不太置信的窗口。通过这样的结合，mAP得到有效的提升，这意味着双模型是互补的。并且这种互补性主要是因为卷积层，结合卷积模型完全相同的两个模型，则没有任何效果。</li>
 </ol>
-<h2 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h2>
+<h2 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h2><blockquote>
+<p>《Fast R-CNN》</p>
+</blockquote>
+<p>作为改进之前方法的论文，第一步，当然是水一下之前的论文了：<br>这里主要针对R-CNN及其改进版本SPP-Net：</p>
+<h3 id="R-CNN和SPP-Net的缺点以及Fast-R-CNN的贡献"><a href="#R-CNN和SPP-Net的缺点以及Fast-R-CNN的贡献" class="headerlink" title="R-CNN和SPP-Net的缺点以及Fast R-CNN的贡献"></a>R-CNN和SPP-Net的缺点以及Fast R-CNN的贡献</h3><ul>
+<li><p><strong>R-CNN缺点</strong>：</p>
+<ol>
+<li>训练过程是多级pipline</li>
+<li>训练时对于每一个候选框都提取特征，造成训练在时间和空间上是的开销很大</li>
+<li>对于每一个候选框都进行一次CNN的正向传播，因此目标检测速度很慢</li>
+</ol>
+</li>
+<li><p><strong>SPP-Net</strong></p>
+<ol>
+<li>训练过程是多级pipline</li>
+<li>提取特征使用共享计算，但是仍需要将特征文件写入内存</li>
+</ol>
+</li>
+<li><p><strong>Fast R-CNN的贡献</strong></p>
+<ol>
+<li>比R-CNN和SPPnet具有更高的目标检测精度</li>
+<li>训练是使用多任务损失的单阶段训练</li>
+<li>训练可以更新所有网络层参数</li>
+<li>不需要磁盘空间缓存特征</li>
+</ol>
+</li>
+</ul>
+<h3 id="Fast-R-CNN的结构"><a href="#Fast-R-CNN的结构" class="headerlink" title="Fast R-CNN的结构"></a>Fast R-CNN的结构</h3><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg" alt=""></p>
+
       
     </div>
     
@@ -814,6 +858,16 @@
             <a href="/tags/目标检测/" rel="tag"><i class="fa fa-tag"></i> 目标检测</a>
           
             <a href="/tags/two-stage/" rel="tag"><i class="fa fa-tag"></i> two-stage</a>
+          
+            <a href="/tags/OverFeat/" rel="tag"><i class="fa fa-tag"></i> OverFeat</a>
+          
+            <a href="/tags/SPP-Net/" rel="tag"><i class="fa fa-tag"></i> SPP-Net</a>
+          
+            <a href="/tags/R-CNN/" rel="tag"><i class="fa fa-tag"></i> R-CNN</a>
+          
+            <a href="/tags/Fast-RCNN/" rel="tag"><i class="fa fa-tag"></i> Fast-RCNN</a>
+          
+            <a href="/tags/Faster-RCNN/" rel="tag"><i class="fa fa-tag"></i> Faster-RCNN</a>
           
         </div>
       
@@ -937,7 +991,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -999,7 +1053,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">3.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度网络来定位物体"><span class="nav-number">3.1.</span> <span class="nav-text">使用深度网络来定位物体</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产生类别无关的候选框"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生类别无关的候选框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络产生定长的特征向量"><span class="nav-number">3.1.2.</span> <span class="nav-text">卷积神经网络产生定长的特征向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定类别的SVM线性分类器"><span class="nav-number">3.1.3.</span> <span class="nav-text">指定类别的SVM线性分类器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练网络"><span class="nav-number">3.2.</span> <span class="nav-text">训练网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN的训练"><span class="nav-number">3.2.1.</span> <span class="nav-text">CNN的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM分类器的训练"><span class="nav-number">3.2.2.</span> <span class="nav-text">SVM分类器的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN和SVM训练中的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">CNN和SVM训练中的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ablation-studies"><span class="nav-number">3.2.4.</span> <span class="nav-text">Ablation studies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测错误分析"><span class="nav-number">3.2.5.</span> <span class="nav-text">检测错误分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounding-box回归"><span class="nav-number">3.2.6.</span> <span class="nav-text">Bounding-box回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己的一些问题"><span class="nav-number">3.3.</span> <span class="nav-text">自己的一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPP-Net"><span class="nav-number">4.</span> <span class="nav-text">SPP-Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提出问题以及产生问题的原因"><span class="nav-number">4.1.</span> <span class="nav-text">提出问题以及产生问题的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决问题的方案"><span class="nav-number">4.2.</span> <span class="nav-text">解决问题的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SPP的由来"><span class="nav-number">4.2.1.</span> <span class="nav-text">SPP的由来</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP介绍"><span class="nav-number">4.3.</span> <span class="nav-text">SPP介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的训练"><span class="nav-number">4.4.</span> <span class="nav-text">SPP-Net的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一尺寸训练"><span class="nav-number">4.4.1.</span> <span class="nav-text">单一尺寸训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多尺寸训练"><span class="nav-number">4.4.2.</span> <span class="nav-text">多尺寸训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的测试结果总结"><span class="nav-number">4.5.</span> <span class="nav-text">SPP-Net的测试结果总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-R-CNN"><span class="nav-number">5.</span> <span class="nav-text">Fast R-CNN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">3.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度网络来定位物体"><span class="nav-number">3.1.</span> <span class="nav-text">使用深度网络来定位物体</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产生类别无关的候选框"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生类别无关的候选框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络产生定长的特征向量"><span class="nav-number">3.1.2.</span> <span class="nav-text">卷积神经网络产生定长的特征向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定类别的SVM线性分类器"><span class="nav-number">3.1.3.</span> <span class="nav-text">指定类别的SVM线性分类器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练网络"><span class="nav-number">3.2.</span> <span class="nav-text">训练网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN的训练"><span class="nav-number">3.2.1.</span> <span class="nav-text">CNN的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM分类器的训练"><span class="nav-number">3.2.2.</span> <span class="nav-text">SVM分类器的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN和SVM训练中的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">CNN和SVM训练中的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ablation-studies"><span class="nav-number">3.2.4.</span> <span class="nav-text">Ablation studies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测错误分析"><span class="nav-number">3.2.5.</span> <span class="nav-text">检测错误分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounding-box回归"><span class="nav-number">3.2.6.</span> <span class="nav-text">Bounding-box回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己的一些问题"><span class="nav-number">3.3.</span> <span class="nav-text">自己的一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPP-Net"><span class="nav-number">4.</span> <span class="nav-text">SPP-Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提出问题以及产生问题的原因"><span class="nav-number">4.1.</span> <span class="nav-text">提出问题以及产生问题的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决问题的方案"><span class="nav-number">4.2.</span> <span class="nav-text">解决问题的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SPP的由来"><span class="nav-number">4.2.1.</span> <span class="nav-text">SPP的由来</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP介绍"><span class="nav-number">4.3.</span> <span class="nav-text">SPP介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的训练"><span class="nav-number">4.4.</span> <span class="nav-text">SPP-Net的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一尺寸训练"><span class="nav-number">4.4.1.</span> <span class="nav-text">单一尺寸训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多尺寸训练"><span class="nav-number">4.4.2.</span> <span class="nav-text">多尺寸训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net用于物体检测"><span class="nav-number">4.5.</span> <span class="nav-text">SPP-Net用于物体检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的测试结果总结"><span class="nav-number">4.6.</span> <span class="nav-text">SPP-Net的测试结果总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-R-CNN"><span class="nav-number">5.</span> <span class="nav-text">Fast R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#R-CNN和SPP-Net的缺点以及Fast-R-CNN的贡献"><span class="nav-number">5.1.</span> <span class="nav-text">R-CNN和SPP-Net的缺点以及Fast R-CNN的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN的结构"><span class="nav-number">5.2.</span> <span class="nav-text">Fast R-CNN的结构</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1056,7 +1110,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共45.8k字</span>
+  <span class="post-count">博客全站共46.2k字</span>
 </div>
 
         
