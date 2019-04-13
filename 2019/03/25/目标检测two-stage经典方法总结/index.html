@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
+<meta name="description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一">
 <meta name="keywords" content="目标检测,two-stage,OverFeat,SPP-Net,R-CNN,Fast-RCNN,Faster-RCNN">
 <meta property="og:type" content="article">
 <meta property="og:title" content="目标检测two-stage经典方法总结">
 <meta property="og:url" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/index.html">
 <meta property="og:site_name" content="Camlin Zhang&#39;s Blog">
-<meta property="og:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
+<meta property="og:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1hecz4vepj30rb0vtafs.jpg">
@@ -126,10 +126,10 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g214ve8jg1j30oq09odlw.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg">
-<meta property="og:updated_time" content="2019-04-13T15:48:02.390Z">
+<meta property="og:updated_time" content="2019-04-13T16:00:47.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
-<meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
+<meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一">
 <meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
 
 
@@ -383,8 +383,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-13T23:48:02+08:00">
-                2019-04-13
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-14T00:00:47+08:00">
+                2019-04-14
               </time>
             
           </span>
@@ -466,7 +466,9 @@
       
 
       
-        <h2 id="计算机视觉的三大任务"><a href="#计算机视觉的三大任务" class="headerlink" title="计算机视觉的三大任务"></a>计算机视觉的三大任务</h2><ul>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<h2 id="计算机视觉的三大任务"><a href="#计算机视觉的三大任务" class="headerlink" title="计算机视觉的三大任务"></a>计算机视觉的三大任务</h2><ul>
 <li><p>分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）</p>
 </li>
 <li><p>定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值</p>
@@ -844,7 +846,7 @@
 </blockquote>
 <p><strong>多任务损失</strong></p>
 <p>Fast R-CNN中将分类和回归损失合并为一个损失函数：<br>$$L(p,u,t^u,v)=L_{cls}(p,u)+\lambda[u\ge1]L_{loc}(t^u,v)$$<br>其中分类损失函数如下，即为softmax预测到的第$u$类物体的概率值，负号为了使该概率值越大，$L_{cls}$值越小<br>$$L_{cls}(p,u)=-log(p_u)$$<br>回归损失函数如下，其中$(t_i^u-v_i)$部分主要参考R-CNN中的检测框回归，主要的不同在于Fast R-CNN中采用的是Smooth L1损失，而R-CNN中采用的是L2损失：<br>$$L_{loc}(t^u,v)=\sum_{i\in{x,y,w,h}}smooth_{L_1}(t_i^u-v_i)$$</p>
-<p>$$smooth_{L_1}(x)=\left{\begin{aligned}<br>&amp; 0.5x^2 &amp; &amp; if |x|&lt;1\<br>&amp; |x|-0.5 &amp; &amp; otherwise \end{aligned}<br>\right.$$</p>
+<p>$$smooth_{L_{1}}(x)=\begin{cases}0.5x^{2}, &amp;\left |x \right |\leq 1 \cr \left |x \right|-0.5, &amp;otherwise\end{cases}$$</p>
 <p>Smooth L1损失相较于L1 loss和L2 loss而言具有以下优点：<br><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg" alt=""></p>
 <p>个人觉得这里采用Smooth L1损失主要是因为：根据上面关于R-CNN中loss函数的分析博客<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">https://blog.csdn.net/zijin0802034/article/details/77685438</a>可知，由于R-CNN只挑选出IoU&gt;0.6的检测框来训练回归模型，所以可以控制预测的检测框与GT之间的差值较小，保证其为线性回归问题，但是在Fast R-CNN中由于采用多任务损失进行联合训练，并且从损失函数可以看到，是分类的结果决定了检测的结果(即只有当分类结果$u\ge1$时，检测部分的损失才会大于0)，因此如果分类出现了错误导致预测的检测框与实际的检测框相距很远时，使用L2损失很容易导致梯度爆炸，因此采用Smooth L1损失。同时由于采用Smooth L1损失可以避免预测的检测框与实际的检测框相距很远造成的梯度爆炸，便可以省略R-CNN检测框回归中的正则项</p>
 <p><strong>RoI池化层的反向传播</strong>和<strong>SVD分解</strong>见博客<a href="https://blog.csdn.net/shenxiaolu1984/article/details/51036677" target="_blank" rel="noopener">Fast RCNN算法详解</a></p>
