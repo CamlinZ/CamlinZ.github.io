@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g214ve8jg1j30oq09odlw.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg">
-<meta property="og:updated_time" content="2019-04-14T10:03:03.509Z">
+<meta property="og:updated_time" content="2019-04-17T14:40:46.478Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
 <meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
@@ -383,8 +383,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-14T18:03:03+08:00">
-                2019-04-14
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-17T22:40:46+08:00">
+                2019-04-17
               </time>
             
           </span>
@@ -736,7 +736,7 @@
 <p>卷积层接受任意大小的输入，而分类器固定输出向量的尺寸</p>
 </blockquote>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg" alt=""></p>
-<p>如图所示，SPP结构即针对任意大小的特征图，首先将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个4x4的特征图(即对每一个图像块做最大池化操作)，即图中spatial pyramid pooling layer最左边的16x256-d特征，然后将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个2x2的特征图，即图中spatial pyramid pooling layer中间的4x256-d特征，最后将特征图整体最大值，于是便可以得到一个1x1的特征图，即图中spatial pyramid pooling layer最右边的256-d特征，将以上的各个特征进行拼接，作为全连接层的输入，通过这种方式，不论输入的大小是多少，输出向量的尺寸都是(16+4+1)x256-d</p>
+<p>如图所示，SPP结构即针对任意大小的特征图，首先将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个4x4的特征图(即对每一个图像块做最大池化操作)，即图中spatial pyramid pooling layer最左边的16x256-d特征，然后将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个2x2的特征图，即图中spatial pyramid pooling layer中间的4x256-d特征，最后将特征图整体最大值，于是便可以得到一个1x1的特征图，即图中spatial pyramid pooling layer最右边的256-d特征，将以上的各个特征进行拼接，作为全连接层的输入，通过这种方式，不论输入的大小是多少，输出向量的尺寸都是(16+4+1)x256-d，其中256-d对应着Conv 5输出的特征图即输入SPP结构的特征图的数量</p>
 <p>这种处理方式具有以下的优点：</p>
 <blockquote>
 <p>SPP is able to generate a ﬁxed-length output regardless of the input size, while the sliding window pooling used in the previous deep networks cannot</p>
