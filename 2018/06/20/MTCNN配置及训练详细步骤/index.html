@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-sun.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-sun.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="MTCNN,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Camlin Zhang's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="配置环境为win7 64位，主要完成的任务是用MTCNN完成人脸检测，即使用目标检测框将图像中的人脸框出来，配置过程如下： 1、环境配置安装anaconda进入官网：https://www.anaconda.com/download/根据python版本下载安装相应的anaconda即可 安装Microsoft Visual Studio 2013注意此处一定要安装2013版方便后面caffe的编">
+<meta name="keywords" content="MTCNN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MTCNN配置及训练详细步骤">
+<meta property="og:url" content="http://camlinzhang.com/2018/06/20/MTCNN配置及训练详细步骤/index.html">
+<meta property="og:site_name" content="Camlin Zhang&#39;s Blog">
+<meta property="og:description" content="配置环境为win7 64位，主要完成的任务是用MTCNN完成人脸检测，即使用目标检测框将图像中的人脸框出来，配置过程如下： 1、环境配置安装anaconda进入官网：https://www.anaconda.com/download/根据python版本下载安装相应的anaconda即可 安装Microsoft Visual Studio 2013注意此处一定要安装2013版方便后面caffe的编">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img-blog.csdn.net/20180516150305818?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="https://img-blog.csdn.net/20180618125823933?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2019-03-25T14:13:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MTCNN配置及训练详细步骤">
+<meta name="twitter:description" content="配置环境为win7 64位，主要完成的任务是用MTCNN完成人脸检测，即使用目标检测框将图像中的人脸框出来，配置过程如下： 1、环境配置安装anaconda进入官网：https://www.anaconda.com/download/根据python版本下载安装相应的anaconda即可 安装Microsoft Visual Studio 2013注意此处一定要安装2013版方便后面caffe的编">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180516150305818?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Camlin Zhang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://camlinzhang.com/2018/06/20/MTCNN配置及训练详细步骤/">
+
+
+
+
+
+  <title>MTCNN配置及训练详细步骤 | Camlin Zhang's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+<a href="https://github.com/CamlinZ" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Camlin Zhang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://camlinzhang.com/2018/06/20/MTCNN配置及训练详细步骤/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Camlin Zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Camlin Zhang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MTCNN配置及训练详细步骤</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T15:11:38+08:00">
+                2018-06-20
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-25T22:13:51+08:00">
+                2019-03-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/深度学习算法/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习算法</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/深度学习算法/目标检测/" itemprop="url" rel="index">
+                    <span itemprop="name">目标检测</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/深度学习算法/目标检测/人脸检测/" itemprop="url" rel="index">
+                    <span itemprop="name">人脸检测</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>配置环境为win7 64位，主要完成的任务是用MTCNN完成人脸检测，即使用目标检测框将图像中的人脸框出来，配置过程如下：</p>
+<h1 id="1、环境配置"><a href="#1、环境配置" class="headerlink" title="1、环境配置"></a>1、环境配置</h1><h2 id="安装anaconda"><a href="#安装anaconda" class="headerlink" title="安装anaconda"></a>安装anaconda</h2><p>进入官网：<br><a href="https://www.anaconda.com/download/" target="_blank" rel="noopener">https://www.anaconda.com/download/</a><br>根据python版本下载安装相应的anaconda即可</p>
+<h2 id="安装Microsoft-Visual-Studio-2013"><a href="#安装Microsoft-Visual-Studio-2013" class="headerlink" title="安装Microsoft Visual Studio 2013"></a>安装Microsoft Visual Studio 2013</h2><p>注意此处一定要安装2013版方便后面caffe的编译，下载地址为：<br><a href="https://msdn.itellyou.cn/" target="_blank" rel="noopener">https://msdn.itellyou.cn/</a></p>
+<h2 id="在编译好的VS环境下配置opencv和openblas"><a href="#在编译好的VS环境下配置opencv和openblas" class="headerlink" title="在编译好的VS环境下配置opencv和openblas"></a>在编译好的VS环境下配置opencv和openblas</h2><p>配置opencv参考：<br><a href="https://blog.csdn.net/SherryD/article/details/51734334" target="_blank" rel="noopener">https://blog.csdn.net/SherryD/article/details/51734334</a><br>配置openblas参考：<br><a href="https://blog.csdn.net/yangyangyang20092010/article/details/45156881" target="_blank" rel="noopener">https://blog.csdn.net/yangyangyang20092010/article/details/45156881</a></p>
+<h2 id="在VS环境下编译caffe"><a href="#在VS环境下编译caffe" class="headerlink" title="在VS环境下编译caffe"></a>在VS环境下编译caffe</h2><p>下载caffe的windows官方编译版本：<br><a href="https://github.com/happynear/caffe-windows" target="_blank" rel="noopener">https://github.com/happynear/caffe-windows</a><br>然后按照：<br><a href="https://blog.csdn.net/xierhacker/article/details/51834563" target="_blank" rel="noopener">https://blog.csdn.net/xierhacker/article/details/51834563</a><br>安装即可</p>
+<h2 id="安装pycharm，并在anaconda的python环境中配置opencv"><a href="#安装pycharm，并在anaconda的python环境中配置opencv" class="headerlink" title="安装pycharm，并在anaconda的python环境中配置opencv"></a>安装pycharm，并在anaconda的python环境中配置opencv</h2><p>1、安装pycharm参考：<br><a href="https://www.jianshu.com/p/042324342bf4" target="_blank" rel="noopener">https://www.jianshu.com/p/042324342bf4</a></p>
+<p>2、在anaconda的python环境中配置opencv<br>首先在官网：<a href="https://opencv.org/releases.html" target="_blank" rel="noopener">https://opencv.org/releases.html</a><br>下载opencv的win pack包，然后直接点exe运行即可，安装完成后，将opencv的安装路径：<br>E:\OpenCV2\opencv\build\python\2.7\x86下的cv2.pyd移动到anaconda的安装路径：D:\Anaconda\anaconda2\Lib\site-packages下，然后可以在cmd命令进行测试</p>
+<p>3、以上配置好后，在pycharm中一个常见的问题就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImportError: No module named google.protobuf.internal</span><br></pre></td></tr></table></figure>
+<p>这里需要首先到：<a href="https://github.com/google/protobuf将protobuf-maste拷贝下来，然后到：https://github.com/google/protobuf/releases中下载protoc-3.5.1-win32.zip" target="_blank" rel="noopener">https://github.com/google/protobuf将protobuf-maste拷贝下来，然后到：https://github.com/google/protobuf/releases中下载protoc-3.5.1-win32.zip</a><br>将protoc-3.5.1-win32\bin下的protoc.exe复制到protobuf-master\src文件夹下，按照：<br><a href="http://sharley.iteye.com/blog/2375044" target="_blank" rel="noopener">http://sharley.iteye.com/blog/2375044</a><br>中的方式进行安装</p>
+<h1 id="2、MTCNN配置"><a href="#2、MTCNN配置" class="headerlink" title="2、MTCNN配置"></a>2、MTCNN配置</h1><p>github上MTCNN有很多版本，我以从数据集准备到最终的测试的顺序来介绍<br>训练主要参考：<a href="https://github.com/dlunion/mtcnn" target="_blank" rel="noopener">https://github.com/dlunion/mtcnn</a><br>测试主要参考：<a href="https://github.com/CongWeilin/mtcnn-caffe" target="_blank" rel="noopener">https://github.com/CongWeilin/mtcnn-caffe</a></p>
+<h2 id="数据集的准备"><a href="#数据集的准备" class="headerlink" title="数据集的准备"></a>数据集的准备</h2><p>1、将采集好数据集放到一个文件夹中，命名为samples（也可以写成别的名字，但是注意与后面的步骤中需要该文件夹数据的路径要一致）<br>2、对数据集进行标注，网上有很多的标注工具可以使用：<br><a href="https://blog.csdn.net/chaipp0607/article/details/79036312" target="_blank" rel="noopener">https://blog.csdn.net/chaipp0607/article/details/79036312</a><br>可以使用上面的标注工具进行标注，标注完成后会生成一个txt文档或者是xml文档之类的文档，里面包含了图像检测框的左上角点的坐标和右下角点的坐标信息。<br>3、根据文档中提供的信息，我们需要将检测框的左上角点的坐标和右下角点的坐标提取出来，整理成以下形式：<br>samples/filename.jpg xmin ymin xmax ymax<br>（即：数据集文件夹/图片名 检测框左上角点的x坐标 检测框左上角点的y坐标 检测框右下角点的x坐标 检测框右下角点的y坐标）<br>我使用的数据标注工具生成的文档如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&apos;1.0&apos; encoding=&apos;GB2312&apos;?&gt;</span><br><span class="line">&lt;info&gt;</span><br><span class="line">	&lt;src width=&quot;480&quot; height=&quot;640&quot; depth=&quot;3&quot;&gt;00ff0abc4818a309b51180264b830211.jpg&lt;/src&gt;</span><br><span class="line">	&lt;object id=&quot;E68519DF-E8E1-4C55-9231-CB381DE1CC5A&quot;&gt;</span><br><span class="line">		&lt;rect lefttopx=&quot;168&quot; lefttopy=&quot;168&quot; rightbottomx=&quot;313&quot; rightbottomy=&quot;340&quot;&gt;&lt;/rect&gt;</span><br><span class="line">		&lt;type&gt;21&lt;/type&gt;</span><br><span class="line">		&lt;descriinfo&gt;&lt;/descriinfo&gt;</span><br><span class="line">		&lt;modifydate&gt;2018-05-08 17:04:07&lt;/modifydate&gt;</span><br><span class="line">	&lt;/object&gt;</span><br><span class="line">&lt;/info&gt;</span><br></pre></td></tr></table></figure>
+<p>所以我需要将这个文档中的检测框坐标点提取出来，并整理成如上所述的标准形式，形成一个 label.txt 文档<br>根据以上xml的形式，转换的脚本如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">##################### 以下部分用于读取xml文件，返回检测框左上角和右下角的坐标 ###################</span><br><span class="line">def read_xml(in_path):</span><br><span class="line">    tree = etree.parse(in_path)</span><br><span class="line">    return tree</span><br><span class="line"></span><br><span class="line">def find_nodes(tree, path):</span><br><span class="line">    return tree.findall(path)</span><br><span class="line"></span><br><span class="line">def get_obj(xml_path):</span><br><span class="line">    tree = read_xml(xml_path)</span><br><span class="line">    nodes = find_nodes(tree, &quot;src&quot;)</span><br><span class="line">    objects = []</span><br><span class="line"></span><br><span class="line">    for node in nodes:</span><br><span class="line">        pic_struct = &#123;&#125;</span><br><span class="line">        pic_struct[&apos;width&apos;] = str(node.get(&apos;width&apos;))</span><br><span class="line">        pic_struct[&apos;height&apos;] = str(node.get(&apos;height&apos;))</span><br><span class="line">        pic_struct[&apos;depth&apos;] = str(node.get(&apos;depth&apos;))</span><br><span class="line">        # objects.append(pic_struct)</span><br><span class="line">    nodes = find_nodes(tree, &quot;object&quot;)</span><br><span class="line"></span><br><span class="line">    for i in range(len(nodes)):</span><br><span class="line">        # obj_struct = &#123;&#125;</span><br><span class="line">        # obj_struct[&apos;name&apos;] = str(find_nodes(nodes[i] , &apos;type&apos;)[0].text)</span><br><span class="line">        cl_box = find_nodes(nodes[i], &apos;rect&apos;)</span><br><span class="line">        for rec in cl_box:</span><br><span class="line">            objects = [int(rec.get(&apos;lefttopx&apos;)), int(rec.get(&apos;lefttopy&apos;)),</span><br><span class="line">                       int(rec.get(&apos;rightbottomx&apos;)), int(rec.get(&apos;rightbottomy&apos;))]</span><br><span class="line">    return objects</span><br><span class="line"></span><br><span class="line">################# 将xml的信息统一成标准形式 ################</span><br><span class="line">def listFile(data_dir, suffix):</span><br><span class="line">    fs = os.listdir(data_dir)</span><br><span class="line">    for i in range(len(fs)-1, -1, -1):</span><br><span class="line">        # 如果后缀不是.jpg就将该文件删除掉</span><br><span class="line">        if not fs[i].endswith(suffix):</span><br><span class="line">            del fs[i]</span><br><span class="line">    return fs</span><br><span class="line"></span><br><span class="line">def write_label(data_dir, xml_dir):</span><br><span class="line">    images = listFile(data_dir, &quot;.jpg&quot;)</span><br><span class="line">    with open(&quot;label.txt&quot;, &quot;w&quot;) as label:</span><br><span class="line">        for i in range(len(images)):</span><br><span class="line">            image_path = data_dir + &quot;/&quot; + images[i]</span><br><span class="line">            xml_path = xml_dir + &quot;/&quot; + images[i][:-4] + &quot;.txt&quot;</span><br><span class="line">            objects = get_obj(xml_path)</span><br><span class="line">            line = image_path + &quot; &quot; + str(objects[0]) + &quot; &quot; + str(objects[1]) \</span><br><span class="line">                   + &quot; &quot; + str(objects[2]) + &quot; &quot; + str(objects[3]) + &quot;\n&quot;</span><br><span class="line">            label.write(line)</span><br><span class="line"></span><br><span class="line">################ 主函数 ###################</span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    data_dir = &quot;E:/MTCNN/Train/samples&quot;</span><br><span class="line">    xml_dir = &quot;E:/MTCNN/Train/samples/annotation&quot;</span><br><span class="line">    write_label(data_dir, xml_dir)</span><br></pre></td></tr></table></figure>
+<p>整理好的 label.txt 形式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">E:/MTCNN/Train/samples/0019c3f356ada6bcda0b695020e295e6.jpg 102 87 311 417</span><br><span class="line">E:/MTCNN/Train/samples/0043e38f303b247e50b9a07cb5887b39.jpg 156 75 335 295</span><br><span class="line">E:/MTCNN/Train/samples/004e26290d2290ca87e02b737a740aee.jpg 105 122 291 381</span><br><span class="line">E:/MTCNN/Train/samples/00ff0abc4818a309b51180264b830211.jpg 168 168 313 340</span><br><span class="line">E:/MTCNN/Train/samples/015a7137173f29e2cd4663c7cbcad1cb.jpg 127 60 332 398</span><br><span class="line">E:/MTCNN/Train/samples/0166ceba53a4bfc4360e1d12b33ecb61.jpg 149 82 353 378</span><br><span class="line">E:/MTCNN/Train/samples/01e6deccb55b377985d2c4d72006ee34.jpg 185 100 289 249</span><br><span class="line">E:/MTCNN/Train/samples/021e34448c0ed051db501156cf2b6552.jpg 204 91 359 289</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h1 id="3、MTCNN训练数据生成及训练"><a href="#3、MTCNN训练数据生成及训练" class="headerlink" title="3、MTCNN训练数据生成及训练"></a>3、MTCNN训练数据生成及训练</h1><h2 id="1-P-Net-的训练"><a href="#1-P-Net-的训练" class="headerlink" title="(1)   P_Net 的训练"></a>(1)   P_Net 的训练</h2><p>按照MTCNN论文中的说法：<br><img src="https://img-blog.csdn.net/20180516150305818?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>需要将原始数据集的数据分成Negative，Positive，Part faces，Landmark faces四个部分，由于本次主要是进行人脸检测的任务，所以只需要分成Negative，Positive，Part faces三个部分即可，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">import sys</span><br><span class="line">import numpy as np</span><br><span class="line">import cv2</span><br><span class="line">import os</span><br><span class="line">import numpy.random as npr</span><br><span class="line"></span><br><span class="line">stdsize = 12</span><br><span class="line">anno_file = &quot;label.txt&quot;</span><br><span class="line">im_dir = &quot;samples&quot;</span><br><span class="line">pos_save_dir = str(stdsize) + &quot;/positive&quot;</span><br><span class="line">part_save_dir = str(stdsize) + &quot;/part&quot;</span><br><span class="line">neg_save_dir = str(stdsize) + &apos;/negative&apos;</span><br><span class="line">save_dir = &quot;./&quot; + str(stdsize)</span><br><span class="line"></span><br><span class="line">def IoU(box, boxes):</span><br><span class="line">    &quot;&quot;&quot;Compute IoU between detect box and gt boxes</span><br><span class="line"></span><br><span class="line">    Parameters:</span><br><span class="line">    ----------</span><br><span class="line">    box: numpy array , shape (5, ): x1, y1, x2, y2, score</span><br><span class="line">        input box</span><br><span class="line">    boxes: numpy array, shape (n, 4): x1, y1, x2, y2</span><br><span class="line">        input ground truth boxes</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    -------</span><br><span class="line">    ovr: numpy.array, shape (n, )</span><br><span class="line">        IoU</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    box_area = (box[2] - box[0] + 1) * (box[3] - box[1] + 1)</span><br><span class="line">    area = (boxes[:, 2] - boxes[:, 0] + 1) * (boxes[:, 3] - boxes[:, 1] + 1)</span><br><span class="line">    # boxes[:, 0]代表取boxes这个nx4矩阵所有行的第一个数据</span><br><span class="line">    xx1 = np.maximum(box[0], boxes[:, 0])</span><br><span class="line">    yy1 = np.maximum(box[1], boxes[:, 1])</span><br><span class="line">    xx2 = np.minimum(box[2], boxes[:, 2])</span><br><span class="line">    yy2 = np.minimum(box[3], boxes[:, 3])</span><br><span class="line"></span><br><span class="line">    # compute the width and height of the bounding box</span><br><span class="line">    w = np.maximum(0, xx2 - xx1 + 1)</span><br><span class="line">    h = np.maximum(0, yy2 - yy1 + 1)</span><br><span class="line"></span><br><span class="line">    inter = w * h</span><br><span class="line">    ovr = inter / (box_area + area - inter)</span><br><span class="line">    return ovr</span><br><span class="line"></span><br><span class="line"># 生成一系列文件夹用于存储三类样本</span><br><span class="line">def mkr(dr):</span><br><span class="line">    if not os.path.exists(dr):</span><br><span class="line">        os.mkdir(dr)</span><br><span class="line"></span><br><span class="line">mkr(save_dir)</span><br><span class="line">mkr(pos_save_dir)</span><br><span class="line">mkr(part_save_dir)</span><br><span class="line">mkr(neg_save_dir)</span><br><span class="line"></span><br><span class="line"># 生成一系列txt文档用于存储Positive，Negative，Part三类数据的信息</span><br><span class="line">f1 = open(os.path.join(save_dir, &apos;pos_&apos; + str(stdsize) + &apos;.txt&apos;), &apos;w&apos;)</span><br><span class="line">f2 = open(os.path.join(save_dir, &apos;neg_&apos; + str(stdsize) + &apos;.txt&apos;), &apos;w&apos;)</span><br><span class="line">f3 = open(os.path.join(save_dir, &apos;part_&apos; + str(stdsize) + &apos;.txt&apos;), &apos;w&apos;)</span><br><span class="line"></span><br><span class="line"># 读取label.txt</span><br><span class="line">with open(anno_file, &apos;r&apos;) as f:</span><br><span class="line">    annotations = f.readlines()</span><br><span class="line">num = len(annotations)</span><br><span class="line">print &quot;%d pics in total&quot; % num</span><br><span class="line">p_idx = 0 # positive</span><br><span class="line">n_idx = 0 # negative</span><br><span class="line">d_idx = 0 # dont care</span><br><span class="line">idx = 0</span><br><span class="line">box_idx = 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for annotation in annotations:</span><br><span class="line">    annotation = annotation.strip().split(&apos; &apos;)</span><br><span class="line">    im_path = annotation[0]</span><br><span class="line">    bbox = map(float, annotation[1:])</span><br><span class="line">    boxes = np.array(bbox, dtype=np.float32).reshape(-1, 4)</span><br><span class="line">    print im_path</span><br><span class="line">    img = cv2.imread(im_path)</span><br><span class="line">    idx += 1</span><br><span class="line">    if idx % 100 == 0:</span><br><span class="line">        print idx, &quot;images done&quot;</span><br><span class="line"></span><br><span class="line">    height, width, channel = img.shape</span><br><span class="line"></span><br><span class="line">    neg_num = 0</span><br><span class="line">    while neg_num &lt; 50:</span><br><span class="line">        # 生成随机数，对每张数据集中的图像进行切割，生成一系列小的图像</span><br><span class="line">        size = npr.randint(40, min(width, height) / 2)</span><br><span class="line">        nx = npr.randint(0, width - size)</span><br><span class="line">        ny = npr.randint(0, height - size)</span><br><span class="line">        crop_box = np.array([nx, ny, nx + size, ny + size])</span><br><span class="line">        # 计算小的图像与标注产生的检测框之间的IoU</span><br><span class="line">        Iou = IoU(crop_box, boxes)</span><br><span class="line"></span><br><span class="line">        cropped_im = img[ny : ny + size, nx : nx + size, :]</span><br><span class="line">        resized_im = cv2.resize(cropped_im, (stdsize, stdsize), interpolation=cv2.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">        if np.max(Iou) &lt; 0.3:</span><br><span class="line">            # Iou with all gts must below 0.3</span><br><span class="line">            save_file = os.path.join(neg_save_dir, &quot;%s.jpg&quot;%n_idx)</span><br><span class="line">            f2.write(str(stdsize)+&quot;/negative/%s&quot;%n_idx + &apos; 0\n&apos;)</span><br><span class="line">            cv2.imwrite(save_file, resized_im)</span><br><span class="line">            n_idx += 1</span><br><span class="line">            neg_num += 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    for box in boxes:</span><br><span class="line">        # box (x_left, y_top, x_right, y_bottom)</span><br><span class="line">        x1, y1, x2, y2 = box</span><br><span class="line">        w = x2 - x1 + 1</span><br><span class="line">        h = y2 - y1 + 1</span><br><span class="line"></span><br><span class="line">        # max(w, h) &lt; 40：参数40表示忽略的最小的脸的大小</span><br><span class="line">        # in case the ground truth boxes of small faces are not accurate</span><br><span class="line">        if max(w, h) &lt; 40 or x1 &lt; 0 or y1 &lt; 0:</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">        # generate positive examples and part faces</span><br><span class="line">        for i in range(20):</span><br><span class="line">            size = npr.randint(int(min(w, h) * 0.8), np.ceil(1.25 * max(w, h)))</span><br><span class="line"></span><br><span class="line">            # delta here is the offset of box center</span><br><span class="line">            delta_x = npr.randint(-w * 0.2, w * 0.2)</span><br><span class="line">            delta_y = npr.randint(-h * 0.2, h * 0.2)</span><br><span class="line"></span><br><span class="line">            nx1 = max(x1 + w / 2 + delta_x - size / 2, 0)</span><br><span class="line">            ny1 = max(y1 + h / 2 + delta_y - size / 2, 0)</span><br><span class="line">            nx2 = nx1 + size</span><br><span class="line">            ny2 = ny1 + size</span><br><span class="line"></span><br><span class="line">            if nx2 &gt; width or ny2 &gt; height:</span><br><span class="line">                continue</span><br><span class="line">            crop_box = np.array([nx1, ny1, nx2, ny2])</span><br><span class="line"></span><br><span class="line">            offset_x1 = (x1 - nx1) / float(size)</span><br><span class="line">            offset_y1 = (y1 - ny1) / float(size)</span><br><span class="line">            offset_x2 = (x2 - nx2) / float(size)</span><br><span class="line">            offset_y2 = (y2 - ny2) / float(size)</span><br><span class="line"></span><br><span class="line">            cropped_im = img[int(ny1) : int(ny2), int(nx1) : int(nx2), :]</span><br><span class="line">            resized_im = cv2.resize(cropped_im, (stdsize, stdsize), interpolation=cv2.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">            box_ = box.reshape(1, -1)</span><br><span class="line">            if IoU(crop_box, box_) &gt;= 0.65:</span><br><span class="line">                save_file = os.path.join(pos_save_dir, &quot;%s.jpg&quot;%p_idx)</span><br><span class="line">                f1.write(str(stdsize)+&quot;/positive/%s&quot;%p_idx + &apos; 1 %.2f %.2f %.2f %.2f\n&apos;%(offset_x1, offset_y1, offset_x2, offset_y2))</span><br><span class="line">                cv2.imwrite(save_file, resized_im)</span><br><span class="line">                p_idx += 1</span><br><span class="line">            elif IoU(crop_box, box_) &gt;= 0.4:</span><br><span class="line">                save_file = os.path.join(part_save_dir, &quot;%s.jpg&quot;%d_idx)</span><br><span class="line">                f3.write(str(stdsize)+&quot;/part/%s&quot;%d_idx + &apos; -1 %.2f %.2f %.2f %.2f\n&apos;%(offset_x1, offset_y1, offset_x2, offset_y2))</span><br><span class="line">                cv2.imwrite(save_file, resized_im)</span><br><span class="line">                d_idx += 1</span><br><span class="line">        box_idx += 1</span><br><span class="line">        print &quot;%s images done, pos: %s part: %s neg: %s&quot;%(idx, p_idx, d_idx, n_idx)</span><br><span class="line"></span><br><span class="line">f1.close()</span><br><span class="line">f2.close()</span><br><span class="line">f3.close()</span><br></pre></td></tr></table></figure>
+<p>这里是产生第一个P-Net的训练样本，产生后续R-Net和O-Net的训练样本只需要将上面的 stdsize = 12 参数改成24和48即可，里面有些参数也可以根据自己的需要进行修改。</p>
+<p>上面获得了随机切分原图后得到的Negative，Positive，Part faces三类样本的图片路径和样本中的每一张图片里检测框的坐标，我们要进行训练，还是需要将这些信息保存为第三步中label.txt的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">save_dir = &quot;./12&quot;</span><br><span class="line">if not os.path.exists(save_dir):</span><br><span class="line">    os.mkdir(save_dir)</span><br><span class="line">f1 = open(os.path.join(save_dir, &apos;pos_12.txt&apos;), &apos;r&apos;)</span><br><span class="line">f2 = open(os.path.join(save_dir, &apos;neg_12.txt&apos;), &apos;r&apos;)</span><br><span class="line">f3 = open(os.path.join(save_dir, &apos;part_12.txt&apos;), &apos;r&apos;)</span><br><span class="line"></span><br><span class="line">pos = f1.readlines()</span><br><span class="line">neg = f2.readlines()</span><br><span class="line">part = f3.readlines()</span><br><span class="line">f = open(os.path.join(save_dir, &apos;label-train.txt&apos;), &apos;w&apos;)</span><br><span class="line"></span><br><span class="line">for i in range(int(len(pos))):</span><br><span class="line">    p = pos[i].find(&quot; &quot;) + 1</span><br><span class="line">    pos[i] = pos[i][:p-1] + &quot;.jpg &quot; + pos[i][p:-1] + &quot;\n&quot;</span><br><span class="line">    f.write(pos[i])</span><br><span class="line"></span><br><span class="line">for i in range(int(len(neg))):</span><br><span class="line">    p = neg[i].find(&quot; &quot;) + 1</span><br><span class="line">    neg[i] = neg[i][:p-1] + &quot;.jpg &quot; + neg[i][p:-1] + &quot; -1 -1 -1 -1\n&quot;</span><br><span class="line">    f.write(neg[i])</span><br><span class="line"></span><br><span class="line">for i in range(int(len(part))):</span><br><span class="line">    p = part[i].find(&quot; &quot;) + 1</span><br><span class="line">    part[i] = part[i][:p-1] + &quot;.jpg &quot; + part[i][p:-1] + &quot;\n&quot;</span><br><span class="line">    f.write(part[i])</span><br><span class="line"></span><br><span class="line">f1.close()</span><br><span class="line">f2.close()</span><br><span class="line">f3.close()</span><br></pre></td></tr></table></figure>
+<p>接下来要将其转换成caffe用的lmdb形式，这里我们利用caffe自带的工具，转换代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;caffe/convert_imageset.exe&quot; &quot;&quot; 12/label.txt train_lmdb12 --backend=mtcnn --shuffle=true</span><br></pre></td></tr></table></figure>
+<p>由于将原始图片切分成Negative，Positive，Part faces三个部分后数据量很大，所以可能转换的时间会很长。<br>至此，P_Net的训练数据就准备好了，接下来就可以进行训练了。</p>
+<p>训练我们需要配置到caffe的相关prototxt：<br>上面训练参考链接中的：det1-train.prototxt，solver-12.prototxt，注意调整这两个文件中的路径，然后在根目录下新建models-12文件夹用于存储snapshot，最后使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;caffe/caffe.exe&quot; train --solver=solver-12.prototxt --weights=det1.caffemodel</span><br></pre></td></tr></table></figure>
+<p>进行训练即可。</p>
+<h2 id="2-R-Net-的训练"><a href="#2-R-Net-的训练" class="headerlink" title="(2)   R_Net 的训练"></a>(2)   R_Net 的训练</h2><p>进行完上面P_Net的训练后，继续参考上面的产生数据的代码产生R_Net所需的训练数据，同时因为论文中强调了产生hard_sample会提高模型的预测精度：<br><img src="https://img-blog.csdn.net/20180618125823933?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzI4NzMxNTc1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>所以我们使用下面的代码来产生hard_sample：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line">import tools</span><br><span class="line">import caffe</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line">from utils import *</span><br><span class="line">deploy = &apos;det1.prototxt&apos;</span><br><span class="line">caffemodel = &apos;det1.caffemodel&apos;</span><br><span class="line">net_12 = caffe.Net(deploy,caffemodel,caffe.TEST)</span><br><span class="line">def view_bar(num, total):</span><br><span class="line">    rate = float(num) / total</span><br><span class="line">    rate_num = int(rate * 100)</span><br><span class="line">    r = &apos;\r[%s%s]%d%%  (%d/%d)&apos; % (&quot;#&quot;*rate_num, &quot; &quot;*(100-rate_num), rate_num, num, total)</span><br><span class="line">    sys.stdout.write(r)</span><br><span class="line">    sys.stdout.flush()</span><br><span class="line">def detectFace(img_path,threshold):</span><br><span class="line">    img = cv2.imread(img_path)</span><br><span class="line">    caffe_img = img.copy()-128</span><br><span class="line">    origin_h,origin_w,ch = caffe_img.shape</span><br><span class="line">    scales = tools.calculateScales(img)</span><br><span class="line">    out = []</span><br><span class="line">    for scale in scales:</span><br><span class="line">        hs = int(origin_h*scale)</span><br><span class="line">        ws = int(origin_w*scale)</span><br><span class="line">        scale_img = cv2.resize(caffe_img,(ws,hs))</span><br><span class="line">        scale_img = np.swapaxes(scale_img, 0, 2)</span><br><span class="line">        net_12.blobs[&apos;data&apos;].reshape(1,3,ws,hs)</span><br><span class="line">        net_12.blobs[&apos;data&apos;].data[...]=scale_img</span><br><span class="line">	caffe.set_device(0)</span><br><span class="line">	caffe.set_mode_gpu()</span><br><span class="line">	out_ = net_12.forward()</span><br><span class="line">        out.append(out_)</span><br><span class="line">    image_num = len(scales)</span><br><span class="line">    rectangles = []</span><br><span class="line">    for i in range(image_num):    </span><br><span class="line">        cls_prob = out[i][&apos;cls_score&apos;][0][1]</span><br><span class="line">        roi      = out[i][&apos;conv4-2&apos;][0]</span><br><span class="line">        out_h,out_w = cls_prob.shape</span><br><span class="line">        out_side = max(out_h,out_w)</span><br><span class="line">        rectangle = tools.detect_face_12net(cls_prob,roi,out_side,1/scales[i],origin_w,origin_h,threshold[0])</span><br><span class="line">        rectangles.extend(rectangle)</span><br><span class="line">    return rectangles</span><br><span class="line">anno_file = &apos;wider_face_train.txt&apos;</span><br><span class="line">im_dir = &quot;WIDER_train/images/&quot;</span><br><span class="line">neg_save_dir  = &quot;24/negative&quot;</span><br><span class="line">pos_save_dir  = &quot;24/positive&quot;</span><br><span class="line">part_save_dir = &quot;24/part&quot;</span><br><span class="line">image_size = 24</span><br><span class="line">f1 = open(&apos;24/pos_24.txt&apos;, &apos;w&apos;)</span><br><span class="line">f2 = open(&apos;24/neg_24.txt&apos;, &apos;w&apos;)</span><br><span class="line">f3 = open(&apos;24/part_24.txt&apos;, &apos;w&apos;)</span><br><span class="line">threshold = [0.6,0.6,0.7]</span><br><span class="line">with open(anno_file, &apos;r&apos;) as f:</span><br><span class="line">    annotations = f.readlines()</span><br><span class="line">num = len(annotations)</span><br><span class="line">print &quot;%d pics in total&quot; % num</span><br><span class="line"></span><br><span class="line">p_idx = 0 # positive</span><br><span class="line">n_idx = 0 # negative</span><br><span class="line">d_idx = 0 # dont care</span><br><span class="line">image_idx = 0</span><br><span class="line"></span><br><span class="line">for annotation in annotations:</span><br><span class="line">    annotation = annotation.strip().split(&apos; &apos;)</span><br><span class="line">    bbox = map(float, annotation[1:])</span><br><span class="line">    gts = np.array(bbox, dtype=np.float32).reshape(-1, 4)</span><br><span class="line">    img_path = im_dir + annotation[0] + &apos;.jpg&apos;</span><br><span class="line">    rectangles = detectFace(img_path,threshold)</span><br><span class="line">    img = cv2.imread(img_path)</span><br><span class="line">    image_idx += 1</span><br><span class="line">    view_bar(image_idx,num)</span><br><span class="line">    for box in rectangles:</span><br><span class="line">        x_left, y_top, x_right, y_bottom, _ = box</span><br><span class="line">        crop_w = x_right - x_left + 1</span><br><span class="line">        crop_h = y_bottom - y_top + 1</span><br><span class="line">        # ignore box that is too small or beyond image border</span><br><span class="line">        if crop_w &lt; image_size or crop_h &lt; image_size :</span><br><span class="line">            continue</span><br><span class="line"></span><br><span class="line">        # compute intersection over union(IoU) between current box and all gt boxes</span><br><span class="line">        Iou = IoU(box, gts)</span><br><span class="line">        cropped_im = img[y_top:y_bottom + 1, x_left:x_right + 1]</span><br><span class="line">        resized_im = cv2.resize(cropped_im, (image_size, image_size), interpolation=cv2.INTER_LINEAR)</span><br><span class="line"></span><br><span class="line">        # save negative images and write label</span><br><span class="line">        if np.max(Iou) &lt; 0.3:</span><br><span class="line">            # Iou with all gts must below 0.3</span><br><span class="line">            save_file = os.path.join(neg_save_dir, &quot;%s.jpg&quot;%n_idx)</span><br><span class="line">            f2.write(&quot;%s/negative/%s&quot;%(image_size, n_idx) + &apos; 0\n&apos;)</span><br><span class="line">            cv2.imwrite(save_file, resized_im)</span><br><span class="line">            n_idx += 1</span><br><span class="line">        else:</span><br><span class="line">            # find gt_box with the highest iou</span><br><span class="line">            idx = np.argmax(Iou)</span><br><span class="line">            assigned_gt = gts[idx]</span><br><span class="line">            x1, y1, x2, y2 = assigned_gt</span><br><span class="line"></span><br><span class="line">            # compute bbox reg label</span><br><span class="line">            offset_x1 = (x1 - x_left)   / float(crop_w)</span><br><span class="line">            offset_y1 = (y1 - y_top)    / float(crop_h)</span><br><span class="line">            offset_x2 = (x2 - x_right)  / float(crop_w)</span><br><span class="line">            offset_y2 = (y2 - y_bottom )/ float(crop_h)</span><br><span class="line"></span><br><span class="line">            # save positive and part-face images and write labels</span><br><span class="line">            if np.max(Iou) &gt;= 0.65:</span><br><span class="line">                save_file = os.path.join(pos_save_dir, &quot;%s.jpg&quot;%p_idx)</span><br><span class="line">                f1.write(&quot;%s/positive/%s&quot;%(image_size, p_idx) + &apos; 1 %.2f %.2f %.2f %.2f\n&apos;%(offset_x1, offset_y1, offset_x2, offset_y2))</span><br><span class="line">                cv2.imwrite(save_file, resized_im)</span><br><span class="line">                p_idx += 1</span><br><span class="line"></span><br><span class="line">            elif np.max(Iou) &gt;= 0.4:</span><br><span class="line">                save_file = os.path.join(part_save_dir, &quot;%s.jpg&quot;%d_idx)</span><br><span class="line">                f3.write(&quot;%s/part/%s&quot;%(image_size, d_idx)     + &apos; -1 %.2f %.2f %.2f %.2f\n&apos;%(offset_x1, offset_y1, offset_x2, offset_y2))</span><br><span class="line">                cv2.imwrite(save_file, resized_im)</span><br><span class="line">                d_idx += 1</span><br><span class="line"></span><br><span class="line">f1.close()</span><br><span class="line">f2.close()</span><br><span class="line">f3.close()</span><br></pre></td></tr></table></figure>
+<p>注意修改上面代码的路径，用上面P_Net同样的处理方式将以上数据处理成lmdb的形式并进行训练。O_Net同理。上面的训练完成后就可以进行测试了。</p>
+<h1 id="4、MTCNN的测试"><a href="#4、MTCNN的测试" class="headerlink" title="4、MTCNN的测试"></a>4、MTCNN的测试</h1><p>经过以上的步骤，在models-12、models-24和models-48会有三个网络对应的caffemodel，再加上det1.prototxt、det2.prototxt和det3.prototxt就可以利用下面的代码进行测试了（主要参考<a href="https://github.com/CongWeilin/mtcnn-caffe/tree/master/demo中的代码）：" target="_blank" rel="noopener">https://github.com/CongWeilin/mtcnn-caffe/tree/master/demo中的代码）：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">import tools_matrix as tools</span><br><span class="line">import caffe</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">deploy = &apos;det1.prototxt&apos;</span><br><span class="line">caffemodel = &apos;det1.caffemodel&apos;</span><br><span class="line">net_12 = caffe.Net(deploy,caffemodel,caffe.TEST)</span><br><span class="line"></span><br><span class="line">deploy = &apos;det2.prototxt&apos;</span><br><span class="line">caffemodel = &apos;det2.caffemodel&apos;</span><br><span class="line">net_24 = caffe.Net(deploy,caffemodel,caffe.TEST)</span><br><span class="line"></span><br><span class="line">deploy = &apos;det3.prototxt&apos;</span><br><span class="line">caffemodel = &apos;det3.caffemodel&apos;</span><br><span class="line">net_48 = caffe.Net(deploy,caffemodel,caffe.TEST)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def detectFace(img_path,threshold):</span><br><span class="line">    img = cv2.imread(img_path)</span><br><span class="line">    caffe_img = (img.copy()-127.5)/128</span><br><span class="line">    origin_h,origin_w,ch = caffe_img.shape</span><br><span class="line">    scales = tools.calculateScales(img)</span><br><span class="line">    out = []</span><br><span class="line">    for scale in scales:</span><br><span class="line">        hs = int(origin_h*scale)</span><br><span class="line">        ws = int(origin_w*scale)</span><br><span class="line">        scale_img = cv2.resize(caffe_img,(ws,hs))</span><br><span class="line">        scale_img = np.swapaxes(scale_img, 0, 2)</span><br><span class="line">        net_12.blobs[&apos;data&apos;].reshape(1,3,ws,hs)</span><br><span class="line">        net_12.blobs[&apos;data&apos;].data[...]=scale_img</span><br><span class="line">	caffe.set_device(0)</span><br><span class="line">	caffe.set_mode_gpu()</span><br><span class="line">	out_ = net_12.forward()</span><br><span class="line">        out.append(out_)</span><br><span class="line">    image_num = len(scales)</span><br><span class="line">    rectangles = []</span><br><span class="line">    for i in range(image_num):    </span><br><span class="line">        cls_prob = out[i][&apos;prob1&apos;][0][1]</span><br><span class="line">        roi      = out[i][&apos;conv4-2&apos;][0]</span><br><span class="line">        out_h,out_w = cls_prob.shape</span><br><span class="line">        out_side = max(out_h,out_w)</span><br><span class="line">        rectangle = tools.detect_face_12net(cls_prob,roi,out_side,1/scales[i],origin_w,origin_h,threshold[0])</span><br><span class="line">        rectangles.extend(rectangle)</span><br><span class="line">    rectangles = tools.NMS(rectangles,0.7,&apos;iou&apos;)</span><br><span class="line"></span><br><span class="line">    if len(rectangles)==0:</span><br><span class="line">        return rectangles</span><br><span class="line">    net_24.blobs[&apos;data&apos;].reshape(len(rectangles),3,24,24)</span><br><span class="line">    crop_number = 0</span><br><span class="line">    for rectangle in rectangles:</span><br><span class="line">        crop_img = caffe_img[int(rectangle[1]):int(rectangle[3]), int(rectangle[0]):int(rectangle[2])]</span><br><span class="line">        scale_img = cv2.resize(crop_img,(24,24))</span><br><span class="line">        scale_img = np.swapaxes(scale_img, 0, 2)</span><br><span class="line">        net_24.blobs[&apos;data&apos;].data[crop_number] =scale_img</span><br><span class="line">        crop_number += 1</span><br><span class="line">    out = net_24.forward()</span><br><span class="line">    cls_prob = out[&apos;prob1&apos;]</span><br><span class="line">    roi_prob = out[&apos;conv5-2&apos;]</span><br><span class="line">    rectangles = tools.filter_face_24net(cls_prob,roi_prob,rectangles,origin_w,origin_h,threshold[1])</span><br><span class="line"></span><br><span class="line">    if len(rectangles)==0:</span><br><span class="line">        return rectangles</span><br><span class="line">    net_48.blobs[&apos;data&apos;].reshape(len(rectangles),3,48,48)</span><br><span class="line">    crop_number = 0</span><br><span class="line">    for rectangle in rectangles:</span><br><span class="line">        crop_img = caffe_img[int(rectangle[1]):int(rectangle[3]), int(rectangle[0]):int(rectangle[2])]</span><br><span class="line">        scale_img = cv2.resize(crop_img,(48,48))</span><br><span class="line">        scale_img = np.swapaxes(scale_img, 0, 2)</span><br><span class="line">        net_48.blobs[&apos;data&apos;].data[crop_number] =scale_img</span><br><span class="line">        crop_number += 1</span><br><span class="line">    out = net_48.forward()</span><br><span class="line">    cls_prob = out[&apos;prob1&apos;]</span><br><span class="line">    roi_prob = out[&apos;conv6-2&apos;]</span><br><span class="line">    pts_prob = out[&apos;conv6-3&apos;]</span><br><span class="line">    rectangles = tools.filter_face_48net(cls_prob,roi_prob,pts_prob,rectangles,origin_w,origin_h,threshold[2])</span><br><span class="line"></span><br><span class="line">    return rectangles</span><br><span class="line"></span><br><span class="line">threshold = [0.6,0.6,0.7]</span><br><span class="line">imgpath = &quot;&quot;</span><br><span class="line">rectangles = detectFace(imgpath,threshold)</span><br><span class="line">img = cv2.imread(imgpath)</span><br><span class="line">draw = img.copy()</span><br><span class="line">for rectangle in rectangles:</span><br><span class="line">    cv2.putText(draw,str(rectangle[4]),(int(rectangle[0]),int(rectangle[1])),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0))</span><br><span class="line">    cv2.rectangle(draw,(int(rectangle[0]),int(rectangle[1])),(int(rectangle[2]),int(rectangle[3])),(255,0,0),1)</span><br><span class="line">    for i in range(5,15,2):</span><br><span class="line">    	cv2.circle(draw,(int(rectangle[i+0]),int(rectangle[i+1])),2,(0,255,0))</span><br><span class="line">cv2.imshow(&quot;test&quot;,draw)</span><br><span class="line">cv2.waitKey()</span><br><span class="line">cv2.imwrite(&apos;test.jpg&apos;,draw)</span><br></pre></td></tr></table></figure>
+<p>上面只是一个简单的实现过程的介绍，但是需要实现论文里面的效果，还需要很复杂的处理数据和调参过程。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/images/we_chat_reward_image.png" alt="Camlin Zhang 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/uploads/images/alipay_reward_image.jpg" alt="Camlin Zhang 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MTCNN/" rel="tag"><i class="fa fa-tag"></i> MTCNN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/03/详细解释递归原理/" rel="next" title="详细解释递归原理">
+                <i class="fa fa-chevron-left"></i> 详细解释递归原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/25/一种人脸68特征点检测的深度学习方法/" rel="prev" title="一种人脸68特征点检测的深度学习方法">
+                一种人脸68特征点检测的深度学习方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/images/avatar.jpg" alt="Camlin Zhang">
+            
+              <p class="site-author-name" itemprop="name">Camlin Zhang</p>
+              <p class="site-description motion-element" itemprop="description">只为遇见更好的自己</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CamlinZ" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://me.csdn.net/sinat_28731575" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="camlinzhang@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、环境配置"><span class="nav-number">1.</span> <span class="nav-text">1、环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装anaconda"><span class="nav-number">1.1.</span> <span class="nav-text">安装anaconda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Microsoft-Visual-Studio-2013"><span class="nav-number">1.2.</span> <span class="nav-text">安装Microsoft Visual Studio 2013</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在编译好的VS环境下配置opencv和openblas"><span class="nav-number">1.3.</span> <span class="nav-text">在编译好的VS环境下配置opencv和openblas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在VS环境下编译caffe"><span class="nav-number">1.4.</span> <span class="nav-text">在VS环境下编译caffe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装pycharm，并在anaconda的python环境中配置opencv"><span class="nav-number">1.5.</span> <span class="nav-text">安装pycharm，并在anaconda的python环境中配置opencv</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、MTCNN配置"><span class="nav-number">2.</span> <span class="nav-text">2、MTCNN配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集的准备"><span class="nav-number">2.1.</span> <span class="nav-text">数据集的准备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、MTCNN训练数据生成及训练"><span class="nav-number">3.</span> <span class="nav-text">3、MTCNN训练数据生成及训练</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-P-Net-的训练"><span class="nav-number">3.1.</span> <span class="nav-text">(1)   P_Net 的训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-R-Net-的训练"><span class="nav-number">3.2.</span> <span class="nav-text">(2)   R_Net 的训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、MTCNN的测试"><span class="nav-number">4.</span> <span class="nav-text">4、MTCNN的测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+
+  <span class="with-love">
+    <i class="fa fa-heart" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Camlin Zhang</span>
+
+  
+</div>
+
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数：<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<span class="post-meta-divider">|</span>
+
+<!--
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共48.3k字</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

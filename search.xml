@@ -134,8 +134,8 @@
         <category>环境配置</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
         <tag>Caffe</tag>
+        <tag>Ubuntu</tag>
         <tag>DeepLab</tag>
       </tags>
   </entry>

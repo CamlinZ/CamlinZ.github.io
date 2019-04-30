@@ -324,9 +324,9 @@
       <category term="环境配置" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
     
     
-      <category term="Ubuntu" scheme="http://camlinzhang.com/tags/Ubuntu/"/>
-    
       <category term="Caffe" scheme="http://camlinzhang.com/tags/Caffe/"/>
+    
+      <category term="Ubuntu" scheme="http://camlinzhang.com/tags/Ubuntu/"/>
     
       <category term="DeepLab" scheme="http://camlinzhang.com/tags/DeepLab/"/>
     
