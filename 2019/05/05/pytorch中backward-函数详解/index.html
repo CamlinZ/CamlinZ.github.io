@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://camlinzhang.com/2019/05/05/pytorch中backward-函数详解/image-20190505163615065.png">
 <meta property="og:image" content="http://camlinzhang.com/2019/05/05/pytorch中backward-函数详解/image-20190505162757898.png">
 <meta property="og:image" content="http://camlinzhang.com/2019/05/05/pytorch中backward-函数详解/image-20190505163259186.png">
-<meta property="og:updated_time" content="2019-05-05T09:37:06.105Z">
+<meta property="og:updated_time" content="2019-05-05T09:41:32.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pytorch中backward()函数详解">
 <meta name="twitter:description" content="作为深度学习中最为重要的反向传播计算，pytorch用非常简单的backward( )函数就实现了，但是在实现过程中对于其参数存在一些疑问，下面就从pytorch中反向传播求导的计算方式，backward( )函数参数来进行说明。 这里首先还是放出backward( )函数的pytorch文档，因为整个说明主要还是围绕这个函数来进行的。  问题描述从上面的文档可以看到backward函数有一个奇怪">
@@ -356,7 +356,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-05T17:37:06+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-05T17:41:32+08:00">
                 2019-05-05
               </time>
             
@@ -474,7 +474,7 @@
 <li>如果是标量对向量求导(scalar对tensor求导)，那么就可以保证上面的计算图的根节点只有一个，此时不用引入<code>grad_tensors参数</code>，直接调用backward函数即可</li>
 <li>如果是(向量)矩阵对(向量)矩阵求导(tensor对tensor求导)，实际上是先求出Jacobian矩阵中每一个元素的梯度值(每一个元素的梯度值的求解过程对应上面的计算图的求解方法)，然后将这个Jacobian矩阵与<code>grad_tensors参数</code>对应的矩阵进行对应的点乘，得到最终的结果。</li>
 </ul>
-<p>Jacobian矩阵参考：<a href="[http://jacoxu.com/jacobian%E7%9F%A9%E9%98%B5%E5%92%8Chessian%E7%9F%A9%E9%98%B5/](http://jacoxu.com/jacobian矩阵和hessian矩阵/">Jacobian矩阵和Hessian矩阵</a>)</p>
+<p>Jacobian矩阵参考：<a href="http://jacoxu.com/jacobian矩阵和hessian矩阵/" target="_blank" rel="noopener">Jacobian矩阵和Hessian矩阵</a></p>
 <p>为什么pytorch不支持tensor对tensor求导，而是引入<code>grad_tensors参数</code>参考：<a href="https://zhuanlan.zhihu.com/p/29923090" target="_blank" rel="noopener">PyTorch 的 backward 为什么有一个 grad_variables 参数？</a></p>
 
       
