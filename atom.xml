@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://camlinzhang.com/"/>
-  <updated>2019-05-06T12:43:06.245Z</updated>
+  <updated>2019-05-05T09:41:32.253Z</updated>
   <id>http://camlinzhang.com/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>NLP综述</title>
-    <link href="http://camlinzhang.com/2019/05/06/NLP%E7%BB%BC%E8%BF%B0/"/>
-    <id>http://camlinzhang.com/2019/05/06/NLP综述/</id>
-    <published>2019-05-06T03:16:01.000Z</published>
-    <updated>2019-05-06T12:43:06.245Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-      <category term="技术博客" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/"/>
-    
-      <category term="自然语言处理" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/"/>
-    
-      <category term="NLP综述" scheme="http://camlinzhang.com/categories/%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/NLP%E7%BB%BC%E8%BF%B0/"/>
-    
-    
-      <category term="NLP" scheme="http://camlinzhang.com/tags/NLP/"/>
-    
-      <category term="综述" scheme="http://camlinzhang.com/tags/%E7%BB%BC%E8%BF%B0/"/>
-    
-  </entry>
   
   <entry>
     <title>pytorch中backward()函数详解</title>
