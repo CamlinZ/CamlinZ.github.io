@@ -96,41 +96,43 @@
 <meta property="og:site_name" content="Camlin Zhang&#39;s Blog">
 <meta property="og:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1hecz4vepj30rb0vtafs.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1h831y4p7j30yq0hf796.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1hf4re0nxj30o500r74a.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1hecz4vepj30rb0vtafs.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1h831y4p7j30yq0hf796.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hf4re0nxj30o500r74a.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hf5izkj0j30o606fq4y.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1hf8akn3xj30o50gcgsu.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1g0g45j59j30xt0ea0xs.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1g0hof10hj30wg0an0vx.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1hkmalddvj30ox0f5jwo.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hf8akn3xj30o50gcgsu.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g0g45j59j30xt0ea0xs.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g0hof10hj30wg0an0vx.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hkmalddvj30ox0f5jwo.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1hkojp4x1j30oz07x40w.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1g6msbgx5j30m208r40p.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1hl0abyfyj30p00lqdki.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hl7zyg07j30nb0947hc.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1hl9emjztj30ng0at7i2.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1hlag5o5mj30n90ajakt.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hlhptzrej30up03xq41.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1hli3gbmej30un07aaba.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g1jgru0yqdj30fj05976j.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m1yi7fl9j30sd0gjgur.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m3jopoybj31pk0lx1kx.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1m51iiou3j30o40c4n2h.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg">
-<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g214ve8jg1j30oq09odlw.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg">
-<meta property="og:updated_time" content="2019-05-06T03:18:40.655Z">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g6msbgx5j30m208r40p.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl0abyfyj30p00lqdki.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl7zyg07j30nb0947hc.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl9emjztj30ng0at7i2.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hlag5o5mj30n90ajakt.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hlhptzrej30up03xq41.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hli3gbmej30un07aaba.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1jgru0yqdj30fj05976j.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m1yi7fl9j30sd0gjgur.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m3jopoybj31pk0lx1kx.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m51iiou3j30o40c4n2h.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tNc79gy1g214ve8jg1j30oq09odlw.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/image-20190518171108771.png">
+<meta property="og:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/image-20190519120126997.png">
+<meta property="og:updated_time" content="2019-05-19T04:21:46.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测two-stage经典方法总结">
 <meta name="twitter:description" content="计算机视觉的三大任务 分类（是什么）：给定一张图片，为每张图片打一个标签，说出图片是什么物体。然而因为一张图片中往往有多个物体，因此我们允许你取出概率最大的5个，只要前五个概率最大的包含了我们人工标定标签，就认定正确（top-k预测）  定位（在哪儿）：除了需要预测出图片的类别，你还要定位出这个物体的位置，同时规定你定位的这个物体框与正确位置差不能超过规定的阈值  检测（在哪儿有什么）：给定一张图">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
+<meta name="twitter:image" content="http://camlinzhang.com/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1fc1sp37zj31000dek2d.jpg">
 
 
 
@@ -383,8 +385,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-06T11:18:40+08:00">
-                2019-05-06
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-19T12:21:46+08:00">
+                2019-05-19
               </time>
             
           </span>
@@ -489,7 +491,7 @@
 <p>《OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks》</p>
 </blockquote>
 <p>在早期方法中，通常使用以下的传统框架进行目标检测任务(这里以人脸检测作为一个例子)：</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1fc1sp37zj31000dek2d.jpg" alt="目标检测早期方法传统框架"></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1fc1sp37zj31000dek2d.jpg" alt="目标检测早期方法传统框架"></p>
 <p>可以看到传统的框架通常使用下面的步骤进行检测任务：</p>
 <ol>
 <li><p>首先利用大量图片训练一个目标检测的分类器</p>
@@ -526,13 +528,13 @@
 </li>
 </ul>
 <p>OverFeat整体流程图如下所示：</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1hecz4vepj30rb0vtafs.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1hecz4vepj30rb0vtafs.jpg" alt=""></p>
 <h3 id="Offset-Pooling"><a href="#Offset-Pooling" class="headerlink" title="Offset Pooling"></a>Offset Pooling</h3><p>Offset pooling可以看做是一种特征图滑窗策略，用于针对同一尺度下的输入图片产生的特征图中不同位置进行分类和检测，用于替代传统方法中在输入图片上进行密集滑窗策略这种耗时的操作。在论文中的解释如下：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1h831y4p7j30yq0hf796.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1h831y4p7j30yq0hf796.jpg" alt=""></p>
 <p>具体操作步骤为：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1hf4re0nxj30o500r74a.jpg" alt=""><br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hf5izkj0j30o606fq4y.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hf4re0nxj30o500r74a.jpg" alt=""><br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hf5izkj0j30o606fq4y.jpg" alt=""></p>
 <p>其中的layer5即对应OverFeat整体流程图中特征图2</p>
-<h3 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h3><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1hf8akn3xj30o50gcgsu.jpg" alt=""></p>
+<h3 id="FCN"><a href="#FCN" class="headerlink" title="FCN"></a>FCN</h3><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hf8akn3xj30o50gcgsu.jpg" alt=""></p>
 <h3 id="分类任务"><a href="#分类任务" class="headerlink" title="分类任务"></a>分类任务</h3><p>OverFeat论文中的特征提取模型是在AlexNet的基础上进行改进(注意后面的分析均是基于高精度模型)：</p>
 <ol>
 <li><p>没有使用局部响应归一化层；</p>
@@ -544,9 +546,9 @@
 </ol>
 <p>在此基础上，作者构造出了快速模型和高精度模型两种架构：</p>
 <ul>
-<li><p>快速模型架构<br><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1g0g45j59j30xt0ea0xs.jpg" alt=""></p>
+<li><p>快速模型架构<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g0g45j59j30xt0ea0xs.jpg" alt=""></p>
 </li>
-<li><p>高精度模型架构<br><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1g0hof10hj30wg0an0vx.jpg" alt=""></p>
+<li><p>高精度模型架构<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g0hof10hj30wg0an0vx.jpg" alt=""></p>
 </li>
 </ul>
 <h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>在分类任务的训练阶段，OverFeat采用AlexNet的图像增强方法：</p>
@@ -556,7 +558,7 @@
 <li><p>利用PCA来处理RGB三通道的值</p>
 </li>
 </ul>
-<p>AlexNet的详细处理步骤为：<br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1hkmalddvj30ox0f5jwo.jpg" alt=""><br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1hkojp4x1j30oz07x40w.jpg" alt=""></p>
+<p>AlexNet的详细处理步骤为：<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hkmalddvj30ox0f5jwo.jpg" alt=""><br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1hkojp4x1j30oz07x40w.jpg" alt=""></p>
 <p>再将上述图像增强后的图片输入网络进行训练</p>
 <h4 id="模型测试"><a href="#模型测试" class="headerlink" title="模型测试"></a>模型测试</h4><p>AlexNet在模型测试阶段的方法为：</p>
 <ul>
@@ -578,7 +580,7 @@
 <ul>
 <li>对原图做以下放大处理(由于通常检测问题中对于大尺寸物体的检测效果较好，对于小物体的检测效果不好，所以构造多尺度输入的时候只放大图片)得到6个尺寸的图片，并对所有尺寸的图片做翻转作为输入。</li>
 </ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1g6msbgx5j30m208r40p.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1g6msbgx5j30m208r40p.jpg" alt=""></p>
 <ul>
 <li><p>将以上图片输入模型直接进行测试，并在此处引入offset pooling来实现原始检测框架中的密集滑窗策略，从而对于每一个尺寸的输入图片产生如上表最后一列所示数量的特征向量</p>
 </li>
@@ -586,20 +588,20 @@
 </li>
 </ul>
 <h3 id="定位任务"><a href="#定位任务" class="headerlink" title="定位任务"></a>定位任务</h3><h4 id="模型训练-1"><a href="#模型训练-1" class="headerlink" title="模型训练"></a>模型训练</h4><p>保持分类模型中训练好的OverFeat模型参数不变，在模型后面加上定位任务的网络进行训练，从而得到最终的定位网络(文中并没有给出训练回归任务的loss函数)</p>
-<h4 id="模型定位步骤"><a href="#模型定位步骤" class="headerlink" title="模型定位步骤"></a>模型定位步骤</h4><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1hl0abyfyj30p00lqdki.jpg" alt=""></p>
+<h4 id="模型定位步骤"><a href="#模型定位步骤" class="headerlink" title="模型定位步骤"></a>模型定位步骤</h4><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl0abyfyj30p00lqdki.jpg" alt=""></p>
 <p>从上图可以看到，以281x317的输入尺寸为例，OverFeat论文中对于上面OverFeat整体流程图中特征图2首先进行一个5x5的pooling层得到2x3的特征图，然后经过4096x1x1和1000x1x1的全连接层(这里使用FCN实现)之后最终输出每一个尺度产生的每一个特征图中的每一个像素点映射到原图中的检测框的坐标值，即图中的(top, left, right, right box edges)。对此，作者通过下面的几组图片分析了多尺度策略，offset pooling策略对模型产生检测框的密集度：</p>
 <ul>
-<li><p>利用不同的尺寸来进行预测，由于尺寸越大，对应的第五层产生的特征图的大小也越大，而特征图中每一个像素点都对应一个检测框，因此原图尺寸越大，越会产生更多的检测框<br><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hl7zyg07j30nb0947hc.jpg" alt=""></p>
+<li><p>利用不同的尺寸来进行预测，由于尺寸越大，对应的第五层产生的特征图的大小也越大，而特征图中每一个像素点都对应一个检测框，因此原图尺寸越大，越会产生更多的检测框<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl7zyg07j30nb0947hc.jpg" alt=""></p>
 </li>
-<li><p>在上面的基础上，运用offset pooling 即滑窗的方法，因此在每一个scale又产生了不同的3x3个不同滑动窗口，因此进一步的增加了检测窗口的数量<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1hl9emjztj30ng0at7i2.jpg" alt=""></p>
+<li><p>在上面的基础上，运用offset pooling 即滑窗的方法，因此在每一个scale又产生了不同的3x3个不同滑动窗口，因此进一步的增加了检测窗口的数量<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hl9emjztj30ng0at7i2.jpg" alt=""></p>
 </li>
-<li><p>此处展示的是上面的每一个尺寸的每一滑窗的每一个像素点对应的位置回归网络产生的四个坐标点回归值<br><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1hlag5o5mj30n90ajakt.jpg" alt=""></p>
+<li><p>此处展示的是上面的每一个尺寸的每一滑窗的每一个像素点对应的位置回归网络产生的四个坐标点回归值<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hlag5o5mj30n90ajakt.jpg" alt=""></p>
 </li>
-<li><p>结合上图中各个尺度各个滑窗上产生的检测框<br><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hlhptzrej30up03xq41.jpg" alt=""><br><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g1hli3gbmej30un07aaba.jpg" alt=""></p>
+<li><p>结合上图中各个尺度各个滑窗上产生的检测框<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hlhptzrej30up03xq41.jpg" alt=""><br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hli3gbmej30un07aaba.jpg" alt=""></p>
 </li>
 </ul>
 <h3 id="分类和定位任务"><a href="#分类和定位任务" class="headerlink" title="分类和定位任务"></a>分类和定位任务</h3><p>整体上OverFeat利用OverFeat特征提取器来提取特征，将该特征运用于后面的分类和定位任务，即可以看作对于后面产生的特征图中的每一个像素点映射到原始图中的区域，在该区域预测出分类任务中各个类别的概率以及回归任务中检测框的坐标值，下面同样以281x317的输入尺寸为例，给出网络同时进行两项任务的示意图：</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1hm9wgdfaj30gz0ijtg2.jpg" alt=""></p>
 <h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><p><a href="https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">https://zhum.in/blog/project/TrafficSignRecognition/OverFeat%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</a></p>
 <h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><blockquote>
 <p>《Rich feature hierarchies for accurate object detection and semantic segmentation》</p>
@@ -623,7 +625,7 @@
 <li>构造一个滑动窗口检测器(R-CNN中采用的方法)</li>
 </ol>
 <p>下面具体说明R-CNN的具体构造：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1g1jgru0yqdj30fj05976j.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1jgru0yqdj30fj05976j.jpg" alt=""></p>
 <p>如上图所示，R-CNN的测试部分主要分为三个模块:</p>
 <ol>
 <li>产生类别无关的候选框</li>
@@ -660,7 +662,7 @@
 <h4 id="卷积神经网络产生定长的特征向量"><a href="#卷积神经网络产生定长的特征向量" class="headerlink" title="卷积神经网络产生定长的特征向量"></a>卷积神经网络产生定长的特征向量</h4><ol>
 <li>将第一步中产生的类别无关的候选框risize成227x227大小的图片</li>
 </ol>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcly1g1ji8aeorsj30ng0lzk7w.jpg" alt=""></p>
 <p>上图中展示了作者在附录A中实验的几种resize方式：</p>
 <p>(B)考虑context(图像中context指RoI周边像素)的各向同性变形，检测框向周围像素扩充到227×227，若遇到图像边界则用候选框像素的均值进行填充</p>
 <p>(C)不考虑context的各向同性变形，直接用建议框像素均值填充至227×227</p>
@@ -711,12 +713,12 @@
 <p>CNN的训练中采用的是随机选取正负例，保证两者之间的比例为1:3，而没有采用SVM中的hard negative mining方法，同样导致直接使用CNN进行分类的效果没有使用功能SVM的好</p>
 </blockquote>
 <h4 id="Ablation-studies"><a href="#Ablation-studies" class="headerlink" title="Ablation studies"></a>Ablation studies</h4><p>作者通过在上面提出的模型的基础上分别用Pool5、fc6以及fc7产生的特征来训练SVM，并使用SVM进行分类后的mAP指标如下：</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1jxef79pzj30ux04zabo.jpg" alt=""></p>
 <ul>
 <li>前三行数据说明调优之前的模型中fc7的特征泛化能力不如fc6的特征，同时移除fc6和fc7，仅仅使用pool5的特征，只使用CNN参数的6%也能有非常好的结果。可见CNN的主要表达力来自于卷积层，而不是全连接层</li>
 <li>中间三行数据说明调优之后的模型提升非常明显，mAP提升了8个百分点，达到了54.2%。fc6和fc7的提升明显优于pool5，这说明pool5从ImageNet学习的特征通用性很强，在它之上层的大部分提升主要是在学习领域相关的非线性分类器(上面是文中的观点，但是个人觉得这个数据实际上在一定程度上反驳了上边关于全连接层对于模型的特征表达没有作用的观点)</li>
 </ul>
-<h4 id="检测错误分析"><a href="#检测错误分析" class="headerlink" title="检测错误分析"></a>检测错误分析</h4><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg" alt=""></p>
+<h4 id="检测错误分析"><a href="#检测错误分析" class="headerlink" title="检测错误分析"></a>检测错误分析</h4><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1jxlzt7vaj30f20lrq88.jpg" alt=""></p>
 <p>(这里没有看的太明白)</p>
 <h4 id="Bounding-box回归"><a href="#Bounding-box回归" class="headerlink" title="Bounding-box回归"></a>Bounding-box回归</h4><p>通过上面的检测错误分析，作者指出：</p>
 <blockquote>
@@ -731,11 +733,11 @@
 <p>《Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition》</p>
 </blockquote>
 <h3 id="提出问题以及产生问题的原因"><a href="#提出问题以及产生问题的原因" class="headerlink" title="提出问题以及产生问题的原因"></a>提出问题以及产生问题的原因</h3><p>流行的CNN结构通常都需要输入图像的尺寸是固定的，这限制了输入图像的长宽比和缩放尺度。当遇到任意尺寸的图像时，都是先将图像利用裁剪和变形缩放的方式来适应成固定尺寸。但裁剪会导致信息的丢失，变形会导致位置信息的扭曲，就会影响识别的精度。另外，一个预先定义好的尺寸在物体是缩放可变的时候就不适用了。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m1yi7fl9j30sd0gjgur.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m1yi7fl9j30sd0gjgur.jpg" alt=""></p>
 <p>产生问题的原因主要来自网络的全连接层，也即是网络的最后阶段。</p>
 <h3 id="解决问题的方案"><a href="#解决问题的方案" class="headerlink" title="解决问题的方案"></a>解决问题的方案</h3><p>解决上面CNN输入固定问题的解决方案当然是本文的主角SPP了，即空间金字塔池化，论文首先说明了该结构的来历以及优点</p>
 <h4 id="SPP的由来"><a href="#SPP的由来" class="headerlink" title="SPP的由来"></a>SPP的由来</h4><p>SPP来源于SPM(Spatial Pyramid Matching)，是论文《Beyond bags of features: Spatial pyramid matching for recognizing natural scene categories》提出的观点，出现的背景是将BOVW(Bag of visual words)模型被大量地用在了Image representation中，但是BOVW模型完全缺失了特征点的位置信息。<br>主要参考：<a href="https://blog.csdn.net/jwh_bupt/article/details/9625469" target="_blank" rel="noopener">https://blog.csdn.net/jwh_bupt/article/details/9625469</a></p>
-<h3 id="SPP介绍"><a href="#SPP介绍" class="headerlink" title="SPP介绍"></a>SPP介绍</h3><p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g1m3jopoybj31pk0lx1kx.jpg" alt=""></p>
+<h3 id="SPP介绍"><a href="#SPP介绍" class="headerlink" title="SPP介绍"></a>SPP介绍</h3><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m3jopoybj31pk0lx1kx.jpg" alt=""></p>
 <p>通过上图中将经典的7层网络结构(如AlexNet或VGGNet)中conv5层产生的特征图进行可视化可以发现，CNN中的滤波器会被一些特定的语义激活，而这些滤波器也会在图像中采集相应的语义信息。这项特性说明CNN也和传统方法一样使用以下步骤：</p>
 <ol>
 <li>将原始图像进行编码(即SIFT特征或者HOG特征表示)后形成特征图(可以看成是一个特征空间)</li>
@@ -746,7 +748,7 @@
 <blockquote>
 <p>卷积层接受任意大小的输入，而分类器固定输出向量的尺寸</p>
 </blockquote>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg" alt=""></p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m4l3enlgj30t00oidkc.jpg" alt=""></p>
 <p>如图所示，SPP结构即针对任意大小的特征图，首先将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个4x4的特征图(即对每一个图像块做最大池化操作)，即图中spatial pyramid pooling layer最左边的16x256-d特征，然后将特征图分为4x4个图像块，然后对每一个图像块取最大值，于是便可以得到一个2x2的特征图，即图中spatial pyramid pooling layer中间的4x256-d特征，最后将特征图整体最大值，于是便可以得到一个1x1的特征图，即图中spatial pyramid pooling layer最右边的256-d特征，将以上的各个特征进行拼接，作为全连接层的输入，通过这种方式，不论输入的大小是多少，输出向量的尺寸都是(16+4+1)x256-d，其中256-d对应着Conv 5输出的特征图即输入SPP结构的特征图的数量</p>
 <p>这种处理方式具有以下的优点：</p>
 <blockquote>
@@ -765,12 +767,12 @@
 <p>SPP-net not only makes it possible to generate representations from arbitrarily sized images/windows for testing, but also allows us to feed images with varying sizes or scales during training. Training with variable-size images increases scale-invariance and reduces over-ﬁtting.</p>
 </blockquote>
 <blockquote>
-<p>在检测中，SPP-Net不用像R-CNN那样对每张图片中的上千个变形后的区域的像素反复调用CNN，只需要在整张图片上运行一次卷积网络层（不关心窗口的数量），然后再使用SPP-net在特征图上抽取特征，这里用一张图可以形象的说明：<br><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g1m51iiou3j30o40c4n2h.jpg" alt=""></p>
+<p>在检测中，SPP-Net不用像R-CNN那样对每张图片中的上千个变形后的区域的像素反复调用CNN，只需要在整张图片上运行一次卷积网络层（不关心窗口的数量），然后再使用SPP-net在特征图上抽取特征，这里用一张图可以形象的说明：<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m51iiou3j30o40c4n2h.jpg" alt=""></p>
 </blockquote>
 <h3 id="SPP-Net的训练"><a href="#SPP-Net的训练" class="headerlink" title="SPP-Net的训练"></a>SPP-Net的训练</h3><p>由于GPU的实现(如cuda-convnet和Caffe)更适合运行在固定输入图像上，因此SPP-Net采用下面两种训练方式：</p>
 <h4 id="单一尺寸训练"><a href="#单一尺寸训练" class="headerlink" title="单一尺寸训练"></a>单一尺寸训练</h4><p>首先考虑接收裁剪成224×224图像的网络。裁剪的目的是数据增强。对于一个给定尺寸的图像，我们先计算空间金字塔池化所需要的块（bins）的大小。试想一个尺寸是axa（也就是13×13）的conv5之后特征图。对于nxn块的金字塔级，我们实现一个滑窗池化过程，窗口大小为win = 上取整[a/n]，步幅str = 下取整[a/n]. 对于l层金字塔，我们实现l个这样的层。然后将l个层的输出进行连接输出给全连接层。</p>
 <h4 id="多尺寸训练"><a href="#多尺寸训练" class="headerlink" title="多尺寸训练"></a>多尺寸训练</h4><p>携带SPP的网络可以应用于任意尺寸，为了解决不同图像尺寸的训练问题，我们考虑一些预设好的尺寸。现在考虑这两个尺寸：180×180,224×224。我们使用缩放而不是裁剪，将前述的224的区域图像变成180大小。这样，不同尺度的区域仅仅是分辨率上的不同，而不是内容和布局上的不同。对于接受180输入的网络，我们实现另一个固定尺寸的网络。本例中，conv5输出的特征图尺寸是axa=10×10。我们仍然使用win = 上取整[a/n]，str = 下取整[a/n]，实现每个金字塔池化层。这个180网络的空间金字塔层的输出的大小就和224网络的一样了。<br>这样，这个180网络就和224网络拥有一样的参数了。换句话说，训练过程中，我们通过使用共享参数的两个固定尺寸的网络实现了不同输入尺寸的SPP-net。<br>为了降低从一个网络（比如224）向另一个网络（比如180）切换的开销，我们在每个网络上训练一个完整的epoch，然后在下一个完成的epoch再切换到另一个网络（权重保留）。依此往复。实验中我们发现多尺寸训练的收敛速度和单尺寸差不多。</p>
-<h3 id="SPP-Net用于物体检测"><a href="#SPP-Net用于物体检测" class="headerlink" title="SPP-Net用于物体检测"></a>SPP-Net用于物体检测</h3><p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg" alt=""></p>
+<h3 id="SPP-Net用于物体检测"><a href="#SPP-Net用于物体检测" class="headerlink" title="SPP-Net用于物体检测"></a>SPP-Net用于物体检测</h3><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1maoa60lrj30ug0sgq8p.jpg" alt=""></p>
 <p>将SPP-Net应用于检测的步骤如下：</p>
 <ol>
 <li>使用主干网络提取特征，取conv5产生的特征图</li>
@@ -810,10 +812,10 @@
 </ol>
 </li>
 </ul>
-<h3 id="Fast-R-CNN的结构"><a href="#Fast-R-CNN的结构" class="headerlink" title="Fast R-CNN的结构"></a>Fast R-CNN的结构</h3><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg" alt=""></p>
+<h3 id="Fast-R-CNN的结构"><a href="#Fast-R-CNN的结构" class="headerlink" title="Fast R-CNN的结构"></a>Fast R-CNN的结构</h3><p><img src="/2019/03/25/目标检测two-stage经典方法总结/006tKfTcgy1g1m9p4cel4j30ru0juals.jpg" alt=""></p>
 <p>网络的整体处理步骤为：<br>Fast R-CNN网络将整个图像和一组候选框作为输入。网络首先使用几个卷积层和最大池化层来处理整个图像，以产生卷积特征图。然后，对于每个候选框，RoI池化层从特征图中提取固定长度的特征向量。每个特征向量被送入一系列全连接（fc）层中，其最终分支成两个同级输出层 ：一个输出K个类别加上1个背景类别的Softmax概率估计，另一个为K个类别的每一个类别输出四个实数值。每组4个值表示K个类别的一个类别的检测框位置的修正。</p>
 <p>其中RoI池化层使用最大池化将任何有效的RoI内的特征转换成具有H×W（例如，7×7）的固定空间范围的小特征图，其中H和W是层的超参数，独立于任何特定的RoI。在本文中，RoI是卷积特征图中的一个矩形窗口。 每个RoI由指定其左上角(r,c)及其高度和宽度(h,w)的四元组(r,c,h,w)定义。RoI最大池化通过将大小为h×w的RoI窗口分割成H×W个网格，子窗口大小约为h/H×w/W，然后对每个子窗口执行最大池化，并将输出合并到相应的输出网格单元中。同标准的最大池化一样，池化操作独立应用于每个特征图通道。RoI层只是SPPnets中使用的空间金字塔池层的特殊情况，其只有一个金字塔层。</p>
-<p>这里采用博客<a href="https://blog.csdn.net/u014380165/article/details/72851319" target="_blank" rel="noopener">Fast RCNN算法详解</a>中的两幅图来说明Fast R-CNN在上面网络结构下的训练和测试过程：<br><img src="https://ws4.sinaimg.cn/large/006tNc79gy1g214ve8jg1j30oq09odlw.jpg" alt=""><br>下面就具体根据训练和测试两个过程来分别说明Fast R-CNN算法的详细情况</p>
+<p>这里采用博客<a href="https://blog.csdn.net/u014380165/article/details/72851319" target="_blank" rel="noopener">Fast RCNN算法详解</a>中的两幅图来说明Fast R-CNN在上面网络结构下的训练和测试过程：<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tNc79gy1g214ve8jg1j30oq09odlw.jpg" alt=""><br>下面就具体根据训练和测试两个过程来分别说明Fast R-CNN算法的详细情况</p>
 <h3 id="Fast-R-CNN的训练"><a href="#Fast-R-CNN的训练" class="headerlink" title="Fast R-CNN的训练"></a>Fast R-CNN的训练</h3><h4 id="从预训练网络初始化"><a href="#从预训练网络初始化" class="headerlink" title="从预训练网络初始化"></a>从预训练网络初始化</h4><p>Fast R-CNN采用了三个ImageNet预训练的网络：AlexNet，VGG_CNN_M_1024以及VGG16，对这些网络进行下面的结构替换：</p>
 <ol>
 <li><p>将网络的输入改为：图像的列表和这些图像中RoI的列表</p>
@@ -828,21 +830,21 @@
 <table>
 <thead>
 <tr>
-<th>类别</th>
-<th>比例</th>
-<th>方式</th>
+<th style="text-align:center">类别</th>
+<th style="text-align:center">比例</th>
+<th style="text-align:center">方式</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>正例</td>
-<td>25%</td>
-<td>与GT bounding box的IoU在[0.5,1)</td>
+<td style="text-align:center">正例</td>
+<td style="text-align:center">25%</td>
+<td style="text-align:center">与GT bounding box的IoU在[0.5,1)</td>
 </tr>
 <tr>
-<td>负例</td>
-<td>75%</td>
-<td>与GT bounding box的IoU在[0.1,0.5)</td>
+<td style="text-align:center">负例</td>
+<td style="text-align:center">75%</td>
+<td style="text-align:center">与GT bounding box的IoU在[0.1,0.5)</td>
 </tr>
 </tbody>
 </table>
@@ -856,7 +858,7 @@
 <p><strong>多任务损失</strong></p>
 <p>Fast R-CNN中将分类和回归损失合并为一个损失函数：<br>$$L(p,u,t^u,v)=L_{cls}(p,u)+\lambda[u\ge1]L_{loc}(t^u,v)$$<br>其中分类损失函数如下，即为softmax预测到的第$u$类物体的概率值，负号为了使该概率值越大，$L_{cls}$值越小<br>$$L_{cls}(p,u)=-log(p_u)$$<br>回归损失函数如下，其中$(t_i^u-v_i)$部分主要参考R-CNN中的检测框回归，主要的不同在于Fast R-CNN中采用的是Smooth L1损失，而R-CNN中采用的是L2损失：<br>$$L_{loc}(t^u,v)=\sum_{i\in{x,y,w,h}}smooth_{L_1}(t_i^u-v_i)$$</p>
 <p>$$smooth_{L_{1}}(x)=<br>\begin{cases}<br>0.5x^{2} &amp; |x|\leq 1 \cr<br>|x|-0.5 &amp; otherwise<br>\end{cases}$$</p>
-<p>Smooth L1损失相较于L1 loss和L2 loss而言具有以下优点：<br><img src="https://ws2.sinaimg.cn/large/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg" alt=""></p>
+<p>Smooth L1损失相较于L1 loss和L2 loss而言具有以下优点：<br><img src="/2019/03/25/目标检测two-stage经典方法总结/006tNc79gy1g21f4m2w5xj30ii0x07ab.jpg" alt=""></p>
 <p>个人觉得这里采用Smooth L1损失主要是因为：根据上面关于R-CNN中loss函数的分析博客<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">https://blog.csdn.net/zijin0802034/article/details/77685438</a>可知，由于R-CNN只挑选出IoU&gt;0.6的检测框来训练回归模型，所以可以控制预测的检测框与GT之间的差值较小，保证其为线性回归问题，但是在Fast R-CNN中由于采用多任务损失进行联合训练，并且从损失函数可以看到，是分类的结果决定了检测的结果(即只有当分类结果$u\ge1$时，检测部分的损失才会大于0)，因此如果分类出现了错误导致预测的检测框与实际的检测框相距很远时，使用L2损失很容易导致梯度爆炸，因此采用Smooth L1损失。同时由于采用Smooth L1损失可以避免预测的检测框与实际的检测框相距很远造成的梯度爆炸，便可以省略R-CNN检测框回归中的正则项</p>
 <p><strong>RoI池化层的反向传播</strong>和<strong>SVD分解</strong>见博客<a href="https://blog.csdn.net/shenxiaolu1984/article/details/51036677" target="_blank" rel="noopener">Fast RCNN算法详解</a></p>
 <h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><ul>
@@ -866,7 +868,129 @@
 <li>更多候选窗不能提升性能</li>
 </ul>
 <h3 id="Fast-R-CNN测试"><a href="#Fast-R-CNN测试" class="headerlink" title="Fast R-CNN测试"></a>Fast R-CNN测试</h3><p>Fast RCNN测试中region proposal的提取仍然使用selective search，其他过程与训练中前向传播的过程一致，同时目标检测时间大多消耗在这上面（提region proposal 2~3s，而提特征分类只需0.32s）</p>
-<h2 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h2>
+<h2 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h2><blockquote>
+<p>《Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks》</p>
+</blockquote>
+<p><strong>提出问题：</strong></p>
+<p>在之前的SPPNet和Fast-RNN的研究中，利用RoI池化层实现了直接在卷积网络提取的特征上选取候选框区域，并对于每一个不同大小的候选框区域生成相同大小的特征向量，最后对每一个候选框进行分类。因此这类研究已经非常有效的减少了检测网络的运行时间，但是region proposal的提取仍然使用selective search算法，使得区域提出计算成为一个瓶颈。</p>
+<p><strong>本文解决方案</strong></p>
+<p>提出RPN网络，它是一个全卷积网络，可以同时在每个位置预测目标边界和目标分数。RPN经过端到端的训练，可以生成高质量的区域提出，由Fast R-CNN用于检测。</p>
+<h3 id="Faster-R-CNN参考博文"><a href="#Faster-R-CNN参考博文" class="headerlink" title="Faster R-CNN参考博文"></a>Faster R-CNN参考博文</h3><p>通过下面这几篇博文对于Faster R-CNN可以有一个非常全面的了解：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/31426458" target="_blank" rel="noopener">一文读懂Faster RCNN</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/43812909" target="_blank" rel="noopener">Faster R-CNN 论文阅读记录（一）：概览</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/44612080" target="_blank" rel="noopener">Faster R-CNN 论文阅读记录（二）：细节</a></li>
+<li>Faster R-CNN的详细训练步骤参考：<a href="[http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/](http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/">Object Detection and Classification using R-CNNs</a>)</li>
+</ul>
+<p>我主要针对上面博文会涉及到的我之前没有弄明白的几个问题做以下的补充。</p>
+<h3 id="卷积层感受野的计算"><a href="#卷积层感受野的计算" class="headerlink" title="卷积层感受野的计算"></a>卷积层感受野的计算</h3><p>在论文的3.1节介绍RPN网络的内容中，有下面这一段话：</p>
+<blockquote>
+<p>To generate region proposals, we slide a small network over the convolutional feature map output by the last shared convolutional layer. This small network takes as input an n × n spatial window of the input convolutional feature map. Each sliding window is mapped to a lower-dimensional feature (256-d for ZF and 512-d for VGG, with ReLU [33] following). This feature is fed into two sibling fullyconnected layers—a box-regression layer (reg) and a box-classiﬁcation layer (cls). <strong>We use n = 3 in this paper, noting that the effective receptive ﬁeld on the input image is large (171 and 228 pixels for ZF and VGG, respectively).</strong> This mini-network is illustrated at a single position in Figure 3 (left). Note that because the mini-network operates in a sliding-window fashion, the fully-connected layers are shared across all spatial locations. This architecture is naturally implemented with an n×n convolutional layer followed by two sibling 1 × 1 convolutional layers (for reg and cls, respectively).</p>
+</blockquote>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/image-20190518171108771.png" alt="image-20190518171108771"></p>
+<p>(下面主要以VGG为例)结合论文中的示意图片，是解释RPN网络中采用3x3的卷积核在VGG网络的conv5_3产生的feature map上进行滑动，并产生不同大小的anchor box，这里存在的一个问题就是上面加黑的那句话中，在VGG的网络中3x3的卷积核在VGG网络的conv5_3产生的feature map上的区域对应的感受野大小是228，所以这里主要讲解一下感受野的计算。</p>
+<p>感受野的计算主要可以分为两种方法，一种是自顶向下的计算方法，一种是自底向上的计算方法，两种方法分别适用于不同的情况：</p>
+<ul>
+<li>需要知道整个网络从上到下每一层特征图对应于原始输入图片的感受野大小，采用自顶向下的方式</li>
+<li>只需要求解某一层特征图对应的感受野大小，并且不需要知道其上各个层的感受野，采用自底向上的方式</li>
+<li>只需要求解某一层特征图对应的感受野大小，并且需要知道其上各个层的感受野，采用自顶向下的方式</li>
+</ul>
+<p>从上面的描述中可以发现，自顶向下的计算方法在求解的过程中可以知道每一层的感受野大小，而自底向上的方式不行，只能用于求解某一层特征图对应的感受野大小。可是自底向上的方式相较于自顶向下的方式计算的过程稍微简单一点，不容易弄错，所以当我们只需要求解某一层特征图对应的感受野大小，并且不需要知道其上各个层的感受野，更推荐自底向上的方式</p>
+<p><strong>1. 自顶向下的计算方法</strong></p>
+<p>这种计算方法是从输入图片开始，向下逐层计算每一层特征图中$r_0\times r_0$的范围内对应在原始输入图片中的感受野大小。主要过程为：</p>
+<p>首先假设我们需要求的感受野范围是$r_0\times r_0$，并且输出特征图的jump为$j$，该值是卷积核的步长从上到下的累积量，那么有：</p>
+<p>$$\left{ \begin{array}{lr} r_{i+1} = r_i + (k_{i+1} -1)\times j_i &amp; \\  j_{i+1} = j_i\times s_{i+1} \end{array} \right.$$</p>
+<p>其中$k$为卷积核的大小，$s$为卷积核的步长。初始情况下：</p>
+<ul>
+<li><p>$r_0\times r_0$为我们需要求的感受野范围</p>
+</li>
+<li><p>$j_0 = 1$</p>
+</li>
+<li>$k_1 \times k_1$为第一层卷积核的尺寸</li>
+</ul>
+<p>后面层数的计算以此类推，主要需要注意的是<strong>在计算$r_{i+1}$的时候，使用的是$j_i$而不是$j_{i+1}$</strong>。正是由于我们自顶向下的求解过程中需要求解卷积核步长的累加量，所以相较于自底向上的方法要稍微复杂一点</p>
+<p>上面的内容主要参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/26663577" target="_blank" rel="noopener">卷积神经网络中的感受野计算（译）</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/56940729" target="_blank" rel="noopener">特征图尺寸和感受野计算详解</a></p>
+<p>下面这个用于实现计算网络感受野的网站也是使用这种方式来进行计算的：</p>
+<p><a href="https://fomoro.com/projects/project/receptive-field-calculator" target="_blank" rel="noopener">Fomoro AI</a></p>
+<p><strong>2. 自底向上的计算方法</strong></p>
+<p>这种方法是从我们需要求解的层开始逐层向上进行计算，采用与上面相同的符号，可以有下面的地推公式：</p>
+<p>$$r_{n-1} = s_{n-1}\times (r_{n}-1)+k_{n-1}$$</p>
+<p>由于我们是自底向上进行求解，所以这里的初始值是第$n$层的特征图需要求解的感受野范围：</p>
+<p>初始情况如下：</p>
+<ul>
+<li>$r_n\times r_n$为第$n$层的特征图需要求解的感受野范围</li>
+<li>$s_{n-1}$为产生第$n$层的特征图的卷积核对应的步长</li>
+<li>$k_{n-1}$为产生第$n$层的特征图的卷积核对应的尺寸</li>
+</ul>
+<p>这种方式不需要计算步长的累加量，所以更加简洁一些，其计算的中间结果对应于第$n$层的特征图对应于其上的各个层次的特征图的感受野范围。</p>
+<p>上面的内容主要参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/41955458" target="_blank" rel="noopener">CNN：接受视野（Receptive Field）</a></p>
+<h3 id="损失函数详细解释"><a href="#损失函数详细解释" class="headerlink" title="损失函数详细解释"></a>损失函数详细解释</h3><p>Faster R-CNN中的损失函数分为两个部分：</p>
+<ol>
+<li>RPN网络中判断Anchor是否包含物体的分类损失以及收紧Anchor的回归损失组成的损失函数</li>
+<li>Fast R-CNN中判断region proposal中目标类别的分类损失以及收紧检测框的回归损失组成的损失函数</li>
+</ol>
+<p>以上两个多任务损失函数中的分类损失均采用交叉熵损失函数，回归损失均采用R-CNN中的Bounding Box Regression损失函数，所以下面主要分成这两部分来进行分析。</p>
+<p><strong>1. 交叉熵损失函数</strong></p>
+<ul>
+<li><strong>信息熵</strong></li>
+</ul>
+<p>为了说明交叉熵，我们从信息熵这个源头来进行解释。</p>
+<p>在我们的生活中，信息的作用是为了消除不确定性，不能消除不确定性的信息我们称之为噪声。而信息量就可以被看做是衡量事件不确定性的量。事件的不确定性可以理解为一个事件有多少种<strong>等可能</strong>的情况可能发生，这个可能性可以用概率来进行描述。那么我们如何衡量这个不确定性的量呢？这里可以由质量的定义来进行类推，我们为了用单位千克来衡量一个物体的质量，会选择一个参照物的质量作为基准，假设这个基准物体的质量为B，待测物体的质量为m，那么有：</p>
+<p>$$m = n\times B$$</p>
+<p>而为了衡量待测物体的质量，就可以用乘法的反函数即除法来进行：</p>
+<p>$$n = m / B$$</p>
+<p>所以待测物体的重量为$n$千克。</p>
+<p>同样的，为了衡量一个事件不确定的量，我们同样可以找一个参照事件作为基准来进行衡量，假设我们选取的事件是抛硬币，对于一枚硬币的抛硬币事件，有正面和反面两种可能性，即$2^1$种可能性，而对于两枚硬币则有$2^2$种可能性。假设待测事件可能发生的情况有m种，那么就有：</p>
+<p>$$m = 2^n$$</p>
+<p>为了衡量待测事件相当于多少个抛硬币事件，即为指数函数的反函数即对数函数来进行求解：</p>
+<p>$$n = log_2m$$</p>
+<p>这里我们用bit来作为单位，所以待测事件的信息量为$n$bit。</p>
+<p>上面在说明的时候，我们强调上面所有可能发生的情况都是等可能发生的，可是当各个情况不是等可能性的时候该怎样进行衡量呢？</p>
+<p>这里假设我们的事件有四种可能发生的情况为A，B，C，D，其中三种情况发生的概率为1/6，第四种情况发生的概率为1/2，按照上面的分析，此时我们计算这个事件的信息量即为(假设四个事件可能发生的情况分别为$m_A$，$m_B$，$m_C$，$m_D$)：</p>
+<p>$$n = P_A\times log_2m_A + P_B\times log_2m_B + P_C\times log_2m_C + P_D\times log_2m_D$$</p>
+<p>那么怎样计算$m_A$，$m_B$，$m_C$，$m_D$呢？这里我们首先有$P_A = 1/6$，$P_B = 1/6$，$P_C = 1/6$，$P_D = 1/2$，对于$m_A$，即A事件可能发生的情况，按照$P_A = 1/6$，说明A事件有6中可能发生的情况，所以$m_A = 1 / P_A$，因此上式可以写为：</p>
+<p>$$n = P_A\times log_2(1/P_A) + P_B\times log_2(1/P_B) + P_C\times log_2(1/P_C) + P_D\times log_2(1/P_D)$$</p>
+<p>而这里的信息量我们用信息熵H来定义，假设事件有N种情况，情况$i$发生的概率为$P_i$，同时我们用于衡量的基准事件有m中可能发生的情况，那么有：</p>
+<p>$$H = - \sum_{i=0}^{N} P_ilog_mP_i$$</p>
+<p>可以发现信息熵的形式与我们最终要讨论的交叉熵形式上非常相似。</p>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/55459472" target="_blank" rel="noopener">学习观10：信息与熵</a></p>
+<p>​           <a href="https://zhuanlan.zhihu.com/p/55599202" target="_blank" rel="noopener">学习观11：量化信息</a></p>
+<p>​          《数学之美》第6章：信息的度量和作用</p>
+<ul>
+<li><strong>交叉熵</strong></li>
+</ul>
+<p>参考<a href="[https://charlesliuyx.github.io/2017/09/11/%E4%BB%80%E4%B9%88%E6%98%AF%E4%BF%A1%E6%81%AF%E7%86%B5%E3%80%81%E4%BA%A4%E5%8F%89%E7%86%B5%E5%92%8C%E7%9B%B8%E5%AF%B9%E7%86%B5/](https://charlesliuyx.github.io/2017/09/11/什么是信息熵、交叉熵和相对熵/">【直观详解】信息熵、交叉熵和相对熵</a>)</p>
+<ul>
+<li><strong>交叉熵损失函数</strong></li>
+</ul>
+<p>在Faster R-CNN中分类损失函数为：</p>
+<ol>
+<li><p>RPN中分类前景和背景两个类别的损失函数($N_{cls}$是mini-batch的数量)：$-1/N_{cls}(p_ilogp_i+p_i^<em>logp_i^</em>)$</p>
+</li>
+<li><p>Fast R-CNN中分类多个类别$u$的损失函数：$-logp_u$</p>
+</li>
+</ol>
+<p>1中的损失函数是标准的信息熵的形式，即当分类器预测前景和背景两者的概率分别为1/2时，其信息熵值最大，也即是损失函数值最大，利用梯度下降法进行训练后，让分类器能够改变两种情况的预测概率，当其中一个的概率接近1，另一个接近0时，其信息熵值最小，也即是损失函数值最小。</p>
+<p>2中的损失函数则是交叉熵的形式，其函数log前面没有参数，也即是将各个类别的发生概率同等看待，因为在真实的分布下，各个类别是等可能发生的，而我们训练分类器同样是要改变各个类别的分布概率，让分类器尽量使其中一种类别的预测概率接近1，其他的类别预测概率接近0，这样就可以减少损失函数的大小，也即是在给定的真实分布情况下，使用非真实分布指定的策略消除系统的不确定性所需要付出努力的大小。</p>
+<p><strong>2. 边框回归损失函数</strong></p>
+<p>边框损失函数主要参考：<a href="https://blog.csdn.net/zijin0802034/article/details/77685438" target="_blank" rel="noopener">边框回归(Bounding Box Regression)详解</a></p>
+<p>上面的边框回归详解中是解释R-CNN中的边框损失，而Faster R-CNN中的边框回归损失分为两类：</p>
+<ol>
+<li>RPN中的边框回归损失，与上面参考博客唯一的不同是这里的Region Proposal采用的是预设的Anchor来生成</li>
+<li>Fast R-CNN中的边框回归损失，与上面参考博客唯一的不同是这里的Region Proposal采用的是RPN中生成的结果</li>
+</ol>
+<p>而两个边框回归损失为了避免Region Proposal和Ground Truth相差较大，导致损失函数的值过大，于是采用了Smooth L1损失函数，同时引入了$\lambda$参数来平衡多任务损失函数中分类损失函数和边框回归损失函数两者的权重平衡，保证损失函数对于两类损失函数给予相同的关注程度</p>
+<h3 id="SoftMax函数实现细节"><a href="#SoftMax函数实现细节" class="headerlink" title="SoftMax函数实现细节"></a>SoftMax函数实现细节</h3><p>在上面<a href="https://zhuanlan.zhihu.com/p/31426458" target="_blank" rel="noopener">一文读懂Faster RCNN</a>的博客2.3节softmax判定foreground与background中，RPN网络在预测前景和背景类别的时候，采用下面的结构进行：</p>
+<p><img src="/2019/03/25/目标检测two-stage经典方法总结/image-20190519120126997.png" alt="image-20190519120126997"></p>
+<p>第一次reshape将原始的caffe blob中的存储形式[1, 2x9, H, W]转换为[1, 2, 9xH, W]，而softmax层进行多分类时，在caffe中的实现实际上是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"Number of labels must match number of predictions; "</span></span><br><span class="line"><span class="string">"e.g., if softmax axis == 1 and prediction shape is (N, C, H, W), "</span></span><br><span class="line"><span class="string">"label count (number of labels) must be N*H*W, "</span></span><br><span class="line"><span class="string">"with integer values in &#123;0, 1, ..., C-1&#125;."</span>;</span><br></pre></td></tr></table></figure>
+<p>即是将channel的数量作为类别的数量，而N*H*W均为表示这个类别的特征，这里稍微补充一下。</p>
+<h3 id="自己还存在的问题"><a href="#自己还存在的问题" class="headerlink" title="自己还存在的问题"></a>自己还存在的问题</h3><p>在Faster R-CNN的ROI Pooling步骤中，以VGG作为主干网络为例，用于ROI Pooling的特征图为conv5_3生成的大小为[1,512,14,14]，可以发现特征图的大小为$14\times 14$，可是ROI Pooling中$pooled_w\times pool_h = 7\times 7$。</p>
+<p>用于ROI Pooling的特征图也即是用于生成Anchor的特征图，生成Anchor仅仅用$3\times 3$的划窗进行生成，可是$pooled_w\times pool_h$参数却为$7\times 7$，很明显对于aspect ratio为0.5的Anchor，根本就没有$7\times 7$个像素来做ROI Pooling，这个位置到底是怎样设计的，难道此处的ROI Pooling操作是在输入图片上来采集特征？感觉也不对啊。希望有知道的小伙伴能够告知，感恩！</p>
+
       
     </div>
     
@@ -1125,7 +1249,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">3.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度网络来定位物体"><span class="nav-number">3.1.</span> <span class="nav-text">使用深度网络来定位物体</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产生类别无关的候选框"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生类别无关的候选框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络产生定长的特征向量"><span class="nav-number">3.1.2.</span> <span class="nav-text">卷积神经网络产生定长的特征向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定类别的SVM线性分类器"><span class="nav-number">3.1.3.</span> <span class="nav-text">指定类别的SVM线性分类器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练网络"><span class="nav-number">3.2.</span> <span class="nav-text">训练网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN的训练"><span class="nav-number">3.2.1.</span> <span class="nav-text">CNN的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM分类器的训练"><span class="nav-number">3.2.2.</span> <span class="nav-text">SVM分类器的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN和SVM训练中的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">CNN和SVM训练中的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ablation-studies"><span class="nav-number">3.2.4.</span> <span class="nav-text">Ablation studies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测错误分析"><span class="nav-number">3.2.5.</span> <span class="nav-text">检测错误分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounding-box回归"><span class="nav-number">3.2.6.</span> <span class="nav-text">Bounding-box回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己的一些问题"><span class="nav-number">3.3.</span> <span class="nav-text">自己的一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPP-Net"><span class="nav-number">4.</span> <span class="nav-text">SPP-Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提出问题以及产生问题的原因"><span class="nav-number">4.1.</span> <span class="nav-text">提出问题以及产生问题的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决问题的方案"><span class="nav-number">4.2.</span> <span class="nav-text">解决问题的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SPP的由来"><span class="nav-number">4.2.1.</span> <span class="nav-text">SPP的由来</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP介绍"><span class="nav-number">4.3.</span> <span class="nav-text">SPP介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的训练"><span class="nav-number">4.4.</span> <span class="nav-text">SPP-Net的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一尺寸训练"><span class="nav-number">4.4.1.</span> <span class="nav-text">单一尺寸训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多尺寸训练"><span class="nav-number">4.4.2.</span> <span class="nav-text">多尺寸训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net用于物体检测"><span class="nav-number">4.5.</span> <span class="nav-text">SPP-Net用于物体检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的测试结果总结"><span class="nav-number">4.6.</span> <span class="nav-text">SPP-Net的测试结果总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-R-CNN"><span class="nav-number">5.</span> <span class="nav-text">Fast R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#R-CNN和SPP-Net的缺点以及Fast-R-CNN的贡献"><span class="nav-number">5.1.</span> <span class="nav-text">R-CNN和SPP-Net的缺点以及Fast R-CNN的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN的结构"><span class="nav-number">5.2.</span> <span class="nav-text">Fast R-CNN的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN的训练"><span class="nav-number">5.3.</span> <span class="nav-text">Fast R-CNN的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#从预训练网络初始化"><span class="nav-number">5.3.1.</span> <span class="nav-text">从预训练网络初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#训练配置"><span class="nav-number">5.3.2.</span> <span class="nav-text">训练配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">5.3.3.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN测试"><span class="nav-number">5.4.</span> <span class="nav-text">Fast R-CNN测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Faster-R-CNN"><span class="nav-number">6.</span> <span class="nav-text">Faster R-CNN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算机视觉的三大任务"><span class="nav-number">1.</span> <span class="nav-text">计算机视觉的三大任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverFeat"><span class="nav-number">2.</span> <span class="nav-text">OverFeat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入问题"><span class="nav-number">2.1.</span> <span class="nav-text">引入问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverFeat改进方法"><span class="nav-number">2.2.</span> <span class="nav-text">OverFeat改进方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Offset-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">Offset Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FCN"><span class="nav-number">2.4.</span> <span class="nav-text">FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类任务"><span class="nav-number">2.5.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.5.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型测试"><span class="nav-number">2.5.2.</span> <span class="nav-text">模型测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位任务"><span class="nav-number">2.6.</span> <span class="nav-text">定位任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型定位步骤"><span class="nav-number">2.6.2.</span> <span class="nav-text">模型定位步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类和定位任务"><span class="nav-number">2.7.</span> <span class="nav-text">分类和定位任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">2.8.</span> <span class="nav-text">参考资料：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">3.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度网络来定位物体"><span class="nav-number">3.1.</span> <span class="nav-text">使用深度网络来定位物体</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#产生类别无关的候选框"><span class="nav-number">3.1.1.</span> <span class="nav-text">产生类别无关的候选框</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积神经网络产生定长的特征向量"><span class="nav-number">3.1.2.</span> <span class="nav-text">卷积神经网络产生定长的特征向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#指定类别的SVM线性分类器"><span class="nav-number">3.1.3.</span> <span class="nav-text">指定类别的SVM线性分类器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练网络"><span class="nav-number">3.2.</span> <span class="nav-text">训练网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN的训练"><span class="nav-number">3.2.1.</span> <span class="nav-text">CNN的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM分类器的训练"><span class="nav-number">3.2.2.</span> <span class="nav-text">SVM分类器的训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CNN和SVM训练中的问题"><span class="nav-number">3.2.3.</span> <span class="nav-text">CNN和SVM训练中的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ablation-studies"><span class="nav-number">3.2.4.</span> <span class="nav-text">Ablation studies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测错误分析"><span class="nav-number">3.2.5.</span> <span class="nav-text">检测错误分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bounding-box回归"><span class="nav-number">3.2.6.</span> <span class="nav-text">Bounding-box回归</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己的一些问题"><span class="nav-number">3.3.</span> <span class="nav-text">自己的一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPP-Net"><span class="nav-number">4.</span> <span class="nav-text">SPP-Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提出问题以及产生问题的原因"><span class="nav-number">4.1.</span> <span class="nav-text">提出问题以及产生问题的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决问题的方案"><span class="nav-number">4.2.</span> <span class="nav-text">解决问题的方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SPP的由来"><span class="nav-number">4.2.1.</span> <span class="nav-text">SPP的由来</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP介绍"><span class="nav-number">4.3.</span> <span class="nav-text">SPP介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的训练"><span class="nav-number">4.4.</span> <span class="nav-text">SPP-Net的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单一尺寸训练"><span class="nav-number">4.4.1.</span> <span class="nav-text">单一尺寸训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多尺寸训练"><span class="nav-number">4.4.2.</span> <span class="nav-text">多尺寸训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net用于物体检测"><span class="nav-number">4.5.</span> <span class="nav-text">SPP-Net用于物体检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPP-Net的测试结果总结"><span class="nav-number">4.6.</span> <span class="nav-text">SPP-Net的测试结果总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-R-CNN"><span class="nav-number">5.</span> <span class="nav-text">Fast R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#R-CNN和SPP-Net的缺点以及Fast-R-CNN的贡献"><span class="nav-number">5.1.</span> <span class="nav-text">R-CNN和SPP-Net的缺点以及Fast R-CNN的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN的结构"><span class="nav-number">5.2.</span> <span class="nav-text">Fast R-CNN的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN的训练"><span class="nav-number">5.3.</span> <span class="nav-text">Fast R-CNN的训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#从预训练网络初始化"><span class="nav-number">5.3.1.</span> <span class="nav-text">从预训练网络初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#训练配置"><span class="nav-number">5.3.2.</span> <span class="nav-text">训练配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">5.3.3.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-R-CNN测试"><span class="nav-number">5.4.</span> <span class="nav-text">Fast R-CNN测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Faster-R-CNN"><span class="nav-number">6.</span> <span class="nav-text">Faster R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Faster-R-CNN参考博文"><span class="nav-number">6.1.</span> <span class="nav-text">Faster R-CNN参考博文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卷积层感受野的计算"><span class="nav-number">6.2.</span> <span class="nav-text">卷积层感受野的计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#损失函数详细解释"><span class="nav-number">6.3.</span> <span class="nav-text">损失函数详细解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SoftMax函数实现细节"><span class="nav-number">6.4.</span> <span class="nav-text">SoftMax函数实现细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自己还存在的问题"><span class="nav-number">6.5.</span> <span class="nav-text">自己还存在的问题</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1182,7 +1306,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共49.6k字</span>
+  <span class="post-count">博客全站共53.2k字</span>
 </div>
 
         
