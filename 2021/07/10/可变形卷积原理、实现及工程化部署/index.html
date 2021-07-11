@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-sun.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-sun.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CenterNet,pytorch,C++,TensorRT,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Camlin Zhang's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="引言本文主要以目标检测算法CenterNet作为载体，介绍可变形卷积的算法原理，python实现以及工程化部署 可变形卷积原理介绍可变形卷积目前有DCN V1以及在V1基础上改进发展来的DCN V2，具体的算法原理可以看论文原文或者参考： https://cloud.tencent.com/developer/article/1679389 可变形卷积的实现这里主要参考：https://cloud">
+<meta name="keywords" content="CenterNet,pytorch,C++,TensorRT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可变形卷积原理、实现及工程化部署">
+<meta property="og:url" content="http://camlinzhang.com/2021/07/10/可变形卷积原理、实现及工程化部署/index.html">
+<meta property="og:site_name" content="Camlin Zhang&#39;s Blog">
+<meta property="og:description" content="引言本文主要以目标检测算法CenterNet作为载体，介绍可变形卷积的算法原理，python实现以及工程化部署 可变形卷积原理介绍可变形卷积目前有DCN V1以及在V1基础上改进发展来的DCN V2，具体的算法原理可以看论文原文或者参考： https://cloud.tencent.com/developer/article/1679389 可变形卷积的实现这里主要参考：https://cloud">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-07-11T04:17:37.981Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可变形卷积原理、实现及工程化部署">
+<meta name="twitter:description" content="引言本文主要以目标检测算法CenterNet作为载体，介绍可变形卷积的算法原理，python实现以及工程化部署 可变形卷积原理介绍可变形卷积目前有DCN V1以及在V1基础上改进发展来的DCN V2，具体的算法原理可以看论文原文或者参考： https://cloud.tencent.com/developer/article/1679389 可变形卷积的实现这里主要参考：https://cloud">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Camlin Zhang'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://camlinzhang.com/2021/07/10/可变形卷积原理、实现及工程化部署/">
+
+
+
+
+
+  <title>可变形卷积原理、实现及工程化部署 | Camlin Zhang's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+<a href="https://github.com/CamlinZ" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></a>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Camlin Zhang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://camlinzhang.com/2021/07/10/可变形卷积原理、实现及工程化部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Camlin Zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Camlin Zhang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">可变形卷积原理、实现及工程化部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-10T15:27:59+08:00">
+                2021-07-10
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-07-11T12:17:37+08:00">
+                2021-07-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/计算机视觉/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/计算机视觉/深度学习算法工程化部署/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习算法工程化部署</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文主要以目标检测算法CenterNet作为载体，介绍可变形卷积的算法原理，python实现以及工程化部署</p>
+<h2 id="可变形卷积原理介绍"><a href="#可变形卷积原理介绍" class="headerlink" title="可变形卷积原理介绍"></a>可变形卷积原理介绍</h2><p>可变形卷积目前有DCN V1以及在V1基础上改进发展来的DCN V2，具体的算法原理可以看论文原文或者参考：</p>
+<p><a href="https://cloud.tencent.com/developer/article/1679389" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1679389</a></p>
+<h2 id="可变形卷积的实现"><a href="#可变形卷积的实现" class="headerlink" title="可变形卷积的实现"></a>可变形卷积的实现</h2><p>这里主要参考：<a href="https://cloud.tencent.com/developer/article/1638363" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1638363</a> 中的讲解</p>
+<h2 id="CenterNet中实现DCN-V2的工程化部署"><a href="#CenterNet中实现DCN-V2的工程化部署" class="headerlink" title="CenterNet中实现DCN V2的工程化部署"></a>CenterNet中实现DCN V2的工程化部署</h2><p>这里主要参考的代码为：<a href="https://github.com/CaoWGG/TensorRT-CenterNet" target="_blank" rel="noopener">https://github.com/CaoWGG/TensorRT-CenterNet</a></p>
+<p>这里参考：</p>
+<ul>
+<li><a href="https://oldpan.me/archives/use-tensorrt-speed-up-deep-learning-1" target="_blank" rel="noopener">利用TensorRT对深度学习进行加速</a>；</li>
+<li><a href="https://oldpan.me/archives/tensorrt-code-toturial-1" target="_blank" rel="noopener">利用TensorRT实现神经网络提速(读取ONNX模型并运行)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/297002406" target="_blank" rel="noopener">实现TensorRT自定义插件(plugin)自由</a></li>
+</ul>
+<p>有几个点需要事先说明:</p>
+<ul>
+<li><p>为了能够实现对于模型的量化，需要将CenterNet模型先转换为ONNX，然后利用tensorRT官方公布的<a href="https://github.com/onnx/onnx-tensorrt" target="_blank" rel="noopener">onnx-tensorrt</a>库来实现tensorRT模型的转化</p>
+</li>
+<li><p>由于TensorRT中不支持可变形卷积的操作，所以需要自定义plugin来进行实现</p>
+</li>
+</ul>
+<p>CenterNet中DCNV2的plugin定义在onnx-tensorrt文件夹中，分别为：</p>
+<p>dcn_v2_im2col_cuda.cu和dcn_v2_im2col_cuda.h；DCNv2.cpp和DCNv2.h，其中DCNv2.cpp和DCNv2.h为tensorRT中自定义plugin的文件，具体代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line">DCNv2Plugin::DCNv2Plugin(<span class="keyword">int</span> in_channel,</span><br><span class="line">                         <span class="keyword">int</span> out_channel,</span><br><span class="line">                         <span class="keyword">int</span> kernel_H,</span><br><span class="line">                         <span class="keyword">int</span> kernel_W,</span><br><span class="line">                         <span class="keyword">int</span> deformable_group,</span><br><span class="line">                         <span class="keyword">int</span> dilation,</span><br><span class="line">                         <span class="keyword">int</span> groups,</span><br><span class="line">                         <span class="keyword">int</span> padding,</span><br><span class="line">                         <span class="keyword">int</span> stride,</span><br><span class="line">                         nvinfer1::Weights <span class="keyword">const</span> &amp;weight, nvinfer1::Weights <span class="keyword">const</span> &amp;bias):_in_channel(in_channel),</span><br><span class="line">                        _out_channel(out_channel),_kernel_H(kernel_H),_kernel_W(kernel_W),_deformable_group(deformable_group),</span><br><span class="line">                         _dilation(dilation),_groups(groups),_padding(padding),_stride(stride),_initialized(<span class="literal">false</span>)&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (weight.type == nvinfer1::DataType::kFLOAT)</span><br><span class="line">    &#123;</span><br><span class="line">        _h_weight.assign((<span class="keyword">float</span>*)weight.values,(<span class="keyword">float</span>*)weight.values+weight.count);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="keyword">throw</span> <span class="built_in">std</span>::runtime_error(<span class="string">"Unsupported  weight dtype"</span>);&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (bias.type == nvinfer1::DataType::kFLOAT)</span><br><span class="line">    &#123;</span><br><span class="line">        _h_bias.assign((<span class="keyword">float</span>*)bias.values,(<span class="keyword">float</span>*)bias.values+bias.count);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="keyword">throw</span> <span class="built_in">std</span>::runtime_error(<span class="string">"Unsupported  bias dtype"</span>);&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化函数，为参数提前开辟显存空间</span></span><br><span class="line"><span class="keyword">int</span> DCNv2Plugin::initialize() &#123;</span><br><span class="line">    <span class="keyword">if</span>(_initialized) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">auto</span> _output_dims = <span class="keyword">this</span>-&gt;getOutputDimensions(<span class="number">0</span>, &amp;<span class="keyword">this</span>-&gt;getInputDims(<span class="number">0</span>), <span class="number">3</span>);</span><br><span class="line">    assert(is_CHW(<span class="keyword">this</span>-&gt;getInputDims(<span class="number">0</span>)));</span><br><span class="line">    assert(is_CHW(_output_dims));</span><br><span class="line">    <span class="keyword">size_t</span> ones_size = _output_dims.d[<span class="number">1</span>]*_output_dims.d[<span class="number">2</span>]* <span class="keyword">sizeof</span>(<span class="keyword">float</span>);</span><br><span class="line">    <span class="keyword">size_t</span> weight_size = _h_weight.size()* <span class="keyword">sizeof</span>(<span class="keyword">float</span>);</span><br><span class="line">    <span class="keyword">size_t</span> bias_size = _h_bias.size()* <span class="keyword">sizeof</span>(<span class="keyword">float</span>);</span><br><span class="line">    <span class="keyword">float</span> *ones_cpu = <span class="keyword">new</span> <span class="keyword">float</span>[ones_size/ <span class="keyword">sizeof</span>(<span class="keyword">float</span>)];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ones_size/ <span class="keyword">sizeof</span>(<span class="keyword">float</span>); i++) &#123;</span><br><span class="line">        ones_cpu[i] = <span class="number">1.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    CHECK_CUDA(cudaMalloc((<span class="keyword">void</span>**)&amp;_d_columns, _in_channel * _kernel_H * _kernel_W * ones_size););</span><br><span class="line">    CHECK_CUDA(cudaMalloc((<span class="keyword">void</span>**)&amp;_d_ones, ones_size));</span><br><span class="line">    CHECK_CUDA(cudaMalloc((<span class="keyword">void</span>**)&amp;_d_weight, weight_size));</span><br><span class="line">    CHECK_CUDA(cudaMalloc((<span class="keyword">void</span>**)&amp;_d_bias, bias_size));</span><br><span class="line">    CHECK_CUDA(cudaMemcpy(_d_ones, ones_cpu, ones_size, cudaMemcpyHostToDevice));</span><br><span class="line">    CHECK_CUDA(cudaMemcpy(_d_weight, _h_weight.data(), weight_size, cudaMemcpyHostToDevice));</span><br><span class="line">    CHECK_CUDA(cudaMemcpy(_d_bias, _h_bias.data(), bias_size, cudaMemcpyHostToDevice));</span><br><span class="line">    <span class="keyword">delete</span>[] ones_cpu;</span><br><span class="line">    _initialized = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用于释放之前申请的显存空间</span></span><br><span class="line"><span class="keyword">void</span> DCNv2Plugin::terminate() &#123;</span><br><span class="line">    <span class="keyword">if</span> (!_initialized) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cudaFree(_d_columns);</span><br><span class="line">    cudaFree(_d_bias);</span><br><span class="line">    cudaFree(_d_weight);</span><br><span class="line">    cudaFree(_d_ones);</span><br><span class="line">    _initialized = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DCNv2Plugin::~DCNv2Plugin() &#123;</span><br><span class="line">    terminate();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断数据类型是否正确</span></span><br><span class="line"><span class="keyword">bool</span> DCNv2Plugin::supportsFormat(nvinfer1::DataType type, nvinfer1::PluginFormat format) <span class="keyword">const</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (type == nvinfer1::DataType::kFLOAT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TensorRT支持动态tensor大小的时候，batch的维度需要用下面的函数定义</span></span><br><span class="line">nvinfer1::Dims DCNv2Plugin::getOutputDimensions(<span class="keyword">int</span> index, <span class="keyword">const</span> nvinfer1::Dims *inputDims, <span class="keyword">int</span> nbInputs) &#123;</span><br><span class="line">    assert(index == <span class="number">0</span>);</span><br><span class="line">    assert(inputDims);</span><br><span class="line">    assert(nbInputs == <span class="number">3</span>);</span><br><span class="line">    nvinfer1::Dims <span class="keyword">const</span>&amp; input = inputDims[<span class="number">0</span>];</span><br><span class="line">    assert(is_CHW(input));</span><br><span class="line">    nvinfer1::Dims output;</span><br><span class="line">    output.nbDims = input.nbDims;</span><br><span class="line">    <span class="keyword">for</span>( <span class="keyword">int</span> d=<span class="number">0</span>; d&lt;input.nbDims; ++d ) &#123;</span><br><span class="line">        output.type[d] = input.type[d];</span><br><span class="line">        output.d[d] = input.d[d];</span><br><span class="line">    &#125;</span><br><span class="line">    output.d[<span class="number">0</span>] = _out_channel;</span><br><span class="line">    output.d[<span class="number">1</span>] = (output.d[<span class="number">1</span>] + <span class="number">2</span> * _padding - (_dilation * (_kernel_H - <span class="number">1</span>) + <span class="number">1</span>)) / _stride + <span class="number">1</span> ;</span><br><span class="line">    output.d[<span class="number">2</span>] = (output.d[<span class="number">2</span>] + <span class="number">2</span> * _padding - (_dilation * (_kernel_H - <span class="number">1</span>) + <span class="number">1</span>)) / _stride + <span class="number">1</span> ;</span><br><span class="line">    <span class="keyword">return</span> output;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回该plugin需要中间显存变量的实际数据大小</span></span><br><span class="line"><span class="keyword">size_t</span> DCNv2Plugin::getWorkspaceSize(<span class="keyword">int</span> maxBatchSize) <span class="keyword">const</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该plugin定义的op的执行函数</span></span><br><span class="line"><span class="keyword">int</span> DCNv2Plugin::enqueue(<span class="keyword">int</span> batchSize, <span class="keyword">const</span> <span class="keyword">void</span> *<span class="keyword">const</span> *inputs, <span class="keyword">void</span> **outputs, <span class="keyword">void</span> *workspace,</span><br><span class="line">                         cudaStream_t stream) &#123;</span><br><span class="line">    <span class="keyword">float</span> alpha ,beta;</span><br><span class="line">    <span class="keyword">int</span> m, n, k;</span><br><span class="line"></span><br><span class="line">    cublasHandle_t handle = blas_handle();</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">float</span>* input = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">float</span> *&gt;(inputs[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">float</span>* offset = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">float</span> *&gt;(inputs[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">float</span>* mask = <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">float</span> *&gt;(inputs[<span class="number">2</span>]);</span><br><span class="line">    <span class="keyword">float</span> * output = <span class="keyword">static_cast</span>&lt;<span class="keyword">float</span> *&gt;(outputs[<span class="number">0</span>]);</span><br><span class="line">    nvinfer1::Dims input_dims = <span class="keyword">this</span>-&gt;getInputDims(<span class="number">0</span>);</span><br><span class="line">    assert(batchSize==<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> h = input_dims.d[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> w = input_dims.d[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">int</span> height_out = (h + <span class="number">2</span> * _padding - (_dilation * (_kernel_H - <span class="number">1</span>) + <span class="number">1</span>)) / _stride + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> width_out = (w + <span class="number">2</span> * _padding - (_dilation * (_kernel_W - <span class="number">1</span>) + <span class="number">1</span>)) / _stride + <span class="number">1</span>;</span><br><span class="line">    m = _out_channel;</span><br><span class="line">    n = height_out * width_out;</span><br><span class="line">    k = <span class="number">1</span>;</span><br><span class="line">    alpha = <span class="number">1.0</span>;</span><br><span class="line">    beta = <span class="number">0.0</span>;</span><br><span class="line">    <span class="comment">/// output  nxm</span></span><br><span class="line">    <span class="comment">/// ones    1xn  T -&gt;&gt; nx1</span></span><br><span class="line">    <span class="comment">/// bias    1xm</span></span><br><span class="line">    <span class="comment">/// ones x bias = nxm</span></span><br><span class="line">    <span class="comment">//  add bias</span></span><br><span class="line">    cublasSgemm(handle,</span><br><span class="line">                CUBLAS_OP_T, CUBLAS_OP_N,</span><br><span class="line">                n, m, k,&amp;alpha,</span><br><span class="line">                _d_ones, k,</span><br><span class="line">                _d_bias, k,&amp;beta,</span><br><span class="line">                output, n);</span><br><span class="line">    <span class="comment">// im2col (offset and mask)</span></span><br><span class="line">    modulated_deformable_im2col_cuda(stream,input,offset,mask,</span><br><span class="line">                                     <span class="number">1</span>, _in_channel, h, w,</span><br><span class="line">                                     height_out, width_out, _kernel_H, _kernel_W,</span><br><span class="line">                                     _padding, _padding, _stride, _stride, _dilation, _dilation,</span><br><span class="line">                                     _deformable_group, _d_columns);</span><br><span class="line">    m = _out_channel;</span><br><span class="line">    n = height_out * width_out;</span><br><span class="line">    k = _in_channel * _kernel_H * _kernel_W;</span><br><span class="line">    alpha = <span class="number">1.0</span>;</span><br><span class="line">    beta = <span class="number">1.0</span>;</span><br><span class="line">    <span class="comment">// im2col conv</span></span><br><span class="line">    cublasSgemm(handle,</span><br><span class="line">                CUBLAS_OP_N, CUBLAS_OP_N,</span><br><span class="line">                n, m, k,&amp;alpha,</span><br><span class="line">                _d_columns, n,</span><br><span class="line">                _d_weight, k,</span><br><span class="line">                &amp;beta,</span><br><span class="line">                output, n);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后需要将以上plugin定义好的op在onnx-tensorrt中builtin_op_importers.cpp文件中进行插件的注册操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">DEFINE_BUILTIN_OP_IMPORTER(DCNv2) &#123;</span><br><span class="line">    ASSERT(inputs.at(<span class="number">0</span>).is_tensor(),  ErrorCode::kUNSUPPORTED_NODE); <span class="comment">// input</span></span><br><span class="line">    ASSERT(inputs.at(<span class="number">1</span>).is_tensor(), ErrorCode::kUNSUPPORTED_NODE); <span class="comment">// offset</span></span><br><span class="line">    ASSERT(inputs.at(<span class="number">2</span>).is_tensor(), ErrorCode::kUNSUPPORTED_NODE); <span class="comment">// mask</span></span><br><span class="line">    ASSERT(inputs.at(<span class="number">3</span>).is_weights(), ErrorCode::kUNSUPPORTED_NODE); <span class="comment">// weight</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> kernel_weights = inputs.at(<span class="number">3</span>).weights();</span><br><span class="line">    nvinfer1::Weights bias_weights;</span><br><span class="line">    <span class="keyword">if</span>( inputs.size() == <span class="number">5</span> ) &#123;</span><br><span class="line">        ASSERT(inputs.at(<span class="number">4</span>).is_weights(), ErrorCode::kUNSUPPORTED_NODE);</span><br><span class="line">        <span class="keyword">auto</span> shaped_bias_weights = inputs.at(<span class="number">4</span>).weights();</span><br><span class="line">        ASSERT(shaped_bias_weights.shape.nbDims == <span class="number">1</span>, ErrorCode::kINVALID_NODE);</span><br><span class="line">        ASSERT(shaped_bias_weights.shape.d[<span class="number">0</span>] == kernel_weights.shape.d[<span class="number">0</span>], ErrorCode::kINVALID_NODE);</span><br><span class="line">        bias_weights = shaped_bias_weights;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        bias_weights = ShapedWeights::empty(kernel_weights.type);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> out_channel,in_channel,kernel_H,kernel_W,deformable_group,dilation,groups,padding,stride;</span><br><span class="line">    out_channel = kernel_weights.shape.d[<span class="number">0</span>];</span><br><span class="line">    in_channel = kernel_weights.shape.d[<span class="number">1</span>];</span><br><span class="line">    kernel_H = kernel_weights.shape.d[<span class="number">2</span>];</span><br><span class="line">    kernel_W = kernel_weights.shape.d[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function">OnnxAttrs <span class="title">attrs</span><span class="params">(node)</span></span>;</span><br><span class="line">    deformable_group = attrs.get(<span class="string">"deformable_group"</span>, <span class="number">1</span>);</span><br><span class="line">    dilation = attrs.get(<span class="string">"dilation"</span>, <span class="number">1</span>);</span><br><span class="line">    groups = attrs.get(<span class="string">"groups"</span>, <span class="number">1</span>);</span><br><span class="line">    padding = attrs.get(<span class="string">"padding"</span>, <span class="number">1</span>);</span><br><span class="line">    stride = attrs.get(<span class="string">"stride"</span>, <span class="number">1</span>);</span><br><span class="line">    RETURN_FIRST_OUTPUT(</span><br><span class="line">            ctx-&gt;addPlugin(</span><br><span class="line">                    <span class="keyword">new</span> DCNv2Plugin(in_channel,out_channel,kernel_H,kernel_W,deformable_group,</span><br><span class="line">                            dilation,groups,padding,stride, kernel_weights, bias_weights),</span><br><span class="line">                    &#123;&amp;inputs.at(<span class="number">0</span>).tensor(),&amp;inputs.at(<span class="number">1</span>).tensor(),&amp;inputs.at(<span class="number">2</span>).tensor()&#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后需要在onnx-tensorrt中的CMakeLists.txt里添加上定义plugin对应的源码并将其链接到动态库中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 定义插件源码</span><br><span class="line">set(PLUGIN_SOURCES</span><br><span class="line">  FancyActivation.cu</span><br><span class="line">  ResizeNearest.cu</span><br><span class="line">  Split.cu</span><br><span class="line">  dcn_v2_im2col_cuda.cu</span><br><span class="line">  InstanceNormalization.cpp</span><br><span class="line">  DCNv2.cpp</span><br><span class="line">  plugin.cpp</span><br><span class="line">  )</span><br><span class="line">  </span><br><span class="line"># 链接到动态库</span><br><span class="line">list(APPEND CUDA_NVCC_FLAGS &quot;-Xcompiler -fPIC --expt-extended-lambda&quot;)</span><br><span class="line">if($&#123;CMAKE_VERSION&#125; VERSION_LESS $&#123;CMAKE_VERSION_THRESHOLD&#125;)</span><br><span class="line">  CUDA_INCLUDE_DIRECTORIES($&#123;CUDNN_INCLUDE_DIR&#125; $&#123;TENSORRT_INCLUDE_DIR&#125;)</span><br><span class="line">  CUDA_ADD_LIBRARY(nvonnxparser_plugin STATIC $&#123;PLUGIN_SOURCES&#125;)</span><br><span class="line">else()</span><br><span class="line">  include_directories($&#123;CUDNN_INCLUDE_DIR&#125; $&#123;TENSORRT_INCLUDE_DIR&#125;)</span><br><span class="line">  add_library(nvonnxparser_plugin STATIC $&#123;PLUGIN_SOURCES&#125;)</span><br><span class="line">endif()</span><br><span class="line">target_include_directories(nvonnxparser_plugin PUBLIC $&#123;CUDA_INCLUDE_DIRS&#125; $&#123;ONNX_INCLUDE_DIRS&#125; $&#123;TENSORRT_INCLUDE_DIR&#125; $&#123;CUDNN_INCLUDE_DIR&#125;)</span><br><span class="line">target_link_libraries(nvonnxparser_plugin $&#123;TENSORRT_LIBRARY&#125; cuda cudart cublas)</span><br></pre></td></tr></table></figure>
+<p>最后在链接以上生成的库来进行tensort标准C++ API函数进行前向推理以及模型转换操作</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/images/we_chat_reward_image.png" alt="Camlin Zhang 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/uploads/images/alipay_reward_image.jpg" alt="Camlin Zhang 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CenterNet/" rel="tag"><i class="fa fa-tag"></i> CenterNet</a>
+          
+            <a href="/tags/pytorch/" rel="tag"><i class="fa fa-tag"></i> pytorch</a>
+          
+            <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          
+            <a href="/tags/TensorRT/" rel="tag"><i class="fa fa-tag"></i> TensorRT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/04/Pytorch分割模型libtorch工程化部署/" rel="next" title="Pytorch分割模型C++部署(libtorch)">
+                <i class="fa fa-chevron-left"></i> Pytorch分割模型C++部署(libtorch)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/images/avatar.jpg" alt="Camlin Zhang">
+            
+              <p class="site-author-name" itemprop="name">Camlin Zhang</p>
+              <p class="site-description motion-element" itemprop="description">只为遇见更好的自己</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/CamlinZ" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://me.csdn.net/sinat_28731575" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="camlinzhang@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可变形卷积原理介绍"><span class="nav-number">2.</span> <span class="nav-text">可变形卷积原理介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可变形卷积的实现"><span class="nav-number">3.</span> <span class="nav-text">可变形卷积的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CenterNet中实现DCN-V2的工程化部署"><span class="nav-number">4.</span> <span class="nav-text">CenterNet中实现DCN V2的工程化部署</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2019 &mdash; <span itemprop="copyrightYear">2021</span>
+
+  <span class="with-love">
+    <i class="fa fa-heart" aria-hidden="true"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Camlin Zhang</span>
+
+  
+</div>
+
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数：<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+<span class="post-meta-divider">|</span>
+
+<!--
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共59.5k字</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
